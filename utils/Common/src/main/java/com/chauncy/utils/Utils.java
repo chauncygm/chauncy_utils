@@ -2,6 +2,8 @@ package com.chauncy.utils;
 
 import com.chauncy.utils.common.ExceptionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.openjdk.jol.info.ClassLayout;
+import org.openjdk.jol.info.GraphLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +61,9 @@ public class Utils {
 
     public static String getRuntimeInfo() {
         Runtime runtime = Runtime.getRuntime();
-        return String.format("Processors: %d | Memory: free=%dMB, total=%dMB, max=%dMB",
+        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+        return String.format("PID: %s | Processors: %d | Memory: free=%dMB, total=%dMB, max=%dMB",
+                runtimeMXBean.getName().split("@")[0],
                 runtime.availableProcessors(),
                 runtime.freeMemory() / MB_BYTE_SIZE,
                 runtime.totalMemory() / MB_BYTE_SIZE,
@@ -159,6 +163,26 @@ public class Utils {
                 .findFirst()
                 .map(java.net.InterfaceAddress::getNetworkPrefixLength)
                 .orElse((short) -1);
+    }
+    //endregion
+
+    //region object layout
+    public static String getObjectLayout(Object obj) {
+        GraphLayout graphLayout = GraphLayout.parseInstance(obj);
+        return graphLayout.toPrintable();
+    }
+
+    public static String getClassLayout(Class<?> clazz) {
+        ClassLayout classLayout = ClassLayout.parseClass(clazz);
+        return classLayout.toPrintable();
+    }
+
+    public static String getClassLayOut(Object obj) {
+        if (obj instanceof Class) {
+            return getClassLayout((Class<?>) obj);
+        }
+        ClassLayout classLayout = ClassLayout.parseInstance(obj);
+        return classLayout.toPrintable();
     }
     //endregion
 

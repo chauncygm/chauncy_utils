@@ -2,24 +2,21 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
-  <artifactId>utils</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <groupId>cn.chauncy</groupId>
+  <artifactId>Utils</artifactId>
+  <version>${revision}</version>
+  <packaging>pom</packaging>
 
   <name>utils</name>
+  <modules>
+    <module>Agent</module>
+    <module>Common</module>
+  </modules>
 
   <properties>
-    <netty.version>4.1.119.Final</netty.version>
+    <!-- 特殊保留属性，用于多模块动态版本管理(maven 3.5+)，支持命令行使用-Drevision=1.0.0覆盖-->
+    <revision>1.0</revision>
 
-    <commons-codec.version>1.17.0</commons-codec.version>
-    <common-lang3.version>3.17.0</common-lang3.version>
-    <common-collections4.version>4.4</common-collections4.version>
-    <common-io.version>2.18.0</common-io.version>
-    <common-pool.version>2.12.0</common-pool.version>
-    <guava.version>33.3.0-jre</guava.version>
-
-    <jansi.version>2.4.0</jansi.version>
     <slf4j.version>2.0.17</slf4j.version>
     <jupiter.version>5.12.0</jupiter.version>
     <mockito.version>5.12.0</mockito.version>
@@ -29,149 +26,52 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${common-lang3.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>${commons-codec.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-collections4</artifactId>
-      <version>${common-collections4.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${common-io.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-pool2</artifactId>
-      <version>${common-pool.version}</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-transport</artifactId>
-      <version>${netty.version}</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>${slf4j.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.fusesource.jansi</groupId>
-      <artifactId>jansi</artifactId>
-      <version>${jansi.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-  </dependencies>
-
   <build>
-
     <plugins>
+
+      <!-- 源码插件 -->
+      <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-source-plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <compilerArgs>
-            <arg>-g</arg> <!-- 生成调试信息（行号、变量名等） -->
-          </compilerArgs>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-        </configuration>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <mainClass>org.example.App</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <!-- 设置JVM参数 -->
-          <argLine>
-            -Xmx1024m
-            -Dio.netty.leakDetection.level=PARANOID
-          </argLine>
-        </configuration>
-      </plugin>
-
-
+      <!-- 模块版本同步，revision属性需要此插件支持 -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.5.0</version>
         <configuration>
-          <executable>java</executable>
-          <arguments>
-            <argument>-Xms512m</argument>
-            <argument>-Xmx2048m</argument>
-            <argument>-Duser.language=en</argument>
-            <argument>-Djava.util.logging.config.file=logging.properties</argument>
-            <argument>-classpath</argument>
-            <classpath/>
-            <argument>com.example.App</argument>
-          </arguments>
+          <updatePomFile>true</updatePomFile>
+          <flattenMode>oss</flattenMode>
         </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
+
     </plugins>
   </build>
 </project>
