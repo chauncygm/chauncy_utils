@@ -1,4 +1,4 @@
-package com.chauncy.utils.obj_pool;
+package com.chauncy.utils.pool;
 
 import java.util.function.Supplier;
 

@@ -11,12 +11,26 @@ import java.util.function.Predicate;
 
 public class ReloadUtil {
 
+    /**
+     * 读取文件内容
+     *
+     * @param fileName 文件名
+     * @return 文件内容
+     * @throws IOException 文件读取失败
+     */
     static byte[] readFile(String fileName) throws IOException {
         try (FileInputStream stream = new FileInputStream(fileName)){
             return stream.readAllBytes();
         }
     }
 
+    /**
+     * 递归搜索符合要求的文件
+     *
+     * @param dir       文件目录
+     * @param out       输出列表
+     * @param predicate 文件过滤器
+     */
     static void recurseSearch(@NonNull File dir, @NonNull List<File> out, @Nullable Predicate<? super File> predicate) {
         if (!dir.exists()) {
             return;

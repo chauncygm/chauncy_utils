@@ -1,4 +1,4 @@
-package com.chauncy.utils.obj_pool;
+package com.chauncy.utils.pool;
 
 public interface ObjectPool<T extends Poolable> {
 

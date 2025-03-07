@@ -1,4 +1,4 @@
-package com.chauncy.utils.obj_pool;
+package com.chauncy.utils.pool;
 
 import com.chauncy.utils.collection.CollectionUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;

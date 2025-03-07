@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="App" type="Application" factoryName="Application" focusToolWindowBeforeRun="true">
+    <option name="MAIN_CLASS_NAME" value="com.example.App" />
+    <module name="Common" />
+    <option name="VM_PARAMETERS" value="-Duser.language=en -Dfile.encoding=UTF-8 -Xms128m -Xmx1g -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=D:\Home\chauncy_utils\utils\logs\oom\java_error_%%p.hprof -Xlog:gc*:D:\Home\chauncy_utils\utils\logs\gc\gc.log -javaagent:D:\Home\chauncy_utils\Utils\Agent\target\Agent-1.0.jar" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.example.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
