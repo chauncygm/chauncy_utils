@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class ReloadUtil {
+public class FileUtil {
 
     /**
      * 读取文件内容
@@ -18,8 +18,8 @@ public class ReloadUtil {
      * @return 文件内容
      * @throws IOException 文件读取失败
      */
-    static byte[] readFile(String fileName) throws IOException {
-        try (FileInputStream stream = new FileInputStream(fileName)){
+    static byte[] readFile(File file) throws IOException {
+        try (FileInputStream stream = new FileInputStream(file)){
             return stream.readAllBytes();
         }
     }
@@ -32,12 +32,8 @@ public class ReloadUtil {
      * @param predicate 文件过滤器
      */
     static void recurseSearch(@NonNull File dir, @NonNull List<File> out, @Nullable Predicate<? super File> predicate) {
-        if (!dir.exists()) {
-            return;
-        }
-
-        if (!dir.isDirectory()) {
-            throw new IllegalArgumentException("file type error, file not a dictionary, filePath: " + dir.getPath());
+        if (!dir.exists() || !dir.isDirectory()) {
+            throw new IllegalArgumentException("file error, file not exist or not a dictionary, filePath: " + dir.getPath());
         }
 
         File[] files = dir.listFiles((file) -> {

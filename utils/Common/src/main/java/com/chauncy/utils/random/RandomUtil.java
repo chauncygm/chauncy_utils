@@ -1,6 +1,7 @@
 package com.chauncy.utils.random;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import javax.annotation.concurrent.ThreadSafe;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -94,7 +95,7 @@ public class RandomUtil {
      * @param items   随机项集合
      * @return 随机项
      */
-    public <Item> Optional<Item> random(@Nonnull Collection<Item> items) {
+    public <Item> Optional<Item> random(@NonNull Collection<Item> items) {
         if (items.isEmpty()) {
             return Optional.empty();
         }
@@ -111,7 +112,7 @@ public class RandomUtil {
      * @param items   随机项列表
      * @return 随机项
      */
-    public <Item> Optional<Item> random(@Nonnull List<Item> items) {
+    public <Item> Optional<Item> random(@NonNull List<Item> items) {
         if (items.isEmpty()) {
             return Optional.empty();
         }
@@ -127,7 +128,7 @@ public class RandomUtil {
      * @param num     随机数量
      * @return 随机项列表
      */
-    public <Item> List<Item> randomList(@Nonnull List<Item> items, int num) {
+    public <Item> List<Item> randomList(@NonNull List<Item> items, int num) {
         if (items.isEmpty() || num <= 0) {
             return List.of();
         }
@@ -149,7 +150,7 @@ public class RandomUtil {
      * @throws IllegalArgumentException 数量大于集合提供的数量
      * @return 随机项列表
      */
-    public <Item> List<Item> randomSoleList(@Nonnull Collection<Item> items, int num) {
+    public <Item> List<Item> randomSoleList(@NonNull Collection<Item> items, int num) {
         if (items.isEmpty() || num <= 0) {
             return List.of();
         }
@@ -175,7 +176,7 @@ public class RandomUtil {
      * @throws IllegalArgumentException 随机项权重小于0
      * @return 随机项
      */
-    public <Item> Optional<Item> randomWeight(@Nonnull Collection<Item> items, @Nonnull ToIntFunction<Item> weightFunction) {
+    public <Item> Optional<Item> randomWeight(@NonNull Collection<Item> items, @NonNull ToIntFunction<Item> weightFunction) {
         WeightData<Item> itemWeightData = prepareWeightData(items, weightFunction);
         List<Item> itemList = itemWeightData.items();
         int total = itemWeightData.total();
@@ -198,7 +199,7 @@ public class RandomUtil {
      * @param num     随机数量
      * @return 随机项列表
      */
-    public <Item> List<Item> randomWeightList(@Nonnull Collection<Item> items, @Nonnull ToIntFunction<Item> weightFunction, int num) {
+    public <Item> List<Item> randomWeightList(@NonNull Collection<Item> items, @NonNull ToIntFunction<Item> weightFunction, int num) {
         WeightData<Item> itemWeightData = prepareWeightData(items, weightFunction);
         List<Item> itemList = itemWeightData.items();
         int total = itemWeightData.total();

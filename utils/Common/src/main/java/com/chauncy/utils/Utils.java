@@ -59,6 +59,15 @@ public class Utils {
         return "ClassPath:" + System.getProperties().get("java.class.path").toString();
     }
 
+    public static int getProcessId() {
+        try {
+            String processName = ManagementFactory.getRuntimeMXBean().getName();
+            return Integer.parseInt(processName.split("@")[0]);
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
     public static String getRuntimeInfo() {
         Runtime runtime = Runtime.getRuntime();
         RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();

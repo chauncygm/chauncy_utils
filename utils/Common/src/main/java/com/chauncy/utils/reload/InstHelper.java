@@ -2,6 +2,7 @@ package com.chauncy.utils.reload;
 
 
 import cn.chauncy.agent.Agent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.openjdk.jol.info.GraphLayout;
 
 import java.lang.instrument.ClassDefinition;
@@ -25,7 +26,7 @@ public class InstHelper {
         }
     }
 
-    public static void setInstrumentation(Instrumentation instrumentation) {
+    public static void setInstrumentation(@NonNull Instrumentation instrumentation) {
         InstHelper.instrumentation = instrumentation;
     }
 
@@ -35,8 +36,7 @@ public class InstHelper {
      * @param object 指定对象
      * @return  对象size
      */
-    public static long getDeepObjectSize(Object object) {
-        Objects.requireNonNull(object, "obj is null");
+    public static long getDeepObjectSize(@NonNull Object object) {
         GraphLayout graphLayout = GraphLayout.parseInstance(object);
         return graphLayout.totalSize();
     }
@@ -47,9 +47,8 @@ public class InstHelper {
      * @param object 指定对象
      * @return 对象size
      */
-    public static long getObjectSize(Object object) {
+    public static long getObjectSize(@NonNull Object object) {
         Objects.requireNonNull(instrumentation, "Instrumentation is not set");
-        Objects.requireNonNull(object, "obj is null");
         return instrumentation.getObjectSize(object);
     }
 
@@ -65,7 +64,7 @@ public class InstHelper {
     /**
      * 判断指定类是否支持类重定义，与{@link #isRedefineSupported()}没有直接关联
      */
-    public static boolean isModifiable(Class<?> theClass) {
+    public static boolean isModifiable(@NonNull Class<?> theClass) {
         Objects.requireNonNull(instrumentation, "Instrumentation is not set");
         return instrumentation.isModifiableClass(theClass);
     }
@@ -73,7 +72,7 @@ public class InstHelper {
     /**
      * 重定义指定类文件，该类需同时满足 {@link #isModifiable(Class)} 和 {@link #isRedefineSupported()}
      */
-    public static void redefineClasses(ClassDefinition... definitions) throws UnmodifiableClassException, ClassNotFoundException {
+    public static void redefineClasses(@NonNull ClassDefinition... definitions) throws UnmodifiableClassException, ClassNotFoundException {
         Objects.requireNonNull(instrumentation, "Instrumentation is not set");
         instrumentation.redefineClasses(definitions);
     }

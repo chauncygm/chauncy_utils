@@ -19,12 +19,7 @@ public class App {
     public static void main(String[] args) throws InterruptedException {
         Utils.setJULLogger();
         logger.info(Utils.getInputArguments());
-        List<Integer> list = new ArrayList<>(16);
-        for (int i = 0; i < 100; i++) {
-            list.add(i);
-        }
-        System.out.println("list: " + Utils.getObjectLayout(list));
-        System.out.println("list2: " + Utils.getClassLayOut(list));
+        logger.info(Utils.getRuntimeInfo());
 
         Cleaner cleaner = Cleaner.create();
         cleaner.register(new Object(), () -> {
