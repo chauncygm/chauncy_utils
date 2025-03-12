@@ -10,7 +10,6 @@ public class CompileTest {
 
     @Test
     public void testCompile() {
-
         System.out.println(new File(".").getAbsolutePath());
 
         File sourceDir = Path.of("src/main/java").toFile();
