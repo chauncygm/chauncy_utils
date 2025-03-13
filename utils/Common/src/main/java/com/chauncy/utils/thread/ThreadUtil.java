@@ -64,15 +64,45 @@ public class ThreadUtil {
     }
 
     /**
-     * 安静地线程休眠，不抛出异常
+     * 试图安静地线程休眠指定的毫秒数，不抛出异常
+     * <p>
+     * 如果中断，会提前终止睡眠状态，且恢复中断标志位
+     * 特别注意不要在循环或递归中调用此方法，如果遇到中断会立即返回，可能有堆栈溢出的风险
      *
      * @param millis 休眠时间
      */
-    public static void sleepQuietly(long millis) {
+    public static void sleeplessQuietly(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * 强制安静地线程休眠指定的毫秒数，不抛出异常
+     * <p>
+     * 如果中断，不会提前终止睡眠状态，且在结束休眠后恢复中断标志位
+     *
+     * @param millis 休眠时间
+     */
+    public static void sleepForceQuietly(long millis) {
+        final long deadline = System.currentTimeMillis() + millis;
+
+        long remaining = millis;
+        boolean interrupted = false;
+        while (remaining > 0) {
+            try {
+                Thread.sleep(remaining);
+                break;
+            } catch (InterruptedException e) {
+                remaining = deadline - System.currentTimeMillis();
+                interrupted = true;
+            }
+        }
+
+        if (interrupted) {
+            recoverInterrupted();
         }
     }
 

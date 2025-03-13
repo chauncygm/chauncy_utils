@@ -77,12 +77,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.openjdk.jol</groupId>
-            <artifactId>jol-core</artifactId>
-            <version>${jol.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
@@ -146,6 +140,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.openjdk.jmh</groupId>
+                            <artifactId>jmh-generator-annprocess</artifactId>
+                            <version>${jmh.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-g</arg> <!-- 生成调试信息（行号、变量名等） -->
                     </compilerArgs>
@@ -160,7 +161,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>cn.chauncy.App</mainClass>
+                            <mainClass>com.example.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
