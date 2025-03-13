@@ -22,6 +22,11 @@ public class ThreadUtil {
 
     private ThreadUtil() {}
 
+    /** 获取当前线程的名字 */
+    public static String name() {
+        return Thread.currentThread().getName();
+    }
+
     /**
      * 清除当前线程的中断标志位
      */

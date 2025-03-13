@@ -5,7 +5,8 @@ import com.chauncy.utils.time.TimeProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CountDownLatch;
+import javax.annotation.concurrent.ThreadSafe;
+
 
 /**
  * 雪花算法生成guid，与时间强相关
@@ -18,6 +19,7 @@ import java.util.concurrent.CountDownLatch;
  *
  * @author chauncy
  */
+@ThreadSafe
 public class SnowflakeIdGenerator implements GUIDGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(SnowflakeIdGenerator.class);
