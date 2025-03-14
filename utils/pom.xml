@@ -18,6 +18,7 @@
     <revision>1.0</revision>
 
     <slf4j.version>2.0.17</slf4j.version>
+    <log4j.version>2.20.0</log4j.version>
     <jupiter.version>5.12.0</jupiter.version>
     <mockito.version>5.12.0</mockito.version>
     <lombok.version>1.18.30</lombok.version>
@@ -25,6 +26,14 @@
     <java.version>17</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
