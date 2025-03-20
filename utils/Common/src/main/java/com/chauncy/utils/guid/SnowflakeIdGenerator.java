@@ -9,7 +9,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 
 /**
- * 雪花算法生成guid，与时间强相关
+ * 雪花算法生成guid，与时间强相关，不可回拨时间(可能导致id重复)
  * <p>
  * 支持2048个节点，毫秒级时间差，可运行约35年，支持10毫秒内生成40960个id
  * 测试结果：理论2.5秒可生成1000_0000的id，实际生成1000_0000个id，耗时：3.7秒
@@ -24,7 +24,8 @@ public class SnowflakeIdGenerator implements GUIDGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(SnowflakeIdGenerator.class);
 
-    /** 依赖的时间提供者，使用系统时间，保证始终的连续性 */
+
+    /** 依赖的时间提供者，使用系统时间，保证时钟的连续性 */
     private static final TimeProvider timeProvider = System::currentTimeMillis;
 
     /** 默认初始时间 utc 2025-01-01 00:00:00 */

@@ -2,6 +2,7 @@ package com.chauncy.utils.time;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
 import static com.chauncy.utils.time.TimeUtils.*;
@@ -85,9 +86,9 @@ public class TimeHelper {
      * @param epochMilli 时间戳
      * @return 本地时间
      */
-    public LocalDateTime toLocalDataTime(long epochMilli) {
-        long second = epochMilli / 1000;
-        int nanosOfSecond = (int) (epochMilli  % 1000 * TimeUtils.NANOS_PER_MILLIS);
+    public LocalDateTime toLocalDateTime(long epochMilli) {
+        long second = epochMilli / MILLIS_PER_SECOND;
+        int nanosOfSecond = (int) (epochMilli  % MILLIS_PER_SECOND * NANOS_PER_MILLIS);
         return LocalDateTime.ofEpochSecond(second, nanosOfSecond, zoneOffset);
     }
 
@@ -97,15 +98,15 @@ public class TimeHelper {
      * @param epochMilli 时间戳
      * @return 本地时间
      */
-    public LocalDateTime toLocalDataTimeSec(long epochMilli) {
-        return LocalDateTime.ofEpochSecond(epochMilli / 1000, 0, zoneOffset);
+    public LocalDateTime toLocalDateTimeSec(long epochMilli) {
+        return LocalDateTime.ofEpochSecond(epochMilli / MILLIS_PER_SECOND, 0, zoneOffset);
     }
 
     /**
      * 获取当天开始的时间戳
      */
     public long getBeginOfDay() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(zoneOffset);
         return toEpochMilli(now.with(START_OF_DAY));
     }
 
@@ -116,8 +117,39 @@ public class TimeHelper {
      * @return 当天开始的时间戳
      */
     public long getBeginOfDay(long epochMilli) {
-        LocalDateTime localDataTime = toLocalDataTimeSec(epochMilli);
+        LocalDateTime localDataTime = toLocalDateTimeSec(epochMilli);
         return toEpochMilli(localDataTime.with(START_OF_DAY));
+    }
+
+    /**
+     * 获取下一小时开始的时间戳
+     *
+     * @param epochMilli 时间戳
+     * @return 下一小时开始的时间戳
+     */
+    public long getBeginOfNextHour(long epochMilli) {
+        LocalDateTime time = toLocalDateTimeSec(epochMilli);
+        LocalDateTime nextHour = time.plusHours(1).truncatedTo(ChronoUnit.HOURS);
+        return toEpochMilli(nextHour);
+    }
+
+    /**
+     * 获取指定时间当天之后的下一个指定小时数的时间戳
+     *
+     * @param epochMilli 指定时间
+     * @param hour 指定小时数
+     * @return 下一个指定小时数的时间戳
+     */
+    public long getNextTimeFromHourOfDay(long epochMilli, int hour) {
+        if (hour < 0 || hour > 23) {
+            throw new DateTimeException("Invalid hour (0-23): " + hour);
+        }
+
+        long dayStart = getBeginOfDay(epochMilli);
+        long targetTime = dayStart + hour * MILLIS_PER_HOUR;
+
+        return epochMilli < targetTime ? targetTime : targetTime + MILLIS_PER_DAY;
+
     }
 
     /**
@@ -127,7 +159,7 @@ public class TimeHelper {
      * @return 当天结束的时间戳
      */
     public long getEndOfDay(long epochMilli) {
-        LocalDateTime localDataTime = toLocalDataTimeSec(epochMilli);
+        LocalDateTime localDataTime = toLocalDateTimeSec(epochMilli);
         return toEpochMilli(localDataTime.with(END_OF_DAY));
     }
 
@@ -148,7 +180,7 @@ public class TimeHelper {
      * @return 明天开始的时间戳
      */
     public long getNextBeginOfDay(long epochMilli) {
-        LocalDateTime localDateTime = toLocalDataTimeSec(epochMilli);
+        LocalDateTime localDateTime = toLocalDateTimeSec(epochMilli);
         return toEpochMilli(localDateTime.plusDays(1).with(START_OF_DAY));
     }
 
@@ -160,7 +192,7 @@ public class TimeHelper {
      * @return 当天指定小时数的时间戳
      */
     public long getTimeHourOfDay(long epochMilli, int hour) {
-        LocalDateTime localDataTime = toLocalDataTimeSec(epochMilli);
+        LocalDateTime localDataTime = toLocalDateTimeSec(epochMilli);
         LocalDateTime adjustTime = localDataTime.with(LocalTime.of(hour, 0));
         return toEpochMilli(adjustTime);
     }
@@ -172,7 +204,7 @@ public class TimeHelper {
      * @return 当前周开始的时间戳
      */
     public long getBeginOfWeek(long epochMilli) {
-        LocalDateTime localDataTime = toLocalDataTimeSec(epochMilli);
+        LocalDateTime localDataTime = toLocalDateTimeSec(epochMilli);
         LocalDateTime adjustTime = localDataTime.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).with(LocalTime.MIN);
         return toEpochMilli(adjustTime);
     }
@@ -184,7 +216,7 @@ public class TimeHelper {
      * @return 下一周开始的时间戳
      */
     public long getNextBeginOfWeek(long epochMilli) {
-        LocalDateTime localDataTime = toLocalDataTimeSec(epochMilli);
+        LocalDateTime localDataTime = toLocalDateTimeSec(epochMilli);
         LocalDateTime adjustTime = localDataTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY)).with(LocalTime.MIN);
         return toEpochMilli(adjustTime);
     }
@@ -196,7 +228,7 @@ public class TimeHelper {
      * @return 本月开始的时间戳
      */
     public long getBeginOfMonth(long epochMilli) {
-        LocalDateTime localDataTime = toLocalDataTimeSec(epochMilli);
+        LocalDateTime localDataTime = toLocalDateTimeSec(epochMilli);
         LocalDateTime adjustTime = localDataTime.with(TemporalAdjusters.firstDayOfMonth()).with(LocalTime.MIN);
         return toEpochMilli(adjustTime);
     }
@@ -208,7 +240,7 @@ public class TimeHelper {
      * @return 下月开始的时间戳
      */
     public long getNextBeginOfMonth(long epochMilli) {
-        LocalDateTime localDataTime = toLocalDataTimeSec(epochMilli);
+        LocalDateTime localDataTime = toLocalDateTimeSec(epochMilli);
         LocalDateTime adjustTime = localDataTime.with(TemporalAdjusters.firstDayOfNextMonth()).with(LocalTime.MIN);
         return toEpochMilli(adjustTime);
     }
@@ -279,7 +311,7 @@ public class TimeHelper {
      * 将时间戳转换为指定格式时间字符串
      */
     public String formatTime(long epochMilli, DateTimeFormatter formatter) {
-        LocalDateTime localDataTime = toLocalDataTime(epochMilli);
+        LocalDateTime localDataTime = toLocalDateTime(epochMilli);
         return formatTime(localDataTime, formatter);
     }
 
