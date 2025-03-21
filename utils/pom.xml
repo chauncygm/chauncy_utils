@@ -11,6 +11,8 @@
   <modules>
     <module>Agent</module>
     <module>Common</module>
+    <module>Tools/GenProtoMsg</module>
+    <module>Message</module>
   </modules>
 
   <properties>
