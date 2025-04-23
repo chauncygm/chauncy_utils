@@ -1,25 +1,27 @@
 package com.chauncy.utils.sensitive;
 
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.locks.StampedLock;
+import java.util.function.Supplier;
 
 /**
  * 敏感词工具类
  */
-@NotThreadSafe
+@ThreadSafe
 public final class SensitiveFilter {
+
+    /** 默认敏感词替换为(*) */
+    private static final SensitiveProcessor DEFAULT_PROCESSOR = new SensitiveProcessor() {};
 
     /** 敏感词树 */
     private final WordTree sensitiveTree = new WordTree();
-
+    /** 乐观锁 */
+    private final StampedLock stampedLock = new StampedLock();
 
     /** 空的敏感词树 */
-    public SensitiveFilter() {
-
-    }
+    public SensitiveFilter() {}
 
     /**
      * 初始化敏感词树
@@ -32,12 +34,31 @@ public final class SensitiveFilter {
 
     /** 是否存在敏感词 */
     public boolean hasSensitiveWords() {
-        return !sensitiveTree.isEmpty();
+        return executeWithOptimisticRead(() -> !sensitiveTree.isEmpty());
     }
 
     /** 添加敏感词 */
     public void add(Collection<String> sensitiveWords) {
-        sensitiveTree.addWords(sensitiveWords);
+        if (sensitiveWords == null || sensitiveWords.isEmpty()) {
+            return;
+        }
+
+        long stamp = stampedLock.writeLock();
+        try {
+            sensitiveTree.addWords(sensitiveWords);
+        } finally {
+            stampedLock.unlockWrite(stamp);
+        }
+    }
+
+    /** 清空敏感词库 */
+    public void clear() {
+        long stamp = stampedLock.writeLock();
+        try {
+            sensitiveTree.clear();
+        } finally {
+            stampedLock.unlockWrite(stamp);
+        }
     }
 
     /**
@@ -48,8 +69,13 @@ public final class SensitiveFilter {
      * @since 5.4.4
      */
     public void setCharFilter(Filter<Character> charFilter) {
-        if (charFilter != null) {
-            sensitiveTree.setCharFilter(charFilter);
+        long stamp = stampedLock.writeLock();
+        try {
+            if (charFilter != null) {
+                sensitiveTree.setCharFilter(charFilter);
+            }
+        } finally {
+            stampedLock.unlockWrite(stamp);
         }
     }
 
@@ -60,7 +86,7 @@ public final class SensitiveFilter {
      * @return 是否包含
      */
     public boolean containsSensitive(String text) {
-        return sensitiveTree.isMatch(text);
+        return executeWithOptimisticRead(() -> sensitiveTree.isMatch(text));
     }
 
     /**
@@ -71,7 +97,7 @@ public final class SensitiveFilter {
      * @since 5.5.3
      */
     public FoundWord getFoundFirstSensitive(String text) {
-        return sensitiveTree.matchWord(text);
+        return executeWithOptimisticRead(() -> sensitiveTree.matchWord(text));
     }
 
     /**
@@ -82,7 +108,7 @@ public final class SensitiveFilter {
      * @since 5.5.3
      */
     public List<FoundWord> getFoundAllSensitive(String text) {
-        return sensitiveTree.matchAllWords(text);
+        return executeWithOptimisticRead(() -> sensitiveTree.matchAllWords(text));
     }
 
     /**
@@ -96,7 +122,7 @@ public final class SensitiveFilter {
      * @return 敏感词
      */
     public List<FoundWord> getFoundAllSensitive(String text, boolean isDensityMatch, boolean isGreedMatch) {
-        return sensitiveTree.matchAllWords(text, -1, isDensityMatch, isGreedMatch);
+        return executeWithOptimisticRead(() -> sensitiveTree.matchAllWords(text, -1, isDensityMatch, isGreedMatch));
     }
 
     /**
@@ -128,22 +154,32 @@ public final class SensitiveFilter {
         if (foundWordList.isEmpty()) {
             return text;
         }
-        sensitiveProcessor = sensitiveProcessor == null ? new SensitiveProcessor() {
-        } : sensitiveProcessor;
+        sensitiveProcessor = sensitiveProcessor == null ? DEFAULT_PROCESSOR : sensitiveProcessor;
 
-        final Map<Integer, FoundWord> foundWordMap = new HashMap<>(foundWordList.size(), 1);
-        foundWordList.forEach(foundWord -> foundWordMap.put(foundWord.getStartIndex(), foundWord));
-        final int length = text.length();
-        final StringBuilder textStringBuilder = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            final FoundWord fw = foundWordMap.get(i);
-            if (fw != null) {
-                textStringBuilder.append(sensitiveProcessor.process(fw));
-                i = fw.getEndIndex();
-            } else {
-                textStringBuilder.append(text.charAt(i));
+        int lastIndex = 0;
+        final StringBuilder textBuilder = new StringBuilder();
+        for (FoundWord fw : foundWordList) {
+            if (fw.getStartIndex() >= lastIndex) {
+                textBuilder.append(text, lastIndex, fw.getStartIndex());
+                textBuilder.append(sensitiveProcessor.process(fw));
+                lastIndex = fw.getEndIndex() + 1;
             }
         }
-        return textStringBuilder.toString();
+        textBuilder.append(text.substring(lastIndex));
+        return textBuilder.toString();
+    }
+
+    private <T> T executeWithOptimisticRead(Supplier<T> supplier) {
+        long stamp = stampedLock.tryOptimisticRead();
+        T result = supplier.get();
+        if (!stampedLock.validate(stamp)) {
+            stamp = stampedLock.readLock();
+            try {
+                result = supplier.get();
+            } finally {
+                stampedLock.unlockRead(stamp);
+            }
+        }
+        return result;
     }
 }

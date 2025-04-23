@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
  * 巾                            <br>
  * 其中每个节点都是一个WordTreeNode对象，查找时从上向下查找。<br>
  */
+@SuppressWarnings("UnusedReturnValue")
 @NotThreadSafe
 public class WordTree {
 
@@ -65,7 +66,7 @@ public class WordTree {
      * @return this
      */
     public WordTree addWord(String word) {
-        if (word == null || word.length() == 0) {
+        if (word == null || word.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
