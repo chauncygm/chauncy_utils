@@ -13,6 +13,9 @@
     <module>Common</module>
     <module>Tools/GenProtoMsg</module>
     <module>Message</module>
+    <module>Game</module>
+    <module>Apt-processor</module>
+    <module>Apt-base</module>
   </modules>
 
   <properties>
@@ -23,6 +26,7 @@
     <log4j.version>2.20.0</log4j.version>
     <jupiter.version>5.12.0</jupiter.version>
     <mockito.version>5.12.0</mockito.version>
+    <junit.version>3.8.1</junit.version>
     <lombok.version>1.18.30</lombok.version>
 
     <java.version>17</java.version>
@@ -35,7 +39,42 @@
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>Maven Repository</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>central</id>
+      <name>Maven Repository</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+      <releases>
+          <enabled>true</enabled>
+      </releases>
+      <snapshots>
+          <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
   <build>
     <plugins>

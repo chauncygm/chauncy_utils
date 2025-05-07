@@ -3,19 +3,21 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>cn.chauncy</groupId>
-  <artifactId>Agent</artifactId>
+  <artifactId>Game</artifactId>
   <version>1.0</version>
+  <name>Game</name>
+  <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm-commons</artifactId>
-      <version>9.7</version>
+      <groupId>cn.chauncy</groupId>
+      <artifactId>Apt-base</artifactId>
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm-util</artifactId>
-      <version>9.7</version>
+      <groupId>cn.chauncy</groupId>
+      <artifactId>Apt-processor</artifactId>
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

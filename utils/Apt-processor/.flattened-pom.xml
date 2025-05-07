@@ -3,19 +3,26 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>cn.chauncy</groupId>
-  <artifactId>Agent</artifactId>
+  <artifactId>Apt-processor</artifactId>
   <version>1.0</version>
+  <name>Apt-processor</name>
   <dependencies>
     <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm-commons</artifactId>
-      <version>9.7</version>
+      <groupId>cn.chauncy</groupId>
+      <artifactId>Apt-base</artifactId>
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm-util</artifactId>
-      <version>9.7</version>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service</artifactId>
+      <version>1.1.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup</groupId>
+      <artifactId>javapoet</artifactId>
+      <version>1.13.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

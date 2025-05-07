@@ -3,19 +3,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>cn.chauncy</groupId>
-  <artifactId>Agent</artifactId>
+  <artifactId>Utils</artifactId>
   <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>utils</name>
   <dependencies>
     <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm-commons</artifactId>
-      <version>9.7</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm-util</artifactId>
-      <version>9.7</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.17</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
