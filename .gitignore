@@ -1,5 +1,6 @@
 ﻿Utils/logs
 logs
-utils/.idea
+Utils/.idea
 Utils/Common/res
 Utils/Message/src/main/java
+Utils/**/.flattened-pom.xml

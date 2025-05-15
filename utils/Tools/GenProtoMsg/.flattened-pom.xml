@@ -3,20 +3,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>cn.chauncy</groupId>
-  <artifactId>Game</artifactId>
+  <artifactId>GenProtoMsg</artifactId>
   <version>1.0</version>
-  <name>Game</name>
-  <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
-      <groupId>cn.chauncy</groupId>
-      <artifactId>Apt-base</artifactId>
-      <version>1.0</version>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.18.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cn.chauncy</groupId>
-      <artifactId>Apt-processor</artifactId>
+      <artifactId>Common</artifactId>
       <version>1.0</version>
       <scope>compile</scope>
     </dependency>
