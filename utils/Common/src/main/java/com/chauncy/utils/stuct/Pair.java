@@ -1,28 +1,15 @@
 package com.chauncy.utils.stuct;
 
-public class Pair<F, S> {
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-    private final F first;
-    private final S second;
-
-    public Pair(F first, S second) {
-        this.first = first;
-        this.second = second;
-    }
-
-    public F getFirst() {
-        return first;
-    }
-
-    public S getSecond() {
-        return second;
-    }
+public record Pair<F, S>(F first, S second) {
 
     public static <F, S> Pair<F, S> of(F first, S second) {
         return new Pair<F, S>(first, second);
     }
 
     @Override
+    @NonNull
     public String toString() {
         return "Pair{" + first + ", " + second + '}';
     }

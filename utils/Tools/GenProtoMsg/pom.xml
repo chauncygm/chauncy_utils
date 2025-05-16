@@ -6,11 +6,13 @@
     <parent>
         <groupId>cn.chauncy</groupId>
         <artifactId>Utils</artifactId>
-        <version>${revision}</version>
+        <version>1.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
+    <name>GenProtoMsg</name>
     <artifactId>GenProtoMsg</artifactId>
+    <version>${revision}</version>
 
     <properties>
         <commons-io.version>2.18.0</commons-io.version>
@@ -24,12 +26,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.chauncy</groupId>
-            <artifactId>Common</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
 

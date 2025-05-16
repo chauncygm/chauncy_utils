@@ -1,25 +1,20 @@
 package com.example;
 
-import com.chauncy.utils.Utils;
-import com.chauncy.utils.reload.InstHelper;
-import org.openjdk.jol.info.ClassLayout;
-import org.openjdk.jol.info.GraphLayout;
+import com.chauncy.utils.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.Cleaner;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class App {
 
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) throws InterruptedException {
-        Utils.setJULLogger();
-        logger.info(Utils.getInputArguments());
-        logger.info(Utils.getRuntimeInfo());
+        SystemUtils.setJULLogger();
+        logger.info(SystemUtils.getInputArguments());
+        logger.info(SystemUtils.getRuntimeInfo());
 
         Cleaner cleaner = Cleaner.create();
         cleaner.register(new Object(), () -> {

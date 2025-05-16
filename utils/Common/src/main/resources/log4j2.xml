@@ -2,6 +2,7 @@
 <Configuration status="WARN" monitorInterval="30">
 <Properties>
     <Property name="LOG_HOME">logs</Property>
+    <Property name="LOGSTASH_HOST">172.21.240.55</Property>
     <Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS z}] [%t] %-5level %logger{36} - %msg%xEx%n</Property>
 </Properties>
 
@@ -14,12 +15,18 @@
         <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
         <PatternLayout pattern="${LOG_PATTERN}"/>
     </File>
+
+<!--    <Socket name="logstash" host="${LOGSTASH_HOST}" port="4567" protocol="TCP" reconnectionDelay="10000">-->
+<!--        <PatternLayout pattern="${LOG_PATTERN}"/>-->
+<!--        <immediateFlush>true</immediateFlush>-->
+<!--    </Socket>-->
 </Appenders>
 
 <Loggers>
     <Root level="info">
         <AppenderRef ref="console"/>
         <AppenderRef ref="log"/>
+<!--        <AppenderRef ref="logstash"/>-->
     </Root>
 </Loggers>
 </Configuration>

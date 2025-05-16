@@ -30,13 +30,13 @@ public class TimeHelper {
     }
 
     public static TimeHelper of(ZoneOffset zoneOffset) {
-        if (TimeUtils.ZONE_UTC.equals(zoneOffset)) {
+        if (ZONE_UTC.equals(zoneOffset)) {
             return UTC;
         }
-        if (TimeUtils.ZONE_CST.equals(zoneOffset)) {
+        if (ZONE_CST.equals(zoneOffset)) {
             return CST;
         }
-        if (TimeUtils.ZONE_SYSTEM.equals(zoneOffset)) {
+        if (ZONE_SYSTEM.equals(zoneOffset)) {
             return SYSTEM;
         }
         return new TimeHelper(zoneOffset);

@@ -4,14 +4,17 @@
     <parent>
         <groupId>cn.chauncy</groupId>
         <artifactId>Utils</artifactId>
-        <version>${revision}</version>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>Message</artifactId>
-    <packaging>jar</packaging>
     <name>Message</name>
+    <artifactId>Message</artifactId>
+    <version>${revision}</version>
+    <packaging>jar</packaging>
 
     <properties>
+        <protobuf.version>4.30.0</protobuf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -19,7 +22,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>4.26.1</version>
+            <version>${protobuf.version}</version>
         </dependency>
     </dependencies>
 </project>

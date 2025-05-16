@@ -1,13 +1,13 @@
 package cn.chauncy;
 
-import cn.chauncy.annotation.AutoMapper;
-import cn.chauncy.annotation.Subscribe;
+import com.chauncy.utils.mapper.AutoMapper;
+import com.chauncy.utils.eventbus.Subscribe;
 
 @AutoMapper(baseMapper = BaseMapper.class)
 public class Demo {
 
     @Subscribe
-    private void test() {
+    public void test(String abc) {
         System.out.println("test");
     }
 }
