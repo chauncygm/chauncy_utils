@@ -8,6 +8,5 @@ module Apt.processor {
     requires com.squareup.javapoet;
     requires java.compiler;
 
-
     provides Processor with SubscribeProcessor, AutoMapperProcessor;
 }
