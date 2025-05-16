@@ -1,11 +1,15 @@
-package cn.chauncy.annotation;
+package com.chauncy.utils.mapper;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-@Target({ ElementType.METHOD})
-public @interface Subscribe {
+public @interface AutoMapper {
+
+    String name() default "";
+
+    Class<?> baseMapper();
 }

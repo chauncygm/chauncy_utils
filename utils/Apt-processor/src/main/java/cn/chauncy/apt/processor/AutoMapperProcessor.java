@@ -1,7 +1,5 @@
 package cn.chauncy.apt.processor;
 
-import cn.chauncy.annotation.AutoMapper;
-import cn.chauncy.annotation.Subscribe;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
@@ -16,16 +14,27 @@ import java.util.Map;
 import java.util.Set;
 
 @AutoService(Processor.class)
-@SupportedAnnotationTypes({
-        "cn.chauncy.annotation.AutoMapper"
-})
 @SupportedSourceVersion(javax.lang.model.SourceVersion.RELEASE_17)
 public class AutoMapperProcessor extends MyAbstractProcessor {
 
+    private static final String AUTO_MAPPER_TYPE = "com.chauncy.utils.eventbus.AutoMapper";
 
+    private TypeElement autoMapperTypeElement;
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
+    }
+
+    @Override
+    protected void ensureInitialized() {
+        if (autoMapperTypeElement == null) {
+            autoMapperTypeElement = elementUtils.getTypeElement(AUTO_MAPPER_TYPE);
+        }
+    }
+
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        return Set.of(AUTO_MAPPER_TYPE);
     }
 
     @Override
@@ -37,28 +46,22 @@ public class AutoMapperProcessor extends MyAbstractProcessor {
             return true;
         }
         messager.printMessage(Diagnostic.Kind.NOTE, "START PROCESS ==> AutoMapper");
-        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(AutoMapper.class);
+        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(autoMapperTypeElement);
         for (Element element : elements) {
             String packageName = elementUtils.getPackageOf(element).getQualifiedName().toString();
             String className = element.getSimpleName().toString();
             ClassName elementClassName = ClassName.get(packageName, className);
-            mapperProcess(element, packageName, className, elementClassName);
+//            mapperProcess(element, packageName, className, elementClassName);
         }
-
         return true;
     }
 
     private void mapperProcess(Element element, String packageName, String className, ClassName elementClassName) {
-        AutoMapper autoMapper = element.getAnnotation(AutoMapper.class);
 
-        String name = autoMapper.name();
-        if (name == null || name.isBlank()) {
-            name = className + "Mapper";
-        }
+        String className2 = className + "Mapper";
+        TypeMirror baseMapperTypeMirror = readValue(element, autoMapperTypeElement.getClass(), "baseMapper");
 
-        TypeMirror baseMapperTypeMirror = readValue(element, AutoMapper.class, "baseMapper");
-
-        TypeSpec.Builder builder = TypeSpec.interfaceBuilder(name).addModifiers(Modifier.PUBLIC);
+        TypeSpec.Builder builder = TypeSpec.interfaceBuilder(className2).addModifiers(Modifier.PUBLIC);
         if (baseMapperTypeMirror != null) {
             builder.addSuperinterface(ClassName.get(baseMapperTypeMirror));
         }
