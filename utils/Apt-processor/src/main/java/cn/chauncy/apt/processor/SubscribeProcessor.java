@@ -2,11 +2,9 @@ package cn.chauncy.apt.processor;
 
 import cn.chauncy.apt.utils.AptUtils;
 import com.google.auto.service.AutoService;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 
+import javax.annotation.processing.Generated;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
@@ -24,11 +22,14 @@ import java.util.stream.Collectors;
 @SupportedSourceVersion(javax.lang.model.SourceVersion.RELEASE_17)
 public class SubscribeProcessor extends MyAbstractProcessor {
 
-    private static final String SUBSCRIBE_TYPE = "com.chauncy.utils.eventbus.Subscribe";
-    private static final String EVENTBUS_TYPE = "com.chauncy.utils.eventbus.EventBus";
-    private static final String GENERIC_EVENT_TYPE = "com.chauncy.utils.eventbus.GenericEvent";
+    private static final String SUBSCRIBE_TYPE = "cn.chauncy.utils.eventbus.Subscribe";
+    private static final String REGISTERED_TYPE = "cn.chauncy.utils.eventbus.Registered";
+    private static final String EVENTBUS_TYPE = "cn.chauncy.utils.eventbus.EventBus";
+    private static final String GENERIC_EVENT_TYPE = "cn.chauncy.utils.eventbus.GenericEvent";
+    private static final String PACKAGE_NAME = "cn.chauncy.registry";
 
     private TypeElement sbscribeTypeElement;
+    private TypeElement registeredTypeElement;
     private TypeElement eventbusTypeElement;
     private TypeElement genericEventTypeElement;
 
@@ -43,6 +44,7 @@ public class SubscribeProcessor extends MyAbstractProcessor {
             sbscribeTypeElement = elementUtils.getTypeElement(SUBSCRIBE_TYPE);
             eventbusTypeElement = elementUtils.getTypeElement(EVENTBUS_TYPE);
             genericEventTypeElement = elementUtils.getTypeElement(GENERIC_EVENT_TYPE);
+            registeredTypeElement = elementUtils.getTypeElement(REGISTERED_TYPE);
         }
     }
 
@@ -71,10 +73,10 @@ public class SubscribeProcessor extends MyAbstractProcessor {
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addAnnotation(processorAnnotationSpec)
+                .addAnnotation(ClassName.get(registeredTypeElement))
                 .addMethod(genRegisterMethodSpec(typeElement, methodList));
 
-        String packageName = typeElement.getEnclosingElement().toString();
-        JavaFile javaFile = JavaFile.builder(packageName, typeBuilder.build())
+        JavaFile javaFile = JavaFile.builder(PACKAGE_NAME, typeBuilder.build())
                 .skipJavaLangImports(true)
                 .indent("    ")
                 .build();
