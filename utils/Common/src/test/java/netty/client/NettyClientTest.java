@@ -1,7 +1,9 @@
 package netty.client;
 
+import com.chauncy.message.ReqLogin;
 import com.chauncy.utils.net.NettyClient;
 import com.chauncy.utils.net.SimplerChannelInitializer;
+import com.chauncy.utils.net.proto.MessageRegistry;
 
 import java.util.Scanner;
 
@@ -11,7 +13,9 @@ public class NettyClientTest {
     private static final int port = 10001;
 
     public static void main(String[] args) {
-        SimplerChannelInitializer channelInitializer = new SimplerChannelInitializer();
+        MessageRegistry registry = new MessageRegistry();
+        registry.register(ReqLogin.class);
+        SimplerChannelInitializer channelInitializer = new SimplerChannelInitializer(registry, false);
         NettyClient nettyClient = new NettyClient("client0", channelInitializer);
         nettyClient.connect(host, port);
 
@@ -22,7 +26,7 @@ public class NettyClientTest {
                 nettyClient.close();
                 break;
             } else {
-                nettyClient.send(msg);
+                nettyClient.send(ReqLogin.newBuilder().setUid(1).build());
             }
         }
     }

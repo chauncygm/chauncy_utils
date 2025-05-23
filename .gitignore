@@ -4,3 +4,4 @@ Utils/.idea
 Utils/Common/res
 Utils/Message/src/main/java
 Utils/**/.flattened-pom.xml
+Utils/Tools/tmp

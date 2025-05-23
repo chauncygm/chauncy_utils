@@ -72,6 +72,7 @@
                                     <artifact>*:*</artifact>
                                     <!-- 包含module-info.class -->
                                     <includes>
+                                        <include>**/*.class</include>
                                         <include>module-info.class</include>
                                     </includes>
                                     <excludes>
@@ -93,6 +94,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>

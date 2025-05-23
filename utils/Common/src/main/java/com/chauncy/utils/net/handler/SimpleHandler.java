@@ -1,90 +1,94 @@
-package com.chauncy.utils.net;
+package com.chauncy.utils.net.handler;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.ChannelPromise;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.SocketAddress;
-import java.nio.charset.StandardCharsets;
 
 public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleHandler.class);
 
+    private final boolean isServer;
+
+    public SimpleHandler(boolean isServer) {
+        this.isServer = isServer;
+    }
+
     //region base handler
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+    public void handlerAdded(ChannelHandlerContext ctx) {
         logger.info("handlerAdded: {}", ctx);
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+    public void handlerRemoved(ChannelHandlerContext ctx) {
         logger.info("handlerRemoved: {}", ctx);
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.info("exceptionCaught: {}, cause: {}", ctx, ExceptionUtils.getRootCauseStackTraceList(cause));
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        logger.info("exceptionCaught: {}, cause: {}", ctx, cause);
     }
     //endregion
 
     //region inbound handler
     @Override
-    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+    public void channelRegistered(ChannelHandlerContext ctx) {
         logger.info("channelRegistered: {}", ctx);
         ctx.fireChannelRegistered();
     }
 
     @Override
-    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+    public void channelUnregistered(ChannelHandlerContext ctx) {
         logger.info("channelUnregistered: {}", ctx);
         ctx.fireChannelUnregistered();
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         logger.info("channelActive: {}", ctx);
         ctx.fireChannelActive();
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         logger.info("channelInactive: {}", ctx);
         ctx.fireChannelInactive();
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof ByteBuf byteBuf) {
-            msg = byteBuf.toString(0, byteBuf.readableBytes(), StandardCharsets.UTF_8);
-        }
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         logger.info("channelRead: {}, msg: {}", ctx, msg);
         ctx.fireChannelRead(msg);
-
-        if (msg instanceof String tip && !tip.contains(": OK")) {
-            ctx.writeAndFlush(msg + ": OK");
+        if (isServer) {
+            ctx.writeAndFlush(msg);
         }
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) {
 //        logger.info("channelReadComplete: {}", ctx);
         ctx.fireChannelReadComplete();
     }
 
     @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        logger.info("userEventTriggered: {}, event: {}", ctx, evt);
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
+        if (evt instanceof IdleStateEvent) {
+            logger.info("trigger: {}", evt);
+        } else {
+            logger.info("userEventTriggered: {}, event: {}", ctx, evt);
+        }
         ctx.fireUserEventTriggered(evt);
     }
 
     @Override
-    public void channelWritabilityChanged(ChannelHandlerContext ctx) throws Exception {
+    public void channelWritabilityChanged(ChannelHandlerContext ctx) {
         logger.info("channelWritabilityChanged: {}", ctx);
         ctx.fireChannelWritabilityChanged();
     }
@@ -92,25 +96,25 @@ public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHand
 
     //region outbound handler
     @Override
-    public void bind(ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise) throws Exception {
+    public void bind(ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise) {
         logger.info("bind: {}, localAddress: {}, promise: {}", ctx, localAddress, promise);
         ctx.bind(localAddress, promise);
     }
 
     @Override
-    public void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress, ChannelPromise promise) throws Exception {
+    public void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress, ChannelPromise promise) {
         logger.info("connect: {}, remoteAddress: {}, localAddress: {}, promise: {}", ctx, remoteAddress, localAddress, promise);
         ctx.connect(remoteAddress, localAddress, promise);
     }
 
     @Override
-    public void disconnect(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
+    public void disconnect(ChannelHandlerContext ctx, ChannelPromise promise) {
         logger.info("disconnect: {}, promise: {}", ctx, promise);
         ctx.disconnect(promise);
     }
 
     @Override
-    public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
+    public void close(ChannelHandlerContext ctx, ChannelPromise promise) {
         logger.info("close: {}, promise: {}", ctx, promise);
         ctx.close(promise);
     }

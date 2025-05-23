@@ -1,5 +1,4 @@
 syntax = "proto3";
-option java_multiple_files = true;
 
 message ReqLogin {
   int64 uid = 1;

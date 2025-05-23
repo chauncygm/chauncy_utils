@@ -1,6 +1,7 @@
 package com.chauncy.utils.net;
 
 
+import com.chauncy.utils.net.handler.SimpleHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -21,22 +22,25 @@ public class NettyServer {
 
     private final EventLoopGroup bossGroup;
     private final EventLoopGroup workerGroup;
+    private final ChannelInitializer<SocketChannel> channelInitializer;
+    private int port;
 
     private volatile boolean running = false;
-    private volatile int port;
     private ChannelFuture channelFuture;
 
-    public NettyServer(String name) {
+    public NettyServer(String name, int port, ChannelInitializer<SocketChannel> channelInitializer) {
         int processors = Runtime.getRuntime().availableProcessors();
         int bossThreadCount = Math.max(processors / 2, 1);
         this.bossGroup = createEventLoopGroup(name + "-boss", bossThreadCount);
         this.workerGroup = createEventLoopGroup(name + "-worker", processors * 2);
+        this.channelInitializer = channelInitializer;
+        this.port = port;
     }
 
 
-    public void start(ChannelInitializer<SocketChannel> channelInitializer, int port) {
+    public ChannelFuture bind() {
         if (running) {
-            return;
+            return channelFuture;
         }
 
         ServerBootstrap serverBootstrap = new ServerBootstrap();
@@ -61,32 +65,26 @@ public class NettyServer {
 //                .childOption(ChannelOption.SO_LINGER, 3)
 //                .childOption(ChannelOption.ALLOW_HALF_CLOSURE, true);
 
-        serverBootstrap.handler(new SimpleHandler());
+        serverBootstrap.handler(new SimpleHandler(true));
         serverBootstrap.childHandler(channelInitializer);
         channelFuture = serverBootstrap.bind();
-        channelFuture.addListener((ChannelFutureListener) future -> {
-            this.running = future.isSuccess();
-            this.port = port;
-            if (future.isSuccess()) {
-                logger.info("NettyServer start success, port: {}", this.port);
-            } else {
-                logger.error("NettyServer start error, port: {}", this.port);
-            }
+        channelFuture.channel().closeFuture().addListener(future -> {
+            logger.info("NettyServer[{}] stop", this.port);
+            shutdown();
         });
+        return channelFuture;
 
-//        channelFuture.channel().closeFuture().addListener(future -> {
-//            logger.info("NettyServer[{}] stop", this.port);
-//            shutdown();
-//        });
     }
 
-    private void shutdown() {
-        channelFuture.channel().close().addListener(future -> {
+    public ChannelFuture shutdown() {
+        ChannelFuture closeFuture = channelFuture.channel().close();
+        closeFuture.addListener(future -> {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
             running = false;
             logger.info("NettyServer[{}] stop success", this.port);
         });
+        return closeFuture;
     }
 
     @SuppressWarnings("unused")

@@ -19,14 +19,15 @@ module Common {
     requires org.apache.commons.io;
     requires org.apache.commons.lang3;
     requires org.checkerframework.checker.qual;
-    requires org.objectweb.asm.commons;
-    requires org.objectweb.asm.util;
     requires owner;
     requires redisson;
     requires zookeeper;
     requires java.sql;
-    requires org.slf4j;
     requires com.fasterxml.jackson.databind;
+    requires com.google.protobuf;
+    requires org.objectweb.asm.commons;
+    requires org.objectweb.asm.util;
+    requires com.google.guice;
 
     exports com.chauncy.utils.log to java.logging;
 }

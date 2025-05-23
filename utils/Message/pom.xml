@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <protobuf.version>4.30.0</protobuf.version>
+        <protobuf.version>4.30.1</protobuf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

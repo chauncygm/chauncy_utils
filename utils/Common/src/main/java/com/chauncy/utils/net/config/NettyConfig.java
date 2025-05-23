@@ -1,4 +1,4 @@
-package com.chauncy.utils.net;
+package com.chauncy.utils.net.config;
 
 import org.aeonbits.owner.Config;
 
