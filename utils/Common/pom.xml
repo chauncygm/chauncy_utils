@@ -12,8 +12,9 @@
     <packaging>jar</packaging>
 
     <properties>
-        <main.class>com.example.App</main.class>
+        <main.class>cn.example.App</main.class>
 
+        <disruptor.version>4.0.0</disruptor.version>
         <netty.version>4.1.119.Final</netty.version>
         <redisson.version>3.45.0</redisson.version>
 
@@ -23,6 +24,8 @@
         <common-io.version>2.18.0</common-io.version>
         <common-pool.version>2.12.0</common-pool.version>
         <guava.version>33.3.0-jre</guava.version>
+        <guice.version>7.0.0</guice.version>
+        <reflections.version>0.10</reflections.version>
         <owner.version>1.0.12</owner.version>
         <curator.version>5.8.0</curator.version>
         <zookepper.version>3.9.3</zookepper.version>
@@ -56,11 +59,22 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.auto.service</groupId>
             <artifactId>auto-service</artifactId>
             <version>${auto-service.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflections.version}</version>
         </dependency>
 
         <dependency>
@@ -103,6 +117,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
             <version>${common-pool.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.lmax/disruptor -->
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>${disruptor.version}</version>
         </dependency>
 
 
@@ -214,6 +235,12 @@
             <version>1.8</version>
             <scope>system</scope>
             <systemPath>C:/Program Files/Java/jdk-1.8/lib/tools.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cn.chauncy</groupId>
+            <artifactId>Message</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

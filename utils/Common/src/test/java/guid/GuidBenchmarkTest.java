@@ -1,6 +1,6 @@
 package guid;
 
-import com.chauncy.utils.guid.SnowflakeIdGenerator;
+import cn.chauncy.utils.guid.SnowflakeIdGenerator;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

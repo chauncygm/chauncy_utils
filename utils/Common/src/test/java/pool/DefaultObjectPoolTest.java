@@ -1,7 +1,7 @@
 package pool;
 
-import com.chauncy.utils.pool.DefaultObjectPool;
-import com.chauncy.utils.pool.Poolable;
+import cn.chauncy.utils.pool.DefaultObjectPool;
+import cn.chauncy.utils.pool.Poolable;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

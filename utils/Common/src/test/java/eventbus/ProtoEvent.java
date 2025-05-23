@@ -1,6 +1,6 @@
 package eventbus;
 
-import com.chauncy.utils.eventbus.GenericEvent;
+import cn.chauncy.utils.eventbus.GenericEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class ProtoEvent<T> implements GenericEvent {

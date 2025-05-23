@@ -1,6 +1,6 @@
 package reload;
 
-import com.chauncy.utils.reload.CompilerUtil;
+import cn.chauncy.utils.reload.CompilerUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

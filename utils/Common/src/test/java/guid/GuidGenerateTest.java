@@ -1,6 +1,6 @@
 package guid;
 
-import com.chauncy.utils.guid.SnowflakeIdGenerator;
+import cn.chauncy.utils.guid.SnowflakeIdGenerator;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 

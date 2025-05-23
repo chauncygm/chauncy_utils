@@ -1,6 +1,6 @@
 package example;
 
-import com.chauncy.utils.SystemUtils;
+import cn.chauncy.utils.SystemUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

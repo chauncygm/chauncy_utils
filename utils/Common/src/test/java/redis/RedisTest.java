@@ -1,8 +1,6 @@
 package redis;
 
-import com.chauncy.utils.redis.RedisUtils;
 import org.junit.jupiter.api.Test;
-import org.redisson.Redisson;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
 
@@ -19,7 +17,7 @@ public class RedisTest {
                 .setConnectionPoolSize(4)
                 .setConnectionMinimumIdleSize(4)
                 .setIdleConnectionTimeout(10000);
-        RedisUtils.init(Redisson.create(config));
-        System.out.println(RedisUtils.getKey("test"));
+//        RedisUtils.init(Redisson.create(config));
+//        System.out.println(RedisUtils.getKey("test"));
     }
 }

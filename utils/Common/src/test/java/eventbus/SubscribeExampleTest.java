@@ -1,8 +1,9 @@
 package eventbus;
 
-import com.chauncy.utils.eventbus.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.junit.jupiter.api.BeforeAll;
+import cn.chauncy.registry.SubscribeExampleTestRegister;
+import cn.chauncy.utils.eventbus.DefaultEventBus;
+import cn.chauncy.utils.eventbus.EventBus;
+import cn.chauncy.utils.eventbus.Subscribe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

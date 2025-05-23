@@ -28,6 +28,7 @@ module Common {
     requires org.objectweb.asm.commons;
     requires org.objectweb.asm.util;
     requires com.google.guice;
+    requires org.slf4j;
 
-    exports com.chauncy.utils.log to java.logging;
+    exports cn.chauncy.utils.log to java.logging;
 }

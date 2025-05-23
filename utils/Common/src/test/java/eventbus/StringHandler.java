@@ -1,6 +1,6 @@
 package eventbus;
 
-import com.chauncy.utils.eventbus.Subscriber;
+import cn.chauncy.utils.eventbus.Subscriber;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class StringHandler implements Subscriber<String> {
