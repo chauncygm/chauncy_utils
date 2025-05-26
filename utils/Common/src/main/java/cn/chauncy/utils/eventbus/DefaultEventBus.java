@@ -37,6 +37,10 @@ public class DefaultEventBus implements EventBus {
         this(CURRENT_THREAD, immediate ?  Dispatcher.Immediate : Dispatcher.PerThreadQueue);
     }
 
+    public DefaultEventBus(Executor executor) {
+        this(executor, Dispatcher.PerThreadQueue);
+    }
+
     public DefaultEventBus(Executor executor, Dispatcher dispatcher) {
         this.executor = executor;
         this.dispatcher = dispatcher;

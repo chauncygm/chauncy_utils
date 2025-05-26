@@ -1,10 +1,15 @@
 package cn.chauncy.net;
 
 import cn.chauncy.logic.player.Player;
+import cn.chauncy.utils.RateLimiter;
 import io.netty.util.AttributeKey;
 
-public class Attrs {
-    public static final String KEY_USER_SESSION = "player_session";
+import java.util.Map;
 
-    public static AttributeKey<Player> PLAYER_SESSION = AttributeKey.newInstance(KEY_USER_SESSION);
+public class Attrs {
+    public static final String KEY_PLAYER = "player";
+    public static final String KEY_RATE_LIMITER_MAP = "playerRateLimiterMap";
+
+    public static AttributeKey<Player> playerKey = AttributeKey.newInstance(KEY_PLAYER);
+    public static AttributeKey<Map<Integer, RateLimiter>> rateLimiterMapKey = AttributeKey.newInstance(KEY_RATE_LIMITER_MAP);
 }

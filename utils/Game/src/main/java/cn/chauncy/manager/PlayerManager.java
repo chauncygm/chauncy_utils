@@ -1,9 +1,6 @@
 package cn.chauncy.manager;
 
-import cn.chauncy.event.PlayerMsgEvent;
 import cn.chauncy.logic.player.Player;
-import cn.chauncy.message.ReqLogin;
-import cn.chauncy.utils.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,12 +18,5 @@ public class PlayerManager {
 
     public void clear() {
         players.clear();
-    }
-
-    @Subscribe
-    public void onPlayerLogin(PlayerMsgEvent<ReqLogin> msgEvent) {
-        ReqLogin reqLogin = msgEvent.getMessage();
-        Player player = msgEvent.getPlayer();
-        logger.info("{} onPlayerLogin: {}", player, reqLogin);
     }
 }

@@ -1,7 +1,6 @@
 package cn.chauncy.net;
 
 import cn.chauncy.component.GlobalEventBus;
-import cn.chauncy.utils.eventbus.EventBus;
 import cn.chauncy.utils.eventbus.Registered;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import com.google.inject.Inject;

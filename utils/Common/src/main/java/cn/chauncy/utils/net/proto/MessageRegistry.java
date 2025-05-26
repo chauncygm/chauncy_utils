@@ -5,11 +5,15 @@ import cn.chauncy.utils.eventbus.GenericEvent;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class MessageRegistry {
+
+    private static final Logger logger = LoggerFactory.getLogger(MessageRegistry.class);
 
     private final Int2ObjectOpenHashMap<Class<? extends Message>> messageMap = new Int2ObjectOpenHashMap<>();
     private final Int2ObjectOpenHashMap<Parser<? extends Message>> parserMap = new Int2ObjectOpenHashMap<>();
@@ -48,7 +52,15 @@ public class MessageRegistry {
     }
 
     public void postMessageEvent(GenericEvent event) {
-        eventBus.post(event);
+        long startTime = System.currentTimeMillis();
+        try {
+            eventBus.post(event);
+        } finally {
+            long endTime = System.currentTimeMillis();
+            if (endTime - startTime > 100) {
+                logger.warn("postMessageEvent cost {}ms, event: {}", endTime - startTime, event);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
