@@ -17,7 +17,7 @@ import java.util.Set;
 @SupportedSourceVersion(javax.lang.model.SourceVersion.RELEASE_17)
 public class AutoMapperProcessor extends MyAbstractProcessor {
 
-    private static final String AUTO_MAPPER_TYPE = "com.chauncy.utils.eventbus.AutoMapper";
+    private static final String AUTO_MAPPER_TYPE = "cn.chauncy.utils.mapper.AutoMapper";
 
     private TypeElement autoMapperTypeElement;
     @Override
@@ -51,7 +51,7 @@ public class AutoMapperProcessor extends MyAbstractProcessor {
             String packageName = elementUtils.getPackageOf(element).getQualifiedName().toString();
             String className = element.getSimpleName().toString();
             ClassName elementClassName = ClassName.get(packageName, className);
-//            mapperProcess(element, packageName, className, elementClassName);
+            mapperProcess(element, packageName, className, elementClassName);
         }
         return true;
     }
@@ -59,7 +59,7 @@ public class AutoMapperProcessor extends MyAbstractProcessor {
     private void mapperProcess(Element element, String packageName, String className, ClassName elementClassName) {
 
         String className2 = className + "Mapper";
-        TypeMirror baseMapperTypeMirror = readValue(element, autoMapperTypeElement.getClass(), "baseMapper");
+        TypeMirror baseMapperTypeMirror = readValue(element, autoMapperTypeElement, "baseMapper");
 
         TypeSpec.Builder builder = TypeSpec.interfaceBuilder(className2).addModifiers(Modifier.PUBLIC);
         if (baseMapperTypeMirror != null) {
@@ -75,8 +75,8 @@ public class AutoMapperProcessor extends MyAbstractProcessor {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T readValue(Element element, Class<?> clazz, String key) {
-        AnnotationMirror annotationMirror = getEventTypeAnnotationMirror(element, clazz);
+    private <T> T readValue(Element element, TypeElement type, String key) {
+        AnnotationMirror annotationMirror = getEventTypeAnnotationMirror(element, type);
         if (annotationMirror == null) {
             return null;
         }
@@ -84,8 +84,8 @@ public class AutoMapperProcessor extends MyAbstractProcessor {
         return annotationValue == null ? null : (T) annotationValue.getValue();
     }
 
-    private AnnotationMirror getEventTypeAnnotationMirror(Element element, Class<?> type) {
-        String clazzName = type.getName();
+    private AnnotationMirror getEventTypeAnnotationMirror(Element element, TypeElement type) {
+        String clazzName = type.getQualifiedName().toString();
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
             String annotationTypeName = annotationMirror.getAnnotationType().toString();
             if (annotationTypeName.equals(clazzName)) {
