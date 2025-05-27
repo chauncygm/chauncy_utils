@@ -29,6 +29,8 @@ module Common {
     requires org.objectweb.asm.util;
     requires com.google.guice;
     requires org.slf4j;
+    requires com.baomidou.mybatis.plus.core;
+    requires org.mybatis;
 
     exports cn.chauncy.utils.log to java.logging;
 }

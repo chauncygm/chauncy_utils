@@ -38,8 +38,8 @@ public class ConsoleThread extends Thread {
         this.setName("Console-Thread");
         // 设置为守护线程
         this.setDaemon(true);
-        setDefaultUncaughtExceptionHandler((t, e) -> {
-            logger.error("ConsoleThread has uncaught exception.", e);
+        this.setUncaughtExceptionHandler((t, e) -> {
+            logger.error("ConsoleThread has uncaught exception.\n", e);
         });
     }
 

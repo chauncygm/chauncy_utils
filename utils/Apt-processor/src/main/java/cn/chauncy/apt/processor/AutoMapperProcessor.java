@@ -3,6 +3,7 @@ package cn.chauncy.apt.processor;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import javax.annotation.processing.*;
@@ -18,6 +19,7 @@ import java.util.Set;
 public class AutoMapperProcessor extends MyAbstractProcessor {
 
     private static final String AUTO_MAPPER_TYPE = "cn.chauncy.utils.mapper.AutoMapper";
+    private static final String PACKAGE_NAME = "cn.chauncy.dao.mapper";
 
     private TypeElement autoMapperTypeElement;
     @Override
@@ -48,25 +50,28 @@ public class AutoMapperProcessor extends MyAbstractProcessor {
         messager.printMessage(Diagnostic.Kind.NOTE, "START PROCESS ==> AutoMapper");
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(autoMapperTypeElement);
         for (Element element : elements) {
-            String packageName = elementUtils.getPackageOf(element).getQualifiedName().toString();
             String className = element.getSimpleName().toString();
+            String packageName = elementUtils.getPackageOf(element).getQualifiedName().toString();
             ClassName elementClassName = ClassName.get(packageName, className);
-            mapperProcess(element, packageName, className, elementClassName);
+            mapperProcess(element, className, elementClassName);
         }
         return true;
     }
 
-    private void mapperProcess(Element element, String packageName, String className, ClassName elementClassName) {
-
+    private void mapperProcess(Element element, String className, ClassName elementClassName) {
         String className2 = className + "Mapper";
         TypeMirror baseMapperTypeMirror = readValue(element, autoMapperTypeElement, "baseMapper");
 
         TypeSpec.Builder builder = TypeSpec.interfaceBuilder(className2).addModifiers(Modifier.PUBLIC);
         if (baseMapperTypeMirror != null) {
-            builder.addSuperinterface(ClassName.get(baseMapperTypeMirror));
+            Element baseMapperElement = processingEnv.getTypeUtils().asElement(baseMapperTypeMirror);
+            if (baseMapperElement instanceof TypeElement) {
+                ClassName baseMapperClassName = ClassName.get((TypeElement) baseMapperElement);
+                builder.addSuperinterface(ParameterizedTypeName.get(baseMapperClassName, elementClassName.box()));
+            }
         }
 
-        JavaFile javaFile = JavaFile.builder(packageName, builder.build()).build();
+        JavaFile javaFile = JavaFile.builder(AutoMapperProcessor.PACKAGE_NAME, builder.build()).build();
         try {
             javaFile.writeTo(filer);
         } catch (IOException e) {
