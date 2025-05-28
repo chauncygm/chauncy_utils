@@ -3,7 +3,7 @@ package cn.chauncy.dao.config;
 import org.aeonbits.owner.Config;
 
 @Config.HotReload(2)
-@Config.Sources(value = "application.properties")
+@Config.Sources({"classpath:application.properties"})
 public interface DataBaseConfig extends Config {
 
     @Key("db.url")

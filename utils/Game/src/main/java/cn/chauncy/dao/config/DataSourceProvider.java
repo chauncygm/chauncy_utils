@@ -1,18 +1,16 @@
 package cn.chauncy.dao.config;
 
-import com.google.inject.Provides;
+import com.google.inject.Provider;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.aeonbits.owner.ConfigFactory;
-import org.apache.ibatis.transaction.TransactionFactory;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import javax.sql.DataSource;
 
-public class DBConfiguration {
+public class DataSourceProvider implements Provider<DataSource> {
 
-    @Provides
-    public DataSource privideDataSource(){
+    @Override
+    public DataSource get() {
         DataBaseConfig config = ConfigFactory.create(DataBaseConfig.class);
 
         HikariConfig hikariConfig = new HikariConfig();
@@ -26,10 +24,4 @@ public class DBConfiguration {
         hikariConfig.setMaxLifetime(config.hikariMaxLifetime());
         return new HikariDataSource(hikariConfig);
     }
-
-    @Provides
-    public TransactionFactory privideTransactionFactory() {
-        return new JdbcTransactionFactory();
-    }
-
 }

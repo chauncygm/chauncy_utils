@@ -1,6 +1,7 @@
 package cn.chauncy;
 
 import cn.chauncy.component.GlobalEventBus;
+import cn.chauncy.dao.config.*;
 import cn.chauncy.manager.LoginManager;
 import cn.chauncy.manager.PlayerManager;
 import cn.chauncy.net.GameMessageDispatcher;
@@ -15,8 +16,8 @@ import com.google.inject.multibindings.Multibinder;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.guice.MyBatisModule;
-import org.mybatis.guice.XMLMyBatisModule;
 
 import javax.sql.DataSource;
 
@@ -30,7 +31,10 @@ public class GameModule extends AbstractModule {
 
     @Override
     public void configure() {
-//        binder().requireExplicitBindings();
+        // 强制显式绑定
+        binder().requireExplicitBindings();
+        // 禁止循环代理，防止代理死循环
+        binder().disableCircularProxies();
 
         binder().bind(GameStarter.class).in(Singleton.class);
         binder().bind(GlobalEventBus.class).in(Singleton.class);
@@ -39,18 +43,22 @@ public class GameModule extends AbstractModule {
 
         Multibinder<Service> multibinder = Multibinder.newSetBinder(binder(), Service.class);
         multibinder.addBinding().to(NetService.class);
-//        binder().bind(DefaultObjectWrapperFactory.class).in(Singleton.class);
-//        binder().bind(DefaultObjectFactory.class).in(Singleton.class);
 
         // MyBatisModule
+        binder().bind(DefaultObjectWrapperFactory.class).in(Singleton.class);
+        binder().bind(DefaultObjectFactory.class).in(Singleton.class);
         install(new MyBatisModule() {
             @Override
             protected void initialize() {
                 environmentId("development");
-                bindDataSourceProvider(getProvider(DataSource.class));
-                bindTransactionFactory(getProvider(TransactionFactory.class));
-                mapUnderscoreToCamelCase(true);
+                bindDataSourceProviderType(DataSourceProvider.class);
+                bindTransactionFactoryType(JdbcTransactionFactory.class);
 
+                // 替换应用mybatis-plus的实现
+                useSqlSessionFactoryProvider(MybatisSqlSessionFactoryProvider.class);
+                useConfigurationProvider(MybatisConfigurationProvider.class);
+
+                mapUnderscoreToCamelCase(true);
                 addMapperClasses(MAPPER_SCAN_PACKAGE);
             }
         });

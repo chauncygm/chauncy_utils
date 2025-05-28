@@ -11,16 +11,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 @TableName("player_data")
 public class PlayerData {
     @TableId(value = "player_id", type = IdType.INPUT)
-    private long id;
+    private long playerId;
     private String playerName;
-    private LevelExp levelExp;
 
-    public long getId() {
-        return id;
-    }
+//    private LevelExp levelExp;
 
-    public void setId(long id) {
-        this.id = id;
+    public long getPlayerId() {
+        return playerId;
     }
 
     public String getPlayerName() {
