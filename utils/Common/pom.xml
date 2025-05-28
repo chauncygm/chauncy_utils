@@ -32,6 +32,7 @@
         <dubbo.version>3.3.4</dubbo.version>
         <fastutil.version>8.5.15</fastutil.version>
         <jackson.version>2.18.3</jackson.version>
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
 <!--        <dubbo-curator.version>3.3.2</dubbo-curator.version>-->
 
         <jol.version>0.17</jol.version>
@@ -183,12 +184,17 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
-            <version>3.5.12</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
-            <version>3.5.12</version>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>${mybatis-plus.version}</version>
         </dependency>
 
         <!-- MyBatis -->

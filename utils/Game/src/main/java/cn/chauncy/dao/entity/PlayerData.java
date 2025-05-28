@@ -1,38 +1,26 @@
 package cn.chauncy.dao.entity;
 
-import cn.chauncy.logic.player.LevelExp;
-import cn.chauncy.utils.mapper.AutoMapper;
+import cn.chauncy.logic.player.LevelInfo;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@AutoMapper(baseMapper = BaseMapper.class)
+@Data
+@EqualsAndHashCode(callSuper = true)
 @TableName("player_data")
-public class PlayerData {
+public class PlayerData extends BaseEntity {
+
+    @EqualsAndHashCode.Include
     @TableId(value = "player_id", type = IdType.INPUT)
     private long playerId;
+
     private String playerName;
 
-//    private LevelExp levelExp;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private LevelInfo levelInfo;
 
-    public long getPlayerId() {
-        return playerId;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
-
-//    public LevelExp getLevelExp() {
-//        return levelExp;
-//    }
-//
-//    public void setLevelExp(LevelExp levelExp) {
-//        this.levelExp = levelExp;
-//    }
 }

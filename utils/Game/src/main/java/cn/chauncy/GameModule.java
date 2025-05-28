@@ -9,6 +9,7 @@ import cn.chauncy.net.GameMessageRegistry;
 import cn.chauncy.services.NetService;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
+import cn.chauncy.utils.thread.ConsoleService;
 import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
@@ -43,6 +44,7 @@ public class GameModule extends AbstractModule {
 
         Multibinder<Service> multibinder = Multibinder.newSetBinder(binder(), Service.class);
         multibinder.addBinding().to(NetService.class);
+        multibinder.addBinding().to(ConsoleService.class);
 
         // MyBatisModule
         binder().bind(DefaultObjectWrapperFactory.class).in(Singleton.class);
