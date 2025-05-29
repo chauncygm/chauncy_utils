@@ -1,26 +1,27 @@
 package cn.chauncy;
 
 import cn.chauncy.component.GlobalEventBus;
+import cn.chauncy.component.GlobalIdGenerator;
 import cn.chauncy.dao.config.*;
-import cn.chauncy.manager.LoginManager;
-import cn.chauncy.manager.PlayerManager;
+import cn.chauncy.logic.login.LoginManager;
+import cn.chauncy.logic.player.PlayerManager;
 import cn.chauncy.net.GameMessageDispatcher;
 import cn.chauncy.net.GameMessageRegistry;
 import cn.chauncy.services.NetService;
+import cn.chauncy.utils.guid.GUIDGenerator;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.thread.ConsoleService;
+import com.baomidou.mybatisplus.extension.ddl.history.IDdlGenerator;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
-import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.guice.MyBatisModule;
-
-import javax.sql.DataSource;
 
 public class GameModule extends AbstractModule {
 
@@ -39,6 +40,7 @@ public class GameModule extends AbstractModule {
 
         binder().bind(GameStarter.class).in(Singleton.class);
         binder().bind(GlobalEventBus.class).in(Singleton.class);
+        binder().bind(GUIDGenerator.class).to(GlobalIdGenerator.class).in(Singleton.class);
         binder().bind(MessageRegistry.class).to(GameMessageRegistry.class).in(Singleton.class);
         binder().bind(MessageDispatcher.class).to(GameMessageDispatcher.class).in(Singleton.class);
 
@@ -62,6 +64,7 @@ public class GameModule extends AbstractModule {
 
                 mapUnderscoreToCamelCase(true);
                 addMapperClasses(MAPPER_SCAN_PACKAGE);
+                addTypeHandlerClass(JacksonTypeHandler.class);
             }
         });
 

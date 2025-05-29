@@ -1,6 +1,5 @@
-package cn.chauncy.manager;
+package cn.chauncy.logic.player;
 
-import cn.chauncy.logic.player.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

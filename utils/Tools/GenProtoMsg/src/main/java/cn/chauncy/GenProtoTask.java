@@ -64,7 +64,6 @@ public class GenProtoTask implements Runnable {
                 continue;
             }
 
-
             Path tempFilePath = ProtoConfig.getTmpPath().resolve(protoFile.getName());
             File tempProtoFile = Files.createFile(tempFilePath).toFile();
             FileUtils.writeLines(tempProtoFile, headers);
@@ -81,7 +80,7 @@ public class GenProtoTask implements Runnable {
                 ProtoConfig.getTmpPath().toString() + "\\*.proto");
 
         System.out.println(cmd);
-        Pair<Integer, String> result = ProcessUtils.exec(cmd);
+        ProcessUtils.Pair<Integer, String> result = ProcessUtils.exec(cmd);
         logger.info("gen class file, result: {}", result);
     }
 }

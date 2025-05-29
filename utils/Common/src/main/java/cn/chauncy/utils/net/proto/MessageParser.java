@@ -20,17 +20,10 @@ public interface MessageParser<T extends Message> {
             // 使用 LambdaMetafactory 创建函数式接口实例
             MethodType funcType = MethodType.methodType(Message.class, byte[].class);
             MethodType invokedType = MethodType.methodType(MessageParser.class);
-            MethodHandle factory = LambdaMetafactory.metafactory(
-                    lookup,
-                    "parseFrom",
-                    invokedType,
-                    funcType,
-                    mh,
-                    funcType
-            ).getTarget();
-
+            MethodHandle factory = LambdaMetafactory
+                    .metafactory(lookup, "parseFrom", invokedType, funcType, mh, funcType)
+                    .getTarget();
             return (MessageParser<? extends Message>) factory.invoke();
-
         } catch (Throwable e) {
             return null;
         }

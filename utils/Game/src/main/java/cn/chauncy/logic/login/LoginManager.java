@@ -1,4 +1,4 @@
-package cn.chauncy.manager;
+package cn.chauncy.logic.login;
 
 import cn.chauncy.event.CtxMsgEvent;
 import cn.chauncy.message.ReqLogin;

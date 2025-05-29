@@ -2,10 +2,8 @@ package cn.chauncy.dao.entity;
 
 import cn.chauncy.logic.player.LevelInfo;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,7 +18,6 @@ public class PlayerData extends BaseEntity {
 
     private String playerName;
 
-    @TableField(typeHandler = JacksonTypeHandler.class)
     private LevelInfo levelInfo;
 
 }

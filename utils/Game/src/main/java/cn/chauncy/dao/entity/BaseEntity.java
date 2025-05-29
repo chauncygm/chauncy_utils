@@ -3,7 +3,9 @@ package cn.chauncy.dao.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import lombok.Data;
 
+@Data
 public class BaseEntity {
 
     @TableField(fill = FieldFill.INSERT)
