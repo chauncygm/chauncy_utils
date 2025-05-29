@@ -1,13 +1,31 @@
 syntax = "proto3";
 
+// 玩家数据
+message PlayerData {
+  int64 playerId = 1;
+  string name = 2;
+  int32 head = 3;
+  int32 headFrame = 4;
+  int32 level = 5;
+  int32 exp = 6;
+}
+
+// 请求登录
 message ReqLogin {
   int64 uid = 1;
 }
 
-message ResLogin {
-  int64 uid = 1;
-  string token = 2;
-  string name = 3;
+// 请求重连
+message ReqReconnect {
+  string token = 1;
 }
+
+// 同步登录数据
+message SyncLoginData {
+  int64 uid = 1;
+  PlayerData playerData = 2;
+  string token = 3;
+}
+
 
 

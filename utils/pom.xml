@@ -15,6 +15,8 @@
         <module>Message</module>
         <module>Game</module>
         <module>Apt-processor</module>
+        <module>Template</module>
+        <module>Tools/GenTemplate</module>
     </modules>
 
     <properties>
