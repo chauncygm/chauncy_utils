@@ -7,10 +7,6 @@ import java.util.List;
 
 @Data
 public class ExcelCol {
-    /**
-     * 特殊类型
-     * 1:Key(int),Value(int)
-     */
     private int specialType;
     private int col;
     private String descT;

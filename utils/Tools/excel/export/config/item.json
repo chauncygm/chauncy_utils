@@ -1,0 +1,70 @@
+{
+    "1": {
+        "@type": "com.auto_generate.bean.CfgItem",
+        "id": 1,
+        "type": 1,
+        "quality": 0,
+        "decompose": [
+        ]
+    },
+    "2": {
+        "@type": "com.auto_generate.bean.CfgItem",
+        "id": 2,
+        "type": 1,
+        "quality": 0,
+        "decompose": [
+        ]
+    },
+    "3": {
+        "@type": "com.auto_generate.bean.CfgItem",
+        "id": 3,
+        "type": 1,
+        "quality": 0,
+        "decompose": [
+        ]
+    },
+    "4": {
+        "@type": "com.auto_generate.bean.CfgItem",
+        "id": 4,
+        "type": 1,
+        "quality": 0,
+        "decompose": [
+        ]
+    },
+    "1001": {
+        "@type": "com.auto_generate.bean.CfgItem",
+        "id": 1001,
+        "type": 2,
+        "quality": 3,
+        "decompose": [
+            {
+                "@type": "base.IntKeyValue",
+                "k": 1,
+                "v": 1000
+            },
+            {
+                "@type": "base.IntKeyValue",
+                "k": 2,
+                "v": 10
+            }
+        ]
+    },
+    "1002": {
+        "@type": "com.auto_generate.bean.CfgItem",
+        "id": 1002,
+        "type": 2,
+        "quality": 3,
+        "decompose": [
+            {
+                "@type": "base.IntKeyValue",
+                "k": 1,
+                "v": 1000
+            },
+            {
+                "@type": "base.IntKeyValue",
+                "k": 2,
+                "v": 10
+            }
+        ]
+    }
+}

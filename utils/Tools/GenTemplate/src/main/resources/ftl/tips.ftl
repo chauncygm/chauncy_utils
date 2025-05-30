@@ -1,4 +1,4 @@
-package com.auto_generate;
+package cn.chauncy.template;
 
 /**
  * ID:${tc.id} 字段数:${tc.col} 有效数据行数:${tc.row} 说明:${tc.desc}

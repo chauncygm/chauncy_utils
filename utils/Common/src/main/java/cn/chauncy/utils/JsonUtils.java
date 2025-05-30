@@ -1,6 +1,7 @@
 package cn.chauncy.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -69,6 +70,17 @@ public class JsonUtils {
     public static <T> T readFromJson(@Nonnull String json, @Nonnull Class<T> clazz) {
         try {
             return getMapper().readValue(json, clazz);
+        } catch (IOException e) {
+            return ExceptionUtils.rethrow(e);
+        }
+    }
+
+    /**
+     * 解析json字符串为java对象。
+     */
+    public static <T> T readFromJson(@Nonnull String json, @Nonnull TypeReference<T> type) {
+        try {
+            return getMapper().readValue(json, type);
         } catch (IOException e) {
             return ExceptionUtils.rethrow(e);
         }

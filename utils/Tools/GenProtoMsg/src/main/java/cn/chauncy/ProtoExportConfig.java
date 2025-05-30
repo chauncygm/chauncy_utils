@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public class ProtoConfig {
+public class ProtoExportConfig {
 
     private static final Path CONFIG_PATH = Paths.get("./config/config.properties");
 

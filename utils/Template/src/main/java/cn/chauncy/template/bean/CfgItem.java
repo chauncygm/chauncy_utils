@@ -13,21 +13,21 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.LinkedHashMap;
 
 /**
- * 说明: 表ID:${tc.id} ${tc.desc}
- * Created on ${.now?string("yyyy-MM-dd HH:mm")}
+ * 说明: 表ID:10 道具
+ * Created on 2025-05-30 18:35
  */
-public class Cfg${tc.name?cap_first} extends BaseBean {
+public class CfgItem extends BaseBean {
     /**
-     * ID:${tc.id} 字段数:${tc.col} 有效数据行数:${tc.row} 说明:${tc.desc}
+     * ID:10 字段数:4 有效数据行数:6 说明:道具
      */
     @JsonIgnore
-    public final static String TABLE_NAME = "${tc.name}";
+    public final static String TABLE_NAME = "item";
 
     /**
      * data
      */
     @JsonIgnore
-    private static LinkedHashMap<Integer, Cfg${tc.name?cap_first}> dataMap = null;
+    private static LinkedHashMap<Integer, CfgItem> dataMap = null;
 
     /**
      * 通过key查询
@@ -35,7 +35,7 @@ public class Cfg${tc.name?cap_first} extends BaseBean {
      * @param key 配置表key
      * @return
      */
-    public static Cfg${tc.name?cap_first} get(int key) {
+    public static CfgItem get(int key) {
         return dataMap.get(key);
     }
 
@@ -44,7 +44,7 @@ public class Cfg${tc.name?cap_first} extends BaseBean {
      *
      * @return
      */
-    public static LinkedHashMap<Integer, Cfg${tc.name?cap_first}> all() {
+    public static LinkedHashMap<Integer, CfgItem> all() {
         return dataMap;
     }
 
@@ -66,41 +66,52 @@ public class Cfg${tc.name?cap_first} extends BaseBean {
         return dataMap.size();
     }
 
-    private Cfg${tc.name?cap_first}() { }
+    private CfgItem() { }
 
-<#list tc.cols as col>
-    <#if col.specialType == 0>
-    <#if col.wei == 2 || col.wei == 3>
+
     /**
-     * ${col.desc}
+     * 
+道具id
      */
-    public static class ${col.typeClass} {
-        <#list col.fields as field>
-        private ${field.type} ${field.name};
-        public ${field.type} get${field.name?cap_first}() {
-            return ${field.name};
-        }
+    private int id;
+    /**
+     * 
+道具类型
+     */
+    private int type;
+    /**
+     * 0无1白2蓝3紫4橙5红
+道具品质
+     */
+    private int quality;
+    /**
+     * id - num -- 
+分解获得
+     */
+    private List<IntKeyValue> decompose;
 
-        </#list>
+    /**
+     * 
+     */
+    public int getId() {
+        return id;
     }
-    </#if>
-    </#if>
-</#list>
-
-<#list tc.cols as col>
     /**
-     * ${col.desc}
-${col.descT}
+     * 
      */
-    private ${col.type} ${col.name};
-</#list>
-
-<#list tc.cols as col>
-    /**
-     * ${col.desc}
-     */
-    public ${col.type} get${col.name?cap_first}() {
-        return ${col.name};
+    public int getType() {
+        return type;
     }
-</#list>
+    /**
+     * 0无1白2蓝3紫4橙5红
+     */
+    public int getQuality() {
+        return quality;
+    }
+    /**
+     * id - num -- 
+     */
+    public List<IntKeyValue> getDecompose() {
+        return decompose;
+    }
 }

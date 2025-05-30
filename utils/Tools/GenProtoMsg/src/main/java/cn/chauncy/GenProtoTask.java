@@ -28,10 +28,10 @@ public class GenProtoTask implements Runnable {
     @Override
     public void run() {
         try {
-            ProtoConfig.loadConfig();
+            ProtoExportConfig.loadConfig();
 
-            FileUtils.cleanDirectory(ProtoConfig.getJavaOutPath().toFile());
-            FileUtils.cleanDirectory(ProtoConfig.getTmpPath().toFile());
+            FileUtils.cleanDirectory(ProtoExportConfig.getJavaOutPath().toFile());
+            FileUtils.cleanDirectory(ProtoExportConfig.getTmpPath().toFile());
 
             copyProtoFile();
 
@@ -42,16 +42,16 @@ public class GenProtoTask implements Runnable {
     }
 
     private void copyProtoFile() throws Exception {
-        File protoFileDir = ProtoConfig.getProtoFilePath().toFile();
+        File protoFileDir = ProtoExportConfig.getProtoFilePath().toFile();
         File[] protoFiles = protoFileDir.listFiles((file, name) -> name.endsWith(".proto"));
         if (protoFiles == null || protoFiles.length == 0) {
             throw new Exception("proto file not found");
         }
 
         List<String> headers = new ArrayList<>();
-        headers.add("syntax = \"" + ProtoConfig.getSYNTAX() + "\";");
-        headers.add("option java_multiple_files = " + ProtoConfig.isMultipleFiles() + ";");
-        headers.add("option java_package = \"" + ProtoConfig.getJavaOutPackage() + "\";");
+        headers.add("syntax = \"" + ProtoExportConfig.getSYNTAX() + "\";");
+        headers.add("option java_multiple_files = " + ProtoExportConfig.isMultipleFiles() + ";");
+        headers.add("option java_package = \"" + ProtoExportConfig.getJavaOutPackage() + "\";");
 
         for (File protoFile : protoFiles) {
             String fileName = protoFile.getName().split("\\.")[0];
@@ -64,7 +64,7 @@ public class GenProtoTask implements Runnable {
                 continue;
             }
 
-            Path tempFilePath = ProtoConfig.getTmpPath().resolve(protoFile.getName());
+            Path tempFilePath = ProtoExportConfig.getTmpPath().resolve(protoFile.getName());
             File tempProtoFile = Files.createFile(tempFilePath).toFile();
             FileUtils.writeLines(tempProtoFile, headers);
             FileUtils.writeLines(tempProtoFile, List.of("option java_outer_classname = \"" + fileName + "Msg\";"), true);
@@ -74,10 +74,10 @@ public class GenProtoTask implements Runnable {
 
     private void genAllClassFile() throws Exception {
         String cmd = String.format("%s --proto_path %s --java_out=%s %s",
-                ProtoConfig.getProtocPath(),
-                ProtoConfig.getTmpPath(),
-                ProtoConfig.getJavaOutPath(),
-                ProtoConfig.getTmpPath().toString() + "\\*.proto");
+                ProtoExportConfig.getProtocPath(),
+                ProtoExportConfig.getTmpPath(),
+                ProtoExportConfig.getJavaOutPath(),
+                ProtoExportConfig.getTmpPath().toString() + "\\*.proto");
 
         System.out.println(cmd);
         ProcessUtils.Pair<Integer, String> result = ProcessUtils.exec(cmd);
