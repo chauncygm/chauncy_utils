@@ -7,8 +7,7 @@ import freemarker.template.TemplateException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static cn.chauncy.ExcelUtil.firstCapital;
 import static freemarker.template.Configuration.VERSION_2_3_34;
@@ -37,21 +36,22 @@ public class TemplateGenerator {
         }
     }
 
-    public int write(List<ExcelFile> list, boolean isAll) {
+    public void write(List<ExcelFile> list, boolean isAll) {
         int count = 0;
-
         if (isAll) {
             clearDir(ExcelExportConfig.getExportPath().toString());
             clearDir(ExcelExportConfig.getOutputPath().toString() + "\\bean");
         }
 
         try {
-            for (ExcelFile excelFile : list) {
-
+            Iterator<ExcelFile> iterator = list.iterator();
+            while (iterator.hasNext()) {
+                ExcelFile excelFile = iterator.next();
                 count++;
                 long t1 = System.currentTimeMillis();
                 if (excelFile.getName().contains("tips")) {
                     writeTips(excelFile);
+                    iterator.remove();
                 } else {
                     writeClass(excelFile);
                     writeJson(excelFile);
@@ -65,7 +65,7 @@ public class TemplateGenerator {
         } catch (Exception e) {
             System.err.println("生成配置文件失败");
         }
-        return count;
+        System.out.println("写入配置数据数量：" + count);
     }
 
     /**
@@ -77,14 +77,11 @@ public class TemplateGenerator {
             return;
         }
 
-        String[] content = file.list();//取得当前目录下所有文件和文件夹
-        if (content == null)
-            return;
-
-        for (String name : content) {
+        for (String name : Objects.requireNonNull(file.list())) {
             File temp = new File(dir, name);
-            if (temp.isDirectory()) {//判断是否是目录
+            if (temp.isDirectory()) {
                 clearDir(temp.getAbsolutePath());//递归调用，删除目录里的内容
+                //noinspection ResultOfMethodCallIgnored
                 temp.delete();//删除空目录
             } else {
                 if (!temp.delete()) {//直接删除文件
@@ -95,66 +92,35 @@ public class TemplateGenerator {
     }
 
     private void writeClass(ExcelFile excelFile) throws IOException, TemplateException {
-        HashMap<String, Object> root = new HashMap<>();
-        root.put("tc", excelFile);
-
-        Writer out = new StringWriter();
-        Template temp = cfg.getTemplate("class.ftl");
-        temp.process(root, out);
-        writeFile(path + "bean\\Cfg" + firstCapital(excelFile.getName()) + ".java", out.toString());
-        out.close();
+        Map<String, Object> root = Map.of("data", excelFile);
+        writeTemplateToFile(path + "bean\\" + "Cfg" + firstCapital(excelFile.getName()) + ".java", "class.ftl", root);
     }
 
     private void writeJson(ExcelFile excelFile) throws IOException, TemplateException {
-        HashMap<String, Object> root = new HashMap<>();
-        root.put("tc", excelFile);
-
-        Writer out = new StringWriter();
-        Template temp = cfg.getTemplate("json.ftl");
-        temp.process(root, out);
-        writeFile(dataPath + excelFile.getName() + ".json", out.toString());
-        out.close();
+        Map<String, Object> root = Map.of("data", excelFile);
+        writeTemplateToFile(dataPath + excelFile.getName() + ".json", "json.ftl", root);
     }
 
     private void writeTips(ExcelFile excelFile) throws IOException, TemplateException {
-        HashMap<String, Object> root = new HashMap<>();
-        root.put("tc", excelFile);
-
-        Writer out = new StringWriter();
-        Template temp = cfg.getTemplate("tips.ftl");
-        temp.process(root, out);
-        writeFile(path + "CfgTips.java", out.toString());
-        out.close();
+        Map<String, Object> root = Map.of("data", excelFile);
+        writeTemplateToFile(path + "CfgTips.java", "tips.ftl", root);
     }
 
     private void writeDefine(List<ExcelFile> list) throws IOException, TemplateException {
-        HashMap<String, Object> root = new HashMap<>();
-        root.put("data", list);
-
-        Writer out = new StringWriter();
-        Template temp = cfg.getTemplate("define.ftl");
-        temp.process(root, out);
-        writeFile(path + "CfgDefine.java", out.toString());
-        out.close();
+        Map<String, Object> root = Map.of("datalist", list);
+        writeTemplateToFile(path + "CfgDefine.java", "define.ftl", root);
     }
 
-    private void writeFile(String filePath, String content) {
-        try {
-            File file = new File(filePath);
-            FileOutputStream fos;
-            if (!file.exists()) {
-                file.createNewFile();
-                fos = new FileOutputStream(file);
-            } else {
-                fos = new FileOutputStream(file, false);
-            }
-            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(content);
-            writer.flush();
-            writer.close();
-            fos.close();
-        } catch (IOException e) {
-            System.err.println("写入文件失败:" + filePath);
+    private void writeTemplateToFile(String filePath, String templateName, Map<String, Object> dataModel) throws IOException, TemplateException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            file.createNewFile();
+        }
+
+        try (FileWriter fileWriter = new FileWriter(file)){
+            Template template = cfg.getTemplate(templateName);
+            template.process(dataModel, fileWriter);
         }
     }
 }

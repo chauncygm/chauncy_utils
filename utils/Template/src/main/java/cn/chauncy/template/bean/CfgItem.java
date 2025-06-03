@@ -1,24 +1,19 @@
 package cn.chauncy.template.bean;
 
+import java.util.*;
+import cn.chauncy.base.Entry;
 import cn.chauncy.base.BaseBean;
-import cn.chauncy.base.IntKeyValue;
-import cn.chauncy.base.IntKeyLongVal;
-import cn.chauncy.base.IntKeyFloatVal;
-import java.util.List;
 import cn.chauncy.utils.JsonUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import java.util.LinkedHashMap;
-
 /**
- * 说明: 表ID:10 道具
- * Created on 2025-05-30 18:35
+ * 说明: 表ID:11 道具表
+ * Created on 2025-06-03 18:42
  */
 public class CfgItem extends BaseBean {
     /**
-     * ID:10 字段数:4 有效数据行数:6 说明:道具
+     * ID:11 字段数:4 有效数据行数:6 说明:道具表
      */
     @JsonIgnore
     public final static String TABLE_NAME = "item";
@@ -27,7 +22,7 @@ public class CfgItem extends BaseBean {
      * data
      */
     @JsonIgnore
-    private static LinkedHashMap<Integer, CfgItem> dataMap = null;
+    private static Map<Integer, CfgItem> dataMap = null;
 
     /**
      * 通过key查询
@@ -44,7 +39,7 @@ public class CfgItem extends BaseBean {
      *
      * @return
      */
-    public static LinkedHashMap<Integer, CfgItem> all() {
+    public static Map<Integer, CfgItem> all() {
         return dataMap;
     }
 
@@ -53,16 +48,15 @@ public class CfgItem extends BaseBean {
      *
      * @param data 配置数据
      * @return
-     * @throws JsonProcessingException
      */
-    public static int reload(String data) throws JsonProcessingException {
+    public static int reload(String data) {
         if (data == null || data.isEmpty()) {
             dataMap.clear();
             return 0;
         }
 
-        dataMap = JsonUtils.readFromJson(data, new TypeReference<>() {
-        });
+        dataMap = JsonUtils.readFromJson(data, new TypeReference<LinkedHashMap<Integer, CfgItem>>() {});
+        dataMap = Collections.unmodifiableMap(dataMap);
         return dataMap.size();
     }
 
@@ -70,25 +64,21 @@ public class CfgItem extends BaseBean {
 
 
     /**
-     * 
-道具id
+     *  道具id
      */
     private int id;
     /**
-     * 
-道具类型
+     *  道具类型
      */
     private int type;
     /**
-     * 0无1白2蓝3紫4橙5红
-道具品质
+     * 0无1白2蓝3紫4橙5红 道具品质
      */
     private int quality;
     /**
-     * id - num -- 
-分解获得
+     * id - num --  分解获得
      */
-    private List<IntKeyValue> decompose;
+    private List<Entry.Int2IntVal> decompose;
 
     /**
      * 
@@ -111,7 +101,7 @@ public class CfgItem extends BaseBean {
     /**
      * id - num -- 
      */
-    public List<IntKeyValue> getDecompose() {
+    public List<Entry.Int2IntVal> getDecompose() {
         return decompose;
     }
 }

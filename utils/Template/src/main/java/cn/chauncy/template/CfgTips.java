@@ -1,15 +1,21 @@
 package cn.chauncy.template;
 
 /**
- * ID:${data.id} 字段数:${data.col} 有效数据行数:${data.row} 说明:${data.desc}
+ * ID:99 字段数:3 有效数据行数:3 说明:提示表
  */
 public enum CfgTips {
-<#list data.cols[0].values as key>
     /**
-     * ${data.cols[2].values[key_index][0][0]}
+     * 服务器异常
      */
-    ${data.cols[1].values[key_index][0][0]}${key[0][0]}(${key[0][0]}, "${data.cols[2].values[key_index][0][0]}"),
-</#list>
+    SERVER_ERROR1(1, "服务器异常"),
+    /**
+     * 背包容量不足
+     */
+    BAG_FULL2(2, "背包容量不足"),
+    /**
+     * 资源不足
+     */
+    RESOURCE_NOT_ENOUGH3(3, "资源不足"),
     ;
 
     /*

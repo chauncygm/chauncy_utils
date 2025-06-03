@@ -12,7 +12,9 @@ public abstract class CfgDefine {
     protected abstract void initLoad(String tableName);
 
     public void init() {
-        // ID:10 字段数:4 有效数据行数:6 说明:道具
+        // ID:10 字段数:1 有效数据行数:1 说明:全局表
+        initLoad(CfgGlobal.TABLE_NAME);
+        // ID:11 字段数:4 有效数据行数:6 说明:道具表
         initLoad(CfgItem.TABLE_NAME);
     }
 	
@@ -25,12 +27,12 @@ public abstract class CfgDefine {
      * @throws JsonProcessingException
      */
     public int reloadCfg(String tableName, String data) throws JsonProcessingException {
-        switch (tableName) {
-            // ID:10 字段数:4 有效数据行数:6 说明:道具
-            case CfgItem.TABLE_NAME:
-                return CfgItem.reload(data);
-            default:
-                return -1;
-        }
+        return switch (tableName) {
+            // ID:10 字段数:1 有效数据行数:1 说明:全局表
+            case CfgGlobal.TABLE_NAME -> CfgGlobal.reload(data);
+            // ID:11 字段数:4 有效数据行数:6 说明:道具表
+            case CfgItem.TABLE_NAME -> CfgItem.reload(data);
+            default -> -1;
+        };
     }
 }

@@ -1,33 +1,28 @@
 package cn.chauncy.template.bean;
 
+import java.util.*;
+import cn.chauncy.base.Entry;
 import cn.chauncy.base.BaseBean;
-import cn.chauncy.base.IntKeyValue;
-import cn.chauncy.base.IntKeyLongVal;
-import cn.chauncy.base.IntKeyFloatVal;
-import java.util.List;
 import cn.chauncy.utils.JsonUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import java.util.LinkedHashMap;
-
 /**
- * 说明: 表ID:${tc.id} ${tc.desc}
+ * 说明: 表ID:${data.id} ${data.desc}
  * Created on ${.now?string("yyyy-MM-dd HH:mm")}
  */
-public class Cfg${tc.name?cap_first} extends BaseBean {
+public class Cfg${data.name?cap_first} extends BaseBean {
     /**
-     * ID:${tc.id} 字段数:${tc.col} 有效数据行数:${tc.row} 说明:${tc.desc}
+     * ID:${data.id} 字段数:${data.col} 有效数据行数:${data.row} 说明:${data.desc}
      */
     @JsonIgnore
-    public final static String TABLE_NAME = "${tc.name}";
+    public final static String TABLE_NAME = "${data.name}";
 
     /**
      * data
      */
     @JsonIgnore
-    private static LinkedHashMap<Integer, Cfg${tc.name?cap_first}> dataMap = null;
+    private static Map<Integer, Cfg${data.name?cap_first}> dataMap = null;
 
     /**
      * 通过key查询
@@ -35,7 +30,7 @@ public class Cfg${tc.name?cap_first} extends BaseBean {
      * @param key 配置表key
      * @return
      */
-    public static Cfg${tc.name?cap_first} get(int key) {
+    public static Cfg${data.name?cap_first} get(int key) {
         return dataMap.get(key);
     }
 
@@ -44,7 +39,7 @@ public class Cfg${tc.name?cap_first} extends BaseBean {
      *
      * @return
      */
-    public static LinkedHashMap<Integer, Cfg${tc.name?cap_first}> all() {
+    public static Map<Integer, Cfg${data.name?cap_first}> all() {
         return dataMap;
     }
 
@@ -53,22 +48,21 @@ public class Cfg${tc.name?cap_first} extends BaseBean {
      *
      * @param data 配置数据
      * @return
-     * @throws JsonProcessingException
      */
-    public static int reload(String data) throws JsonProcessingException {
+    public static int reload(String data) {
         if (data == null || data.isEmpty()) {
             dataMap.clear();
             return 0;
         }
 
-        dataMap = JsonUtils.readFromJson(data, new TypeReference<>() {
-        });
+        dataMap = JsonUtils.readFromJson(data, new TypeReference<LinkedHashMap<Integer, Cfg${data.name?cap_first}>>() {});
+        dataMap = Collections.unmodifiableMap(dataMap);
         return dataMap.size();
     }
 
-    private Cfg${tc.name?cap_first}() { }
+    private Cfg${data.name?cap_first}() { }
 
-<#list tc.cols as col>
+<#list data.cols as col>
     <#if col.specialType == 0>
     <#if col.wei == 2 || col.wei == 3>
     /**
@@ -87,15 +81,14 @@ public class Cfg${tc.name?cap_first} extends BaseBean {
     </#if>
 </#list>
 
-<#list tc.cols as col>
+<#list data.cols as col>
     /**
-     * ${col.desc}
-${col.descT}
+     * ${col.desc} ${col.descT}
      */
     private ${col.type} ${col.name};
 </#list>
 
-<#list tc.cols as col>
+<#list data.cols as col>
     /**
      * ${col.desc}
      */

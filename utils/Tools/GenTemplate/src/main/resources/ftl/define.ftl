@@ -12,10 +12,10 @@ public abstract class CfgDefine {
     protected abstract void initLoad(String tableName);
 
     public void init() {
-<#list data as tc>
-    <#if tc.id != 97>
-        // ID:${tc.id} 字段数:${tc.col} 有效数据行数:${tc.row} 说明:${tc.desc}
-        initLoad(Cfg${tc.name?cap_first}.TABLE_NAME);
+<#list datalist as data>
+    <#if data.id != 97>
+        // ID:${data.id} 字段数:${data.col} 有效数据行数:${data.row} 说明:${data.desc}
+        initLoad(Cfg${data.name?cap_first}.TABLE_NAME);
     </#if>
 </#list>
     }
@@ -29,16 +29,14 @@ public abstract class CfgDefine {
      * @throws JsonProcessingException
      */
     public int reloadCfg(String tableName, String data) throws JsonProcessingException {
-        switch (tableName) {
-<#list data as tc>
-    <#if tc.id != 97>
-            // ID:${tc.id} 字段数:${tc.col} 有效数据行数:${tc.row} 说明:${tc.desc}
-            case Cfg${tc.name?cap_first}.TABLE_NAME:
-                return Cfg${tc.name?cap_first}.reload(data);
+        return switch (tableName) {
+<#list datalist as data>
+    <#if data.id != 97>
+            // ID:${data.id} 字段数:${data.col} 有效数据行数:${data.row} 说明:${data.desc}
+            case Cfg${data.name?cap_first}.TABLE_NAME -> Cfg${data.name?cap_first}.reload(data);
     </#if>
 </#list>
-            default:
-                return -1;
-        }
+            default -> -1;
+        };
     }
 }

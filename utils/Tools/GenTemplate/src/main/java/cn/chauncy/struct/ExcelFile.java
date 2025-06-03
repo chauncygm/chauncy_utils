@@ -24,7 +24,7 @@ public class ExcelFile {
      */
     private int col;
     /**
-     * 所有列，包含客户端
+     * 所有列
      */
     private int allCol;
     /**
@@ -50,11 +50,5 @@ public class ExcelFile {
                 ", name='" + name + '\'' +
                 ", desc='" + desc + '\'' +
                 '}';
-    }
-
-    public String info() {
-        return "name='" + name + '\'' +
-                ", id=" + id +
-                ", desc='" + desc + '\'';
     }
 }

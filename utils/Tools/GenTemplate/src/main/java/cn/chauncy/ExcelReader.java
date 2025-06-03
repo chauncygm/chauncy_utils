@@ -102,7 +102,7 @@ public class ExcelReader {
     }
 
     private void parse(ExcelFile excelFile) throws ExcelParseException {
-        System.out.println("开始解析配置表:" + excelFile.info() + " ...");
+        System.out.println("开始解析配置表:" + excelFile + " ...");
         long t1 = System.currentTimeMillis();
 
         try {
@@ -147,7 +147,7 @@ public class ExcelReader {
             String name = readValue(xssfRow, 1);
             String type = readValue(xssfRow, 2);
             String exportFlag = readValue(xssfRow, 3);
-            if (name.isEmpty() || exportFlag.toLowerCase().contains("s")) {
+            if (name.isEmpty() || !exportFlag.toLowerCase().contains("s")) {
                 continue;
             }
 
@@ -158,7 +158,7 @@ public class ExcelReader {
             // 拼装字段信息
             ExcelCol excelCol = new ExcelCol();
             excelCol.setCol(col);
-            excelCol.setDescT(desc);
+            excelCol.setDescT("");
             excelCol.setDesc(desc);
             excelCol.setName(name);
 
@@ -194,7 +194,7 @@ public class ExcelReader {
             }
         }
         if (colList.isEmpty() || !colList.contains(0)) {
-            System.out.println(">>> 跳过非服务器所用配置表:" + table.info());
+            System.out.println(">>> 跳过非服务器所用配置表:" + table);
             return;
         }
 
@@ -331,6 +331,10 @@ public class ExcelReader {
     }
 
     private String readValue(XSSFRow row, int col) {
+        if (row == null) {
+            return "";
+        }
+
         XSSFCell xssfCell = row.getCell(col);
         if (xssfCell == null) {
             return "";
@@ -346,7 +350,7 @@ public class ExcelReader {
                 value = xssfCell.toString().trim();
             }
         }
-        return value.equalsIgnoreCase("null") ? "" : value;
+        return value.equalsIgnoreCase("null") ? "" : value.trim();
     }
 
     private String getCurCell() {
@@ -379,27 +383,27 @@ public class ExcelReader {
         switch (valueType) {
             case "int":
                 if (excelCol.getWei() == 3) {
-                    excelCol.setType("List<IntKeyValue>");
+                    excelCol.setType("List<Entry.Int2IntVal>");
                 } else {
-                    excelCol.setType("IntKeyValue");
+                    excelCol.setType("Int2IntVal");
                 }
-                excelCol.setTypeClass("IntKeyValue");
+                excelCol.setTypeClass("Int2IntVal");
                 break;
             case "long":
                 if (excelCol.getWei() == 3) {
-                    excelCol.setType("List<IntKeyLongVal>");
+                    excelCol.setType("List<Entry.Int2LongVal>");
                 } else {
-                    excelCol.setType("IntKeyLongVal");
+                    excelCol.setType("Entry.Int2LongVal");
                 }
-                excelCol.setTypeClass("IntKeyLongVal");
+                excelCol.setTypeClass("Entry.Int2LongVal");
                 break;
             case "float":
                 if (excelCol.getWei() == 3) {
-                    excelCol.setType("List<IntKeyFloatVal>");
+                    excelCol.setType("List<Entry.Int2FloatVal>");
                 } else {
-                    excelCol.setType("IntKeyFloatVal");
+                    excelCol.setType("Entry.Int2FloatVal");
                 }
-                excelCol.setTypeClass("IntKeyFloatVal");
+                excelCol.setTypeClass("Entry.Int2FloatVal");
                 break;
         }
 

@@ -1,12 +1,12 @@
 {
-<#list tc.cols[0].values as key>
-    <#if tc.id == 98>
+<#list data.cols[0].values as key>
+    <#if data.id == 98>
     "1": {
     <#else>
     "${key[0][0]}": {
     </#if>
-        "@type": "com.auto_generate.bean.Cfg${tc.name?cap_first}",
-    <#list tc.cols as col>
+        "@type": "com.auto_generate.bean.Cfg${data.name?cap_first}",
+    <#list data.cols as col>
         <#if "${col.wei}" == "0">
         <#--基本类型-->
             <#if "${col.type}" == "String">
