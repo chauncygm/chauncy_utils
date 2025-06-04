@@ -3,16 +3,19 @@ package cn.chauncy;
 import cn.chauncy.component.GlobalEventBus;
 import cn.chauncy.component.GlobalIdGenerator;
 import cn.chauncy.component.BaseJacksonTypeHandler;
+import cn.chauncy.component.GlobalTimeProvider;
 import cn.chauncy.dao.config.*;
 import cn.chauncy.logic.login.LoginManager;
 import cn.chauncy.logic.player.PlayerManager;
 import cn.chauncy.net.GameMessageDispatcher;
 import cn.chauncy.net.GameMessageRegistry;
 import cn.chauncy.services.NetService;
+import cn.chauncy.services.ScheduleService;
 import cn.chauncy.utils.guid.GUIDGenerator;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.thread.ConsoleService;
+import cn.chauncy.utils.time.TimeProvider;
 import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
@@ -39,12 +42,14 @@ public class GameModule extends AbstractModule {
 
         binder().bind(GameStarter.class).in(Singleton.class);
         binder().bind(GlobalEventBus.class).in(Singleton.class);
+        binder().bind(TimeProvider.class).to(GlobalTimeProvider.class).in(Singleton.class);
         binder().bind(GUIDGenerator.class).to(GlobalIdGenerator.class).in(Singleton.class);
         binder().bind(MessageRegistry.class).to(GameMessageRegistry.class).in(Singleton.class);
         binder().bind(MessageDispatcher.class).to(GameMessageDispatcher.class).in(Singleton.class);
 
         Multibinder<Service> multibinder = Multibinder.newSetBinder(binder(), Service.class);
         multibinder.addBinding().to(NetService.class);
+        multibinder.addBinding().to(ScheduleService.class);
         multibinder.addBinding().to(ConsoleService.class);
 
         // MyBatisModule

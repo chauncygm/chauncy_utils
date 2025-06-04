@@ -3,6 +3,8 @@ package cn.chauncy.utils.thread;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +22,14 @@ public class ThreadUtil {
             StackWalker.Option.SHOW_REFLECT_FRAMES,
             StackWalker.Option.RETAIN_CLASS_REFERENCE));
 
+    private static final AtomicInteger threadIndex = new AtomicInteger(1);
+
     private ThreadUtil() {}
+
+    public static ThreadFactory createFactory(String name) {
+        int index = threadIndex.incrementAndGet();
+        return runnable -> new Thread(runnable, name + "-" + index);
+    }
 
     /** 获取当前线程的名字 */
     public static String currentName() {

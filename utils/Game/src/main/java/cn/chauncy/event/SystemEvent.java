@@ -3,17 +3,17 @@ package cn.chauncy.event;
 /** 系统事件 */
 public class SystemEvent {
 
-    record ServerStartEvent() {}
+    public record ServerStartEvent() {}
 
-    record ServerStopEvent() {}
+    public record ServerStopEvent() {}
 
-    record CrossHourEvent(int hour) {}
+    public record CrossHourEvent(int hour) {}
 
-    record CrossDayEvent(int epochDay) {}
+    public record CrossDayEvent(int epochDay) {}
 
-    record CrossWeekEvent(int weekOfYear) {}
+    public record CrossWeekEvent(int weekOfYear) {}
 
-    record CrossMonthEvent(int month) {}
+    public record CrossMonthEvent(int month) {}
 
-    record CrossYearEvent(int year) {}
+    public record CrossYearEvent(int year) {}
 }

@@ -4,6 +4,8 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 
 import static cn.chauncy.utils.time.TimeUtils.*;
 
@@ -78,6 +80,17 @@ public class TimeHelper {
     public int toEpochDays(long epochMilli) {
         long localSec = epochMilli / 1000 + zoneOffset.getTotalSeconds();
         return Math.toIntExact(localSec / SECONDS_PER_DAY);
+    }
+
+    /**
+     * 获取指定时间在一年中的周数
+     *
+     * @param epochMilli 时间戳
+     * @return 一年的周数
+     */
+    public int getWeekOfYear(long epochMilli) {
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        return toLocalDateTime(epochMilli).get(weekFields.weekOfYear());
     }
 
     /**

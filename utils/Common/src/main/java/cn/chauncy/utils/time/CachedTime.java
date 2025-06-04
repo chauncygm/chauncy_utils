@@ -1,6 +1,10 @@
 package cn.chauncy.utils.time;
 
+import cn.chauncy.utils.thread.ThreadUtil;
+
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,8 +16,8 @@ public class CachedTime implements TimeProvider {
     private volatile long currentTime = System.currentTimeMillis();
 
     public CachedTime() {
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
-                () -> currentTime = System.currentTimeMillis(),
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.createFactory("CachedTime"));
+        executor.scheduleAtFixedRate(() -> currentTime = System.currentTimeMillis(),
                 1, 1, TimeUnit.MILLISECONDS); // 1ms精度
     }
 
