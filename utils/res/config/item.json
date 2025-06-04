@@ -1,6 +1,6 @@
 {
     "1": {
-        "@type": "com.auto_generate.bean.CfgItem",
+        "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 1,
         "type": 1,
         "quality": 0,
@@ -8,7 +8,7 @@
         ]
     },
     "2": {
-        "@type": "com.auto_generate.bean.CfgItem",
+        "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 2,
         "type": 1,
         "quality": 0,
@@ -16,7 +16,7 @@
         ]
     },
     "3": {
-        "@type": "com.auto_generate.bean.CfgItem",
+        "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 3,
         "type": 1,
         "quality": 0,
@@ -24,7 +24,7 @@
         ]
     },
     "4": {
-        "@type": "com.auto_generate.bean.CfgItem",
+        "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 4,
         "type": 1,
         "quality": 0,
@@ -32,36 +32,36 @@
         ]
     },
     "1001": {
-        "@type": "com.auto_generate.bean.CfgItem",
+        "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 1001,
         "type": 2,
         "quality": 3,
         "decompose": [
             {
-                "@type": "base.IntKeyValue",
+                "@type": "base.Entry.Int2IntVal",
                 "k": 1,
                 "v": 1000
             },
             {
-                "@type": "base.IntKeyValue",
+                "@type": "base.Entry.Int2IntVal",
                 "k": 2,
                 "v": 10
             }
         ]
     },
     "1002": {
-        "@type": "com.auto_generate.bean.CfgItem",
+        "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 1002,
         "type": 2,
         "quality": 3,
         "decompose": [
             {
-                "@type": "base.IntKeyValue",
+                "@type": "base.Entry.Int2IntVal",
                 "k": 1,
                 "v": 1000
             },
             {
-                "@type": "base.IntKeyValue",
+                "@type": "base.Entry.Int2IntVal",
                 "k": 2,
                 "v": 10
             }

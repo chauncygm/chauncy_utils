@@ -1,6 +1,0 @@
-{
-    "100": {
-        "@type": "com.auto_generate.bean.CfgGlobal",
-        "max_bag_capacity": 100
-    }
-}

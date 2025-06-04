@@ -2,6 +2,7 @@ package cn.chauncy;
 
 import cn.chauncy.component.GlobalEventBus;
 import cn.chauncy.component.GlobalIdGenerator;
+import cn.chauncy.component.BaseJacksonTypeHandler;
 import cn.chauncy.dao.config.*;
 import cn.chauncy.logic.login.LoginManager;
 import cn.chauncy.logic.player.PlayerManager;
@@ -12,8 +13,6 @@ import cn.chauncy.utils.guid.GUIDGenerator;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.thread.ConsoleService;
-import com.baomidou.mybatisplus.extension.ddl.history.IDdlGenerator;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
@@ -64,7 +63,8 @@ public class GameModule extends AbstractModule {
 
                 mapUnderscoreToCamelCase(true);
                 addMapperClasses(MAPPER_SCAN_PACKAGE);
-                addTypeHandlerClass(JacksonTypeHandler.class);
+
+                addTypeHandlerClass(BaseJacksonTypeHandler.class);
             }
         });
 

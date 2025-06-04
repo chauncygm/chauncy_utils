@@ -32,6 +32,11 @@
             <artifactId>Message</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>cn.chauncy</groupId>
+            <artifactId>Template</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.inject</groupId>

@@ -5,7 +5,7 @@
     <#else>
     "${key[0][0]}": {
     </#if>
-        "@type": "com.auto_generate.bean.Cfg${data.name?cap_first}",
+        "@type": "cn.chauncy.template.bean.Cfg${data.name?cap_first}",
     <#list data.cols as col>
         <#if "${col.wei}" == "0">
         <#--基本类型-->
@@ -25,7 +25,7 @@
         <#--对象-->
         "${col.name}": {
             <#if col.specialType == 1>
-            "@type": "base.IntKeyValue",
+            "@type": "base.Entry.Int2IntVal",
             </#if>
             <#list col.values[key_index] as g>
                 <#list col.fields as f>
@@ -43,7 +43,7 @@
             <#list col.values[key_index] as g>
             {
                 <#if col.specialType == 1>
-                "@type": "base.IntKeyValue",
+                "@type": "base.Entry.Int2IntVal",
                 </#if>
                 <#list col.fields as f>
                     <#if "${f.type}" == "String">

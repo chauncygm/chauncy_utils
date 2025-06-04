@@ -9,9 +9,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
  * 说明: 表ID:10 全局表
- * Created on 2025-06-03 18:42
+ * Created on 2025-06-04 10:45
  */
 public class CfgGlobal extends BaseBean {
+
+    private static final TypeReference<LinkedHashMap<Integer, CfgGlobal>> MAP_REFERENCE = new TypeReference<>() {};
+
     /**
      * ID:10 字段数:1 有效数据行数:1 说明:全局表
      */
@@ -22,7 +25,7 @@ public class CfgGlobal extends BaseBean {
      * data
      */
     @JsonIgnore
-    private static Map<Integer, CfgGlobal> dataMap = null;
+    private static Map<Integer, CfgGlobal> dataMap = Map.of();
 
     /**
      * 通过key查询
@@ -55,7 +58,7 @@ public class CfgGlobal extends BaseBean {
             return 0;
         }
 
-        dataMap = JsonUtils.readFromJson(data, new TypeReference<LinkedHashMap<Integer, CfgGlobal>>() {});
+        dataMap = JsonUtils.readFromJson(data, MAP_REFERENCE);
         dataMap = Collections.unmodifiableMap(dataMap);
         return dataMap.size();
     }

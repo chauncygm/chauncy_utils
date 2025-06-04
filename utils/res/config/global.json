@@ -1,0 +1,6 @@
+{
+    "100": {
+        "@type": "cn.chauncy.template.bean.CfgGlobal",
+        "max_bag_capacity": 100
+    }
+}

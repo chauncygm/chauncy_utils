@@ -3,15 +3,17 @@ package cn.chauncy.template;
 import cn.chauncy.template.bean.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.io.IOException;
+
 public abstract class CfgDefine {
     /**
      * 初始化指定配置
      *
-     * @param tableName
+     * @param tableName 表格名字
      */
-    protected abstract void initLoad(String tableName);
+    protected abstract void initLoad(String tableName) throws IOException;
 
-    public void init() {
+    public void init() throws IOException {
         // ID:10 字段数:1 有效数据行数:1 说明:全局表
         initLoad(CfgGlobal.TABLE_NAME);
         // ID:11 字段数:4 有效数据行数:6 说明:道具表

@@ -12,6 +12,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
  * Created on ${.now?string("yyyy-MM-dd HH:mm")}
  */
 public class Cfg${data.name?cap_first} extends BaseBean {
+
+    private static final TypeReference<LinkedHashMap<Integer, Cfg${data.name?cap_first}>> MAP_REFERENCE = new TypeReference<>() {};
+
     /**
      * ID:${data.id} 字段数:${data.col} 有效数据行数:${data.row} 说明:${data.desc}
      */
@@ -22,7 +25,7 @@ public class Cfg${data.name?cap_first} extends BaseBean {
      * data
      */
     @JsonIgnore
-    private static Map<Integer, Cfg${data.name?cap_first}> dataMap = null;
+    private static Map<Integer, Cfg${data.name?cap_first}> dataMap = Map.of();
 
     /**
      * 通过key查询
@@ -55,7 +58,7 @@ public class Cfg${data.name?cap_first} extends BaseBean {
             return 0;
         }
 
-        dataMap = JsonUtils.readFromJson(data, new TypeReference<LinkedHashMap<Integer, Cfg${data.name?cap_first}>>() {});
+        dataMap = JsonUtils.readFromJson(data, MAP_REFERENCE);
         dataMap = Collections.unmodifiableMap(dataMap);
         return dataMap.size();
     }
