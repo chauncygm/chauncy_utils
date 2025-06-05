@@ -8,17 +8,14 @@ public enum BagType implements IEnum<Integer> {
     /** 基础道具 */
     BASE(1),
 
-    /** 资源 */
-    RESOURCE(2),
-
     /** 装备 */
-    EQUIP(3),
+    EQUIP(2),
 
     /** 材料 */
-    MATERIAL(4),
+    MATERIAL(3),
 
     /** 任务 */
-    TASK(5),
+    TASK(4),
     ;
 
     final int value;
@@ -30,5 +27,14 @@ public enum BagType implements IEnum<Integer> {
     @Override
     public Integer getValue() {
         return value;
+    }
+
+    public static BagType valueOf(int value) {
+        for (BagType type : BagType.values()) {
+            if (type.value == value) {
+                return type;
+            }
+        }
+        return null;
     }
 }

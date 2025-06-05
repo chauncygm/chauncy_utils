@@ -20,9 +20,18 @@ public enum ItemType {
 
     ;
 
-    final int value;
+    public final int value;
 
     ItemType(int value) {
         this.value = value;
+    }
+
+    public static ItemType valueOf(int value) {
+        for (ItemType itemType : values()) {
+            if (itemType.value == value) {
+                return itemType;
+            }
+        }
+        return null;
     }
 }
