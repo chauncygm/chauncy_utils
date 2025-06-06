@@ -254,7 +254,7 @@ public class ExcelReader {
             if (value.isEmpty()) {
                 excelCol.getValues().add(new ArrayList<>());
             } else {
-                String[] ds = value.split("\\|");
+                String[] ds = value.split(",");
                 for (String s : ds) {
                     List<String> v = new ArrayList<>();
                     v.add(getValue(s, excelCol.getFields().get(0).getType(), excelCol));

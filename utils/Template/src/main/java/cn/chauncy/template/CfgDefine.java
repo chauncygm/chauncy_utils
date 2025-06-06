@@ -16,7 +16,7 @@ public abstract class CfgDefine {
     public void init() throws IOException {
         // ID:10 字段数:1 有效数据行数:1 说明:全局表
         initLoad(CfgGlobal.TABLE_NAME);
-        // ID:11 字段数:4 有效数据行数:6 说明:道具表
+        // ID:11 字段数:7 有效数据行数:18 说明:道具表
         initLoad(CfgItem.TABLE_NAME);
     }
 	
@@ -32,7 +32,7 @@ public abstract class CfgDefine {
         return switch (tableName) {
             // ID:10 字段数:1 有效数据行数:1 说明:全局表
             case CfgGlobal.TABLE_NAME -> CfgGlobal.reload(data);
-            // ID:11 字段数:4 有效数据行数:6 说明:道具表
+            // ID:11 字段数:7 有效数据行数:18 说明:道具表
             case CfgItem.TABLE_NAME -> CfgItem.reload(data);
             default -> -1;
         };

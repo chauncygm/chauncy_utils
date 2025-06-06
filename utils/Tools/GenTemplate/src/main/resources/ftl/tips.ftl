@@ -8,7 +8,7 @@ public enum CfgTips {
     /**
      * ${data.cols[2].values[key_index][0][0]}
      */
-    ${data.cols[1].values[key_index][0][0]}${key[0][0]}(${key[0][0]}, "${data.cols[2].values[key_index][0][0]}"),
+    ${data.cols[1].values[key_index][0][0]}_${key[0][0]}(${key[0][0]}, "${data.cols[2].values[key_index][0][0]}"),
 </#list>
     ;
 

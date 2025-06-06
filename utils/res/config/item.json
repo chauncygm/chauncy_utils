@@ -2,68 +2,218 @@
     "1": {
         "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 1,
-        "type": 1,
+        "type": 0,
+        "bagType": 0,
         "quality": 0,
+        "bind": 0,
+        "maxStack": 0,
         "decompose": [
         ]
     },
     "2": {
         "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 2,
-        "type": 1,
+        "type": 0,
+        "bagType": 0,
         "quality": 0,
+        "bind": 0,
+        "maxStack": 0,
         "decompose": [
         ]
     },
     "3": {
         "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 3,
-        "type": 1,
+        "type": 0,
+        "bagType": 0,
         "quality": 0,
+        "bind": 0,
+        "maxStack": 0,
         "decompose": [
         ]
     },
     "4": {
         "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 4,
-        "type": 1,
+        "type": 0,
+        "bagType": 0,
         "quality": 0,
+        "bind": 0,
+        "maxStack": 0,
+        "decompose": [
+        ]
+    },
+    "5": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 5,
+        "type": 0,
+        "bagType": 0,
+        "quality": 0,
+        "bind": 0,
+        "maxStack": 0,
+        "decompose": [
+        ]
+    },
+    "6": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 6,
+        "type": 0,
+        "bagType": 0,
+        "quality": 2,
+        "bind": 0,
+        "maxStack": 10000,
         "decompose": [
         ]
     },
     "1001": {
         "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 1001,
-        "type": 2,
+        "type": 1,
+        "bagType": 1,
         "quality": 3,
+        "bind": 0,
+        "maxStack": 10,
         "decompose": [
             {
                 "@type": "base.Entry.Int2IntVal",
                 "k": 1,
-                "v": 1000
+                "v": 100
             },
             {
                 "@type": "base.Entry.Int2IntVal",
                 "k": 2,
-                "v": 10
+                "v": 1000
             }
         ]
     },
     "1002": {
         "@type": "cn.chauncy.template.bean.CfgItem",
         "id": 1002,
-        "type": 2,
+        "type": 1,
+        "bagType": 1,
         "quality": 3,
+        "bind": 0,
+        "maxStack": 1000,
         "decompose": [
             {
                 "@type": "base.Entry.Int2IntVal",
-                "k": 1,
+                "k": 3,
                 "v": 1000
-            },
+            }
+        ]
+    },
+    "110001": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 110001,
+        "type": 2,
+        "bagType": 3,
+        "quality": 3,
+        "bind": 0,
+        "maxStack": 1000,
+        "decompose": [
+        ]
+    },
+    "110002": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 110002,
+        "type": 2,
+        "bagType": 3,
+        "quality": 3,
+        "bind": 0,
+        "maxStack": 1000,
+        "decompose": [
+        ]
+    },
+    "110003": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 110003,
+        "type": 2,
+        "bagType": 3,
+        "quality": 3,
+        "bind": 0,
+        "maxStack": 1000,
+        "decompose": [
+        ]
+    },
+    "1401001": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 1401001,
+        "type": 4,
+        "bagType": 2,
+        "quality": 2,
+        "bind": 0,
+        "maxStack": 1,
+        "decompose": [
+        ]
+    },
+    "1401002": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 1401002,
+        "type": 4,
+        "bagType": 2,
+        "quality": 2,
+        "bind": 0,
+        "maxStack": 1,
+        "decompose": [
+        ]
+    },
+    "1401003": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 1401003,
+        "type": 4,
+        "bagType": 2,
+        "quality": 2,
+        "bind": 0,
+        "maxStack": 1,
+        "decompose": [
+        ]
+    },
+    "1401004": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 1401004,
+        "type": 4,
+        "bagType": 2,
+        "quality": 2,
+        "bind": 0,
+        "maxStack": 1,
+        "decompose": [
+        ]
+    },
+    "1401005": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 1401005,
+        "type": 4,
+        "bagType": 2,
+        "quality": 2,
+        "bind": 0,
+        "maxStack": 1,
+        "decompose": [
+        ]
+    },
+    "1401006": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 1401006,
+        "type": 4,
+        "bagType": 2,
+        "quality": 2,
+        "bind": 0,
+        "maxStack": 1,
+        "decompose": [
+        ]
+    },
+    "1800001": {
+        "@type": "cn.chauncy.template.bean.CfgItem",
+        "id": 1800001,
+        "type": 5,
+        "bagType": 4,
+        "quality": 3,
+        "bind": 0,
+        "maxStack": 1000,
+        "decompose": [
             {
                 "@type": "base.Entry.Int2IntVal",
                 "k": 2,
-                "v": 10
+                "v": 1000
             }
         ]
     }

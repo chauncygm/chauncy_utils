@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IEnum;
 
 /** 背包类型 */
 public enum BagType implements IEnum<Integer> {
+    /** 资源 */
+    RESOURCE(0),
 
     /** 基础道具 */
     BASE(1),

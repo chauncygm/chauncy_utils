@@ -12,6 +12,8 @@ public class Item {
 
     private int configId;
 
+    private boolean bind;
+
     private int count;
 
     @JsonIgnore
@@ -22,5 +24,14 @@ public class Item {
 
     /** 道具额外数据，与道具类型关联 */
     private ItemData data;
+
+    public void release() {
+        uid = 0;
+        configId = 0;
+        count = 0;
+        data = null;
+        type = null;
+        cfgItem = null;
+    }
 
 }

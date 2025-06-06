@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
  * 说明: 表ID:10 全局表
- * Created on 2025-06-04 10:45
+ * Created on 2025-06-06 10:28
  */
 public class CfgGlobal extends BaseBean {
 

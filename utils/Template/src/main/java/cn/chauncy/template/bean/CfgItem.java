@@ -9,14 +9,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
  * 说明: 表ID:11 道具表
- * Created on 2025-06-04 10:45
+ * Created on 2025-06-06 10:28
  */
 public class CfgItem extends BaseBean {
 
     private static final TypeReference<LinkedHashMap<Integer, CfgItem>> MAP_REFERENCE = new TypeReference<>() {};
 
     /**
-     * ID:11 字段数:4 有效数据行数:6 说明:道具表
+     * ID:11 字段数:7 有效数据行数:18 说明:道具表
      */
     @JsonIgnore
     public final static String TABLE_NAME = "item";
@@ -75,9 +75,21 @@ public class CfgItem extends BaseBean {
      */
     private int type;
     /**
+     *  所属背包
+     */
+    private int bagType;
+    /**
      * 0无1白2蓝3紫4橙5红 道具品质
      */
     private int quality;
+    /**
+     *  是否绑定
+     */
+    private int bind;
+    /**
+     *  最大堆叠数量
+     */
+    private int maxStack;
     /**
      * id - num --  分解获得
      */
@@ -96,10 +108,28 @@ public class CfgItem extends BaseBean {
         return type;
     }
     /**
+     * 
+     */
+    public int getBagType() {
+        return bagType;
+    }
+    /**
      * 0无1白2蓝3紫4橙5红
      */
     public int getQuality() {
         return quality;
+    }
+    /**
+     * 
+     */
+    public int getBind() {
+        return bind;
+    }
+    /**
+     * 
+     */
+    public int getMaxStack() {
+        return maxStack;
     }
     /**
      * id - num -- 
