@@ -58,10 +58,18 @@ public class ScheduleService extends AbstractScheduledService {
         logger.info("System onCrossDay: {}", time);
         eventBus.post(new SystemEvent.CrossDayEvent(TimeHelper.SYSTEM.toEpochDays(timeMillis)));
 
+        // 跨周
         if (!TimeHelper.SYSTEM.isSameWeek(timeMillis, lastTickTime)) {
             eventBus.post(new SystemEvent.CrossWeekEvent(time.getMonthValue()));
         }
 
+        // 跨月
+        int lastTickMonth = TimeHelper.SYSTEM.toLocalDateTime(lastTickTime).getMonthValue();
+        if (lastTickMonth != time.getMonthValue()) {
+            eventBus.post(new SystemEvent.CrossMonthEvent(lastTickMonth));
+        }
+
+        // 跨年
         int lastTickYear = TimeHelper.SYSTEM.toLocalDateTime(lastTickTime).getYear();
         if (lastTickYear != time.getYear()) {
             eventBus.post(new SystemEvent.CrossYearEvent(lastTickYear));

@@ -33,10 +33,10 @@ public class ItemManager {
         if (int2IntVal.k() <= 0 || int2IntVal.v() <= 0) {
             throw new IllegalArgumentException("itemId or num must > 0.");
         }
-        return createItem(int2IntVal.k(), int2IntVal.v());
+        return createItem(int2IntVal.k(), int2IntVal.v(), false);
     }
 
-    public Item createItem(int configId, int num) {
+    public Item createItem(int configId, int num, boolean bind) {
         if (num <= 0) {
             throw new IllegalArgumentException("num must > 0.");
         }
@@ -52,6 +52,7 @@ public class ItemManager {
         Item item = new Item();
         item.setUid(guidGenerator.genGuid());
         item.setConfigId(configId);
+        item.setBind(bind);
         item.setCount(num);
         item.setType(ItemType.valueOf(cfgItem.getType()));
         item.setCfgItem(cfgItem);

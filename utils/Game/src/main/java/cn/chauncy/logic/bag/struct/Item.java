@@ -8,12 +8,16 @@ import lombok.Data;
 @Data
 public class Item {
 
+    /** 唯一id */
     private long uid;
 
+    /** 配置id */
     private int configId;
 
+    /** 是否绑定 */
     private boolean bind;
 
+    /** 道具数量 */
     private int count;
 
     @JsonIgnore

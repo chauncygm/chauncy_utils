@@ -17,6 +17,9 @@ public enum TaskType implements IEnum<Integer> {
 
     /** 成就 */
     ACHIEVEMENT(5),
+
+    /** 隐藏 */
+    HIDE(6),
     ;
 
     final int value;

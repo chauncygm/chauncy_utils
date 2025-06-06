@@ -16,6 +16,6 @@ public class LoginManager {
         ChannelHandlerContext context = msgEvent.context();
         ReqLogin reqLogin = msgEvent.message();
         long uid = reqLogin.getUid();
-
+        System.out.println("onPlayerLogin: " + uid);
     }
 }

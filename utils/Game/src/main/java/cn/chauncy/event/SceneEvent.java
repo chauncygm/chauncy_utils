@@ -6,4 +6,6 @@ public class SceneEvent {
 
     record PlayerJoinSceneEvent(Player player, int sceneId) {}
 
+    record PlayerLevelSceneEvent(Player player, int sceneId) {}
+
 }

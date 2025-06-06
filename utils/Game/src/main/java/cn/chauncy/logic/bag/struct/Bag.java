@@ -16,9 +16,6 @@ public class Bag {
     /** 背包大小 */
     private int bagSize;
 
-    /** 背包负重 */
-    private int bagLoad;
-
     /** 背包道具, key道具guid，value背包道具 */
     private Map<Long, BagItem> bagItems = new HashMap<>();
 
