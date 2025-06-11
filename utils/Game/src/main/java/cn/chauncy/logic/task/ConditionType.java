@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.IEnum;
 
 public enum ConditionType implements IEnum<Integer> {
 
+    /** 无 */
+    NONE(0),
+
     /** 登录X天 */
     LOGIN_DAYS(1),
 
@@ -13,13 +16,13 @@ public enum ConditionType implements IEnum<Integer> {
     /** 升级到X级 */
     LEVEL_UP(3),
 
-    /** 获得道具 */
+    /** 获得指定id道具x个 */
     ITEM_GET(4),
 
-    /** 消耗道具 */
+    /** 消耗指定id道具x个 */
     ITEM_CONSUME(5),
 
-    /** 完成指定ID的任务 */
+    /** 完成指定id的任务 */
     FINISH_TASK(6),
     ;
 
@@ -33,5 +36,14 @@ public enum ConditionType implements IEnum<Integer> {
     @Override
     public Integer getValue() {
         return value;
+    }
+
+    public static ConditionType valueOf(int value) {
+        for (ConditionType type : values()) {
+            if (type.value == value) {
+                return type;
+            }
+        }
+        return null;
     }
 }

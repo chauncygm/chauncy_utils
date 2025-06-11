@@ -33,9 +33,9 @@ public class BagManager {
     /** 开放新背包 */
     public void openBag(Player player, BagType bagType) {
         PlayerData playerData = player.getPlayerData();
-        Map<Integer, Bag> bagMap = playerData.getBagMap();
-        if (!bagMap.containsKey(bagType.getValue())) {
-            bagMap.put(bagType.getValue(), createBag(bagType));
+        Map<BagType, Bag> bagMap = playerData.getBagMap();
+        if (!bagMap.containsKey(bagType)) {
+            bagMap.put(bagType, createBag(bagType));
         }
     }
 
@@ -66,8 +66,8 @@ public class BagManager {
         if (bagType == BagType.RESOURCE) {
             return null;
         }
-        Map<Integer, Bag> bagMap = player.getPlayerData().getBagMap();
-        return bagMap.get(bagType.getValue());
+        Map<BagType, Bag> bagMap = player.getPlayerData().getBagMap();
+        return bagMap.get(bagType);
     }
 
     /**
@@ -84,13 +84,18 @@ public class BagManager {
      * 检查整理背包道具
      */
     public void checkBagItem(Player player, boolean neaten) {
-        Map<Integer, Bag> bagMap = player.getPlayerData().getBagMap();
+        Map<BagType, Bag> bagMap = player.getPlayerData().getBagMap();
         for (Bag bag : bagMap.values()) {
             checkBagItem(bag, neaten);
         }
     }
 
     //region 添加道具
+
+    public CfgTips rewardItemList(Player player, List<Entry.Int2IntVal> itemId2NumList) {
+        List<Item> items = itemManager.createItems(itemId2NumList);
+        return rewardItems(player, items);
+    }
 
     /**
      * 添加道具

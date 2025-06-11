@@ -10,8 +10,8 @@ public enum TaskStatus implements IEnum<Integer> {
     /** 未领奖，已完成状态 */
     FINISHED(1),
 
-    /** 已领奖，完结状态 */
-    END(2)
+    /** 已提交，完结状态 */
+    SUBMITTED(2)
     ;
 
     final int value;
@@ -24,4 +24,5 @@ public enum TaskStatus implements IEnum<Integer> {
     public Integer getValue() {
         return value;
     }
+
 }

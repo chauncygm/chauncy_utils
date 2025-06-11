@@ -30,6 +30,15 @@ public enum TaskType implements IEnum<Integer> {
 
     @Override
     public Integer getValue() {
-        return 0;
+        return value;
+    }
+
+    public static TaskType valueOf(int value) {
+        for (TaskType taskType : values()) {
+            if (taskType.value == value) {
+                return taskType;
+            }
+        }
+        return null;
     }
 }

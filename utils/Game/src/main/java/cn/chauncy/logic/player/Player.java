@@ -1,8 +1,10 @@
 package cn.chauncy.logic.player;
 
 import cn.chauncy.dao.entity.PlayerData;
+import cn.chauncy.logic.player.component.GoalComponent;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
+import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
@@ -14,6 +16,9 @@ public class Player {
     private volatile boolean online;
 
     private PlayerData playerData;
+
+    @Getter
+    private final GoalComponent goalComponent = new GoalComponent();
 
     public long getPlayerId() {
         return playerId;
