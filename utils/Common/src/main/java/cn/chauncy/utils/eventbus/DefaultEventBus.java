@@ -1,6 +1,7 @@
 package cn.chauncy.utils.eventbus;
 
 import com.google.common.base.Objects;
+import com.google.common.reflect.TypeToken;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -10,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 import static cn.chauncy.utils.eventbus.ComposeSubscriber.EMPTY_SUBSCRIBER;
@@ -48,9 +50,25 @@ public class DefaultEventBus implements EventBus {
 
     @Override
     public void post(@NonNull Object event) {
-        ComposeSubscriber<?> subscribers = getSubscribers(event);
-        if (!subscribers.isEmpty()) {
-            dispatcher.dispatch(executor, event, subscribers);
+        Class<?> eventClass = event.getClass();
+        if (event instanceof GenericEvent genericEvent) {
+            ComposeKey composeKey = acquireKey(eventClass, genericEvent.getEventType());
+            post(composeKey, event);
+            releaseKey(composeKey);
+            return;
+        }
+
+        if (eventClass.equals(String.class) || eventClass.equals(Object.class)) {
+            post(eventClass, event);
+            return;
+        }
+
+        @SuppressWarnings("unchecked")
+        Set<Class<?>> classes = (Set<Class<?>>) TypeToken.of(eventClass).getTypes().rawTypes();
+        for (Class<?> clazz : classes) {
+            if (!isJavaLangClass(clazz)) {
+                post(clazz, event);
+            }
         }
     }
 
@@ -101,16 +119,15 @@ public class DefaultEventBus implements EventBus {
         }
     }
 
-    private ComposeSubscriber<?> getSubscribers(Object event) {
-        ComposeSubscriber<?> subscribers;
-        if (event instanceof GenericEvent genericEvent) {
-            ComposeKey composeKey = acquireKey(event.getClass(), genericEvent.getEventType());
-            subscribers = handlerMap.get(composeKey);
-            releaseKey(composeKey);
-        } else {
-            subscribers = handlerMap.get(event.getClass());
+    private void post(Object key, Object event) {
+        ComposeSubscriber<?> subscribers = handlerMap.getOrDefault(key, EMPTY_SUBSCRIBER);
+        if (!subscribers.isEmpty()) {
+            dispatcher.dispatch(executor, event, subscribers);
         }
-        return subscribers == null ? EMPTY_SUBSCRIBER : subscribers;
+    }
+
+    private boolean isJavaLangClass(Class<?> clazz) {
+        return clazz.getName().startsWith("java.lang.");
     }
 
     private static Type getEventHandlerGenericType(Subscriber<?> handler) {
