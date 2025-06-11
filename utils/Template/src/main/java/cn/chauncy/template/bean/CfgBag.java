@@ -8,24 +8,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
- * 说明: 表ID:12 道具
+ * 说明: 表ID:11 背包
  * Created on 2025-06-09 16:18
  */
-public class CfgItem extends BaseBean {
+public class CfgBag extends BaseBean {
 
-    private static final TypeReference<LinkedHashMap<Integer, CfgItem>> MAP_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<LinkedHashMap<Integer, CfgBag>> MAP_REFERENCE = new TypeReference<>() {};
 
     /**
-     * ID:12 字段数:7 有效数据行数:18 说明:道具
+     * ID:11 字段数:7 有效数据行数:18 说明:背包
      */
     @JsonIgnore
-    public final static String TABLE_NAME = "item";
+    public final static String TABLE_NAME = "bag";
 
     /**
      * data
      */
     @JsonIgnore
-    private static Map<Integer, CfgItem> dataMap = Map.of();
+    private static Map<Integer, CfgBag> dataMap = Map.of();
 
     /**
      * 通过key查询
@@ -33,7 +33,7 @@ public class CfgItem extends BaseBean {
      * @param key 配置表key
      * @return
      */
-    public static CfgItem get(int key) {
+    public static CfgBag get(int key) {
         return dataMap.get(key);
     }
 
@@ -42,7 +42,7 @@ public class CfgItem extends BaseBean {
      *
      * @return
      */
-    public static Map<Integer, CfgItem> all() {
+    public static Map<Integer, CfgBag> all() {
         return dataMap;
     }
 
@@ -63,7 +63,7 @@ public class CfgItem extends BaseBean {
         return dataMap.size();
     }
 
-    private CfgItem() { }
+    private CfgBag() { }
 
 
     /**

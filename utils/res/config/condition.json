@@ -1,0 +1,50 @@
+{
+    "1": {
+        "@type": "cn.chauncy.template.bean.CfgCondition",
+        "id": 1,
+        "conditionType": 0,
+        "conditionParams": [
+        ],
+        "target": 0
+    },
+    "2": {
+        "@type": "cn.chauncy.template.bean.CfgCondition",
+        "id": 2,
+        "conditionType": 0,
+        "conditionParams": [
+        ],
+        "target": 0
+    },
+    "3": {
+        "@type": "cn.chauncy.template.bean.CfgCondition",
+        "id": 3,
+        "conditionType": 0,
+        "conditionParams": [
+        ],
+        "target": 0
+    },
+    "4": {
+        "@type": "cn.chauncy.template.bean.CfgCondition",
+        "id": 4,
+        "conditionType": 0,
+        "conditionParams": [
+        ],
+        "target": 0
+    },
+    "5": {
+        "@type": "cn.chauncy.template.bean.CfgCondition",
+        "id": 5,
+        "conditionType": 0,
+        "conditionParams": [
+        ],
+        "target": 0
+    },
+    "6": {
+        "@type": "cn.chauncy.template.bean.CfgCondition",
+        "id": 6,
+        "conditionType": 0,
+        "conditionParams": [
+        ],
+        "target": 0
+    }
+}

@@ -1,7 +1,7 @@
 package cn.chauncy.template;
 
 /**
- * ID:99 字段数:3 有效数据行数:8 说明:提示表
+ * ID:99 字段数:3 有效数据行数:8 说明:提示
  */
 public enum CfgTips {
     /**

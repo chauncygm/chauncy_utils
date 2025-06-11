@@ -1,0 +1,130 @@
+{
+    "1": {
+        "@type": "cn.chauncy.template.bean.CfgTask",
+        "id": 1,
+        "chapter": 0,
+        "type": 0,
+        "groupType": 0,
+        "prior": 0,
+        "goalList": [
+        ],
+        "condition": 0,
+        "reward": [
+        ],
+        "limitTime": 0,
+        "rewardLimitTime": 0,
+        "": 0
+    },
+    "2": {
+        "@type": "cn.chauncy.template.bean.CfgTask",
+        "id": 2,
+        "chapter": 0,
+        "type": 0,
+        "groupType": 0,
+        "prior": 0,
+        "goalList": [
+        ],
+        "condition": 0,
+        "reward": [
+        ],
+        "limitTime": 0,
+        "rewardLimitTime": 0,
+        "": 0
+    },
+    "3": {
+        "@type": "cn.chauncy.template.bean.CfgTask",
+        "id": 3,
+        "chapter": 0,
+        "type": 0,
+        "groupType": 0,
+        "prior": 0,
+        "goalList": [
+        ],
+        "condition": 0,
+        "reward": [
+        ],
+        "limitTime": 0,
+        "rewardLimitTime": 0,
+        "": 0
+    },
+    "4": {
+        "@type": "cn.chauncy.template.bean.CfgTask",
+        "id": 4,
+        "chapter": 0,
+        "type": 0,
+        "groupType": 0,
+        "prior": 0,
+        "goalList": [
+        ],
+        "condition": 0,
+        "reward": [
+        ],
+        "limitTime": 0,
+        "rewardLimitTime": 0,
+        "": 0
+    },
+    "5": {
+        "@type": "cn.chauncy.template.bean.CfgTask",
+        "id": 5,
+        "chapter": 0,
+        "type": 0,
+        "groupType": 0,
+        "prior": 0,
+        "goalList": [
+        ],
+        "condition": 0,
+        "reward": [
+        ],
+        "limitTime": 0,
+        "rewardLimitTime": 0,
+        "": 0
+    },
+    "6": {
+        "@type": "cn.chauncy.template.bean.CfgTask",
+        "id": 6,
+        "chapter": 0,
+        "type": 0,
+        "groupType": 0,
+        "prior": 0,
+        "goalList": [
+        ],
+        "condition": 0,
+        "reward": [
+        ],
+        "limitTime": 0,
+        "rewardLimitTime": 0,
+        "": 0
+    },
+    "1001": {
+        "@type": "cn.chauncy.template.bean.CfgTask",
+        "id": 1001,
+        "chapter": 0,
+        "type": 1,
+        "groupType": 0,
+        "prior": 0,
+        "goalList": [
+        ],
+        "condition": 0,
+        "reward": [
+        ],
+        "limitTime": 0,
+        "rewardLimitTime": 0,
+        "": 0
+    },
+    "1002": {
+        "@type": "cn.chauncy.template.bean.CfgTask",
+        "id": 1002,
+        "chapter": 0,
+        "type": 1,
+        "groupType": 0,
+        "prior": 0,
+        "goalList": [
+        ],
+        "condition": 0,
+        "reward": [
+        ],
+        "limitTime": 0,
+        "rewardLimitTime": 0,
+        "": 0
+    }
+}
