@@ -11,7 +11,7 @@ public enum ConditionType implements IEnum<Integer> {
     LOGIN_DAYS(1),
 
     /** 在线X分钟 */
-    ONLINE_MINUTES(2),
+    ONLINE_TIME(2),
 
     /** 升级到X级 */
     LEVEL_UP(3),
@@ -20,7 +20,7 @@ public enum ConditionType implements IEnum<Integer> {
     ITEM_GET(4),
 
     /** 消耗指定id道具x个 */
-    ITEM_CONSUME(5),
+    ITEM_SPEND(5),
 
     /** 完成指定id的任务 */
     FINISH_TASK(6),

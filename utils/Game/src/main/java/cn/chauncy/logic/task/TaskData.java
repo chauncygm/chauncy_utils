@@ -10,7 +10,6 @@ import java.util.Set;
 @Data
 public class TaskData {
 
-
     /** 配置id，同一id只能接取一次 */
     private int configId;
 

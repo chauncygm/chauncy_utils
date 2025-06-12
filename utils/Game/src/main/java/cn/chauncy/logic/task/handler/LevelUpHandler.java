@@ -4,8 +4,7 @@ import cn.chauncy.logic.player.Player;
 import cn.chauncy.logic.task.ConditionType;
 import cn.chauncy.template.bean.CfgCondition;
 
-public class LevelUpHandler3 extends OuterProgressConditionHandler{
-
+public class LevelUpHandler extends OuterProgressConditionHandler{
 
     @Override
     public ConditionType getType() {

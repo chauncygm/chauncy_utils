@@ -85,13 +85,23 @@ public class TaskManager {
     }
 
     private boolean checkCanAccept(Player player, int taskId) {
+        CfgTask cfgTask = CfgTask.get(taskId);
+        if (cfgTask == null) {
+            return false;
+        }
+
         Set<Integer> finishedTaskIdSet = player.getPlayerData().getFinishedTaskIdSet();
         if (finishedTaskIdSet.contains(taskId)) {
             return false;
         }
 
         TaskData taskData = getTask(player, taskId);
-        return taskData == null;
+        if (taskData != null) {
+            return false;
+        }
+
+        int condition = cfgTask.getCondition();
+        return condition <= 0 || goalManager.reachCondition(player, condition);
     }
 
     public void submitTask(Player player, int taskId) {

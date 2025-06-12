@@ -8,8 +8,8 @@ import cn.chauncy.logic.player.component.GoalComponent;
 import cn.chauncy.logic.task.ConditionType;
 import cn.chauncy.logic.task.GoalData;
 import cn.chauncy.logic.task.TaskData;
-import cn.chauncy.logic.task.handler.ConditionHandler;
-import cn.chauncy.logic.task.handler.LevelUpHandler3;
+import cn.chauncy.logic.task.TaskOriginalData;
+import cn.chauncy.logic.task.handler.*;
 import cn.chauncy.template.bean.CfgCondition;
 import cn.chauncy.utils.eventbus.Subscribe;
 import cn.chauncy.utils.stuct.Pair;
@@ -39,12 +39,20 @@ public class GoalManager {
     }
 
     /**
-     * 初始化注册条件处理器
+     * 初始化，注册所有条件处理器
      */
     private void initRegisterHandlers() {
-        registerHandler(new LevelUpHandler3());
+        registerHandler(new NoneHandler());
+        registerHandler(new LoginDaysHandler());
+        registerHandler(new OnlineTimeHandler());
+        registerHandler(new GetItemHandler());
+        registerHandler(new SpendItemHandler());
+        registerHandler(new FinishTaskHandler());
     }
 
+    /**
+     * 注册条件处理器
+     */
     private void registerHandler(ConditionHandler handler) {
         handlers.put(handler.getType(), handler);
         if (handler.isOuterProgress()) {
@@ -87,7 +95,7 @@ public class GoalManager {
             }
             ConditionType conditionType = ConditionType.valueOf(cfgCondition.getConditionType());
             if (!handlers.containsKey(conditionType)) {
-                logger.error("condition handler not exist, type: {}", conditionType);
+                logger.error("register task goal but condition handler not exist, type: {}", conditionType);
                 continue;
             }
 
@@ -141,33 +149,79 @@ public class GoalManager {
     @Subscribe
     public void onConditionChangeEvent(ConditionEvent event) {
         PlayerEvent.ConditionChangeEvent changeEvent = event.convert();
+        if (changeEvent.count() <= 0) {
+            throw new IllegalArgumentException("ConditionChangeEvent count <= 0");
+        }
+
         Player player = changeEvent.player();
         ConditionType conditionType = changeEvent.conditionType();
+
         ConditionHandler conditionHandler = handlers.get(conditionType);
         if (conditionHandler == null) {
-            logger.error("condition handler not exist, type: {}", conditionType);
+            logger.error("trigger event but condition handler not exist, type: {}", conditionType);
             return;
         }
 
+        saveTaskEventData(player, changeEvent);
 
         List<GoalComponent.Goal> goals = player.getGoalComponent().getGoals().get(conditionType);
-        if (goals == null || goals.isEmpty()) {
-            return;
-        }
-        for (GoalComponent.Goal goal : goals) {
-            if (goal == null) {
-                logger.error("goal is null");
-                continue;
+        if (goals != null && !goals.isEmpty()) {
+            for (GoalComponent.Goal goal : goals) {
+                updateGoal(player, conditionHandler, goal, changeEvent);
             }
-            updateGoal(player, conditionHandler, goal, changeEvent);
+        }
+
+    }
+
+    /**
+     * 保存任务事件数据
+     */
+    private void saveTaskEventData(Player player, PlayerEvent.ConditionChangeEvent event) {
+        Map<ConditionType, TaskOriginalData> taskDataMap = player.getPlayerData().getPlayerTaskDataMap();
+        ConditionType conditionType = event.conditionType();
+
+        TaskOriginalData taskOriginalData = taskDataMap.computeIfAbsent(conditionType, k -> new TaskOriginalData(conditionType));
+        int[] params = event.params().stream().mapToInt(Integer::intValue).toArray();
+        TaskOriginalData.ConditionData conditionKey = new TaskOriginalData.ConditionData(params);
+        taskOriginalData.getDataList().merge(conditionKey, event.count(), Integer::sum);
+    }
+
+    /**
+     * 更新任务目标进度
+     */
+    private void updateGoal(Player player, ConditionHandler conditionHandler,
+                            GoalComponent.Goal goal, PlayerEvent.ConditionChangeEvent changeEvent) {
+        int lastProgress = goal.getData().getProgress();
+        CfgCondition cfgCondition = CfgCondition.get(goal.getData().getGoalId());
+
+        int progress;
+        if (cfgCondition.getSourceType() == 0) {
+            // 获取条件当前进度
+            progress = conditionHandler.getCurrentProgress(player, cfgCondition);
+        } else {
+            // 获取事件导致条件变化的进度
+            int deltaProgress = conditionHandler.getEventDeltaProgress(player, cfgCondition, changeEvent);
+            progress = lastProgress + deltaProgress;
+        }
+        if (progress != lastProgress) {
+            globalEventBus.post(new PlayerEvent.TaskChangeEvent(player, goal.getTaskId(), goal.getData()));
         }
     }
 
-    private void updateGoal(Player player, ConditionHandler conditionHandler, GoalComponent.Goal goal, PlayerEvent.ConditionChangeEvent changeEvent ) {
-        boolean update = conditionHandler.updateProgress(player, goal, changeEvent);
-        if (update) {
-            globalEventBus.post(new PlayerEvent.TaskChangeEvent(player, goal.getTaskId(), goal.getData()));
+    /**
+     * 判断条件是否满足
+     */
+    public boolean reachCondition(Player player, int conditionId) {
+        CfgCondition cfgCondition = CfgCondition.get(conditionId);
+        if (cfgCondition == null) {
+            return false;
         }
+        ConditionType conditionType = ConditionType.valueOf(cfgCondition.getConditionType());
+        ConditionHandler handler = handlers.get(conditionType);
+        if (handler == null) {
+            return false;
+        }
+        return handler.getCurrentProgress(player, cfgCondition) >= cfgCondition.getTarget();
     }
 
 }
