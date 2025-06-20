@@ -37,6 +37,9 @@ public class TaskManager {
     public void init(Player player) {
         Map<Integer, TaskData> taskMap = player.getPlayerData().getTaskMap();
         for (TaskData taskData : taskMap.values()) {
+            if (taskData.getTaskStatus() >= TaskStatus.FINISHED.getValue()) {
+                continue;
+            }
             goalManager.registerTaskGoal(player, taskData, false);
         }
         goalManager.updateAllGoal(player);

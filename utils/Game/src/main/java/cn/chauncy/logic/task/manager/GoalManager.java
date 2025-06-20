@@ -13,6 +13,7 @@ import cn.chauncy.logic.task.handler.*;
 import cn.chauncy.template.bean.CfgCondition;
 import cn.chauncy.utils.eventbus.Subscribe;
 import cn.chauncy.utils.stuct.Pair;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +33,7 @@ public class GoalManager {
 
     private final GlobalEventBus globalEventBus;
 
+    @Inject
     public GoalManager(GlobalEventBus globalEventBus) {
         this.globalEventBus = globalEventBus;
 

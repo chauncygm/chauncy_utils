@@ -11,6 +11,7 @@ import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.net.proto.ProtobufMessage;
 import com.google.inject.Inject;
 import com.google.protobuf.Message;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.LongAdder;
 
+@ChannelHandler.Sharable
 public class GameMessageDispatcher extends MessageDispatcher<ProtobufMessage<?>> {
 
     private static final Logger logger = LoggerFactory.getLogger(GameMessageDispatcher.class);

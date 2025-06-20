@@ -35,7 +35,8 @@ public class GenProtoTask implements Runnable {
 
             copyProtoFile();
 
-            genAllClassFile();
+            genJavaFile();
+            genCSharpFile();
         } catch (Exception e) {
             logger.error("gen proto failed", e);
         }
@@ -52,6 +53,7 @@ public class GenProtoTask implements Runnable {
         headers.add("syntax = \"" + ProtoExportConfig.getSYNTAX() + "\";");
         headers.add("option java_multiple_files = " + ProtoExportConfig.isMultipleFiles() + ";");
         headers.add("option java_package = \"" + ProtoExportConfig.getJavaOutPackage() + "\";");
+        headers.add("option csharp_namespace = \"" + ProtoExportConfig.getCSharpNamespace() + "\";");
 
         for (File protoFile : protoFiles) {
             String fileName = protoFile.getName().split("\\.")[0];
@@ -72,7 +74,7 @@ public class GenProtoTask implements Runnable {
         }
     }
 
-    private void genAllClassFile() throws Exception {
+    private void genJavaFile() throws Exception {
         String cmd = String.format("%s --proto_path %s --java_out=%s %s",
                 ProtoExportConfig.getProtocPath(),
                 ProtoExportConfig.getTmpPath(),
@@ -82,5 +84,18 @@ public class GenProtoTask implements Runnable {
         System.out.println(cmd);
         ProcessUtils.Pair<Integer, String> result = ProcessUtils.exec(cmd);
         logger.info("gen class file, result: {}", result);
+    }
+
+    private void genCSharpFile() throws Exception {
+        String cmd = String.format("%s --proto_path %s --csharp_out=%s %s",
+                ProtoExportConfig.getProtocPath(),
+                ProtoExportConfig.getTmpPath(),
+                ProtoExportConfig.getCSharpOutPath(),
+                ProtoExportConfig.getTmpPath().toString() + "\\*.proto");
+
+        System.out.println(cmd);
+        ProcessUtils.Pair<Integer, String> result = ProcessUtils.exec(cmd);
+        logger.info("gen class file, result: {}", result);
+
     }
 }

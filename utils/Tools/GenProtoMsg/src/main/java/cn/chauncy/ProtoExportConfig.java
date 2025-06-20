@@ -12,7 +12,7 @@ public class ProtoExportConfig {
 
     private static final Path CONFIG_PATH = Paths.get("./config/config.properties");
 
-    private static final Pattern pattern = Pattern.compile("^[a-z_]*(\\.[a-z_]*)*$");
+    private static final Pattern pattern = Pattern.compile("^[a-zA-Z_]*(\\.[a-zA-Z_]*)*$");
 
     /** 使用proto的语法版本 */
     private static String SYNTAX;
@@ -22,8 +22,12 @@ public class ProtoExportConfig {
     private static Path PROTO_FILE_PATH;
     /** 输出java文件的路径 */
     private static Path JAVA_OUT_PATH;
+    /** 输出c#类文件的所在的包 */
+    private static Path C_SHARP_OUT_PATH;
     /** 输出java类文件的所在的包 */
     private static Path JAVA_OUT_PACKAGE;
+    /** 输出c#类文件的所在的包 */
+    private static Path C_SHARP_OUT_NAMESPACE;
     /** 生成中间proto文件的路径 */
     private static Path TMP_PATH;
 
@@ -40,6 +44,8 @@ public class ProtoExportConfig {
         PROTO_FILE_PATH = Paths.get(properties.getProperty("proto.file.path"));
         JAVA_OUT_PATH = Paths.get(properties.getProperty("proto.java.out.path"));
         JAVA_OUT_PACKAGE = Paths.get(properties.getProperty("proto.java.import.package"));
+        C_SHARP_OUT_PATH = Paths.get(properties.getProperty("proto.csharp.out.path"));
+        C_SHARP_OUT_NAMESPACE = Paths.get(properties.getProperty("proto.csharp.namespace"));
         TMP_PATH = Paths.get(properties.getProperty("proto.tmp.path", "./tmp"));
     }
 
@@ -72,11 +78,25 @@ public class ProtoExportConfig {
         return JAVA_OUT_PATH;
     }
 
+    public static Path getCSharpOutPath() {
+        if (C_SHARP_OUT_PATH == null || !C_SHARP_OUT_PATH.toFile().isDirectory()) {
+            throw new RuntimeException("proto.java.out.path is not a directory");
+        }
+        return C_SHARP_OUT_PATH;
+    }
+
     public static Path getJavaOutPackage() {
         if (JAVA_OUT_PACKAGE == null || !pattern.matcher(JAVA_OUT_PACKAGE.toString()).matches()) {
             throw new RuntimeException("proto.java.import.package is not a valid package name");
         }
         return JAVA_OUT_PACKAGE;
+    }
+
+    public static Path getCSharpNamespace() {
+        if (C_SHARP_OUT_NAMESPACE == null || !pattern.matcher(C_SHARP_OUT_NAMESPACE.toString()).matches()) {
+            throw new RuntimeException("proto.csharp.namespace is not a valid package name");
+        }
+        return C_SHARP_OUT_NAMESPACE;
     }
 
     public static Path getTmpPath() {
