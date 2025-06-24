@@ -8,6 +8,18 @@ import java.util.List;
 
 public class PlayerEvent {
 
+    /** 玩家创角 */
+    public record PlayerCreateRoleEvent(Player player) {}
+
+    /** 玩家登录 */
+    public record PlayerLoginEvent(Player player) {}
+
+    /** 玩家上线，在登录之后 */
+    public record PlayerOnlineEvent(Player player) {}
+
+    /** 玩家离线 */
+    public record PlayerOfflineEvent(Player player) {}
+
     /** 玩家等级变化 */
     public record MainLevelChangeEvent(Player player, int level) {}
 

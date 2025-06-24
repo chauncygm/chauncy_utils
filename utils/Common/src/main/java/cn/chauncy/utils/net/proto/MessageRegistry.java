@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.zip.CRC32;
 
 public class MessageRegistry {
 
@@ -40,7 +41,9 @@ public class MessageRegistry {
     }
 
     public int getProtoEnum(Class<? extends Message> clazz) {
-        return clazz.getSimpleName().hashCode();
+        CRC32 crc32 = new CRC32();
+        crc32.update(clazz.getSimpleName().getBytes());
+        return (int) crc32.getValue();
     }
 
     public Parser<? extends Message> getParser(int protoEnum) {

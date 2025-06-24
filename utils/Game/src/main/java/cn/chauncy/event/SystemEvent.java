@@ -7,6 +7,8 @@ public class SystemEvent {
 
     public record ServerStopEvent() {}
 
+    public record MinuteTickEvent() {}
+
     public record CrossHourEvent(int hour) {}
 
     public record CrossDayEvent(int epochDay) {}

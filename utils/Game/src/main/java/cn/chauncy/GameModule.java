@@ -2,7 +2,6 @@ package cn.chauncy;
 
 import cn.chauncy.component.GlobalEventBus;
 import cn.chauncy.component.GlobalIdGenerator;
-import cn.chauncy.component.BaseJacksonTypeHandler;
 import cn.chauncy.component.GlobalTimeProvider;
 import cn.chauncy.dao.config.*;
 import cn.chauncy.logic.bag.manager.BagManager;
@@ -73,8 +72,6 @@ public class GameModule extends AbstractModule {
 
                 mapUnderscoreToCamelCase(true);
                 addMapperClasses(MAPPER_SCAN_PACKAGE);
-
-                addTypeHandlerClass(BaseJacksonTypeHandler.class);
             }
         });
 

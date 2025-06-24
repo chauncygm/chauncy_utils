@@ -3,6 +3,7 @@ package cn.chauncy.net;
 import cn.chauncy.event.CtxMsgEvent;
 import cn.chauncy.event.PlayerMsgEvent;
 import cn.chauncy.logic.player.Player;
+import cn.chauncy.message.ReqHeartbeat;
 import cn.chauncy.message.ReqLogin;
 import cn.chauncy.services.FixedExecutorService;
 import cn.chauncy.utils.RateLimiter;

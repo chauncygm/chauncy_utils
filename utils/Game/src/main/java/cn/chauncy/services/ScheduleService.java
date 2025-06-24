@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class ScheduleService extends AbstractScheduledService {
 
     private static final Logger logger = LoggerFactory.getLogger(ScheduleService.class);
+    private static final SystemEvent.MinuteTickEvent MINUTE_TICK = new SystemEvent.MinuteTickEvent();
 
     private final GlobalEventBus eventBus;
     private final TimeProvider timeProvider;
@@ -35,7 +36,7 @@ public class ScheduleService extends AbstractScheduledService {
         long timeMillis = timeProvider.getTimeMillis();
         LocalDateTime time = TimeHelper.SYSTEM.toLocalDateTime(timeMillis);
         if ((timeMillis / 1000) % TimeUtils.SECONDS_PER_MINUTE == 0) {
-            logger.info("=== System tick ===");
+            eventBus.post(MINUTE_TICK);
         }
         if (lastTickTime / TimeUtils.MILLIS_PER_HOUR != timeMillis / TimeUtils.MILLIS_PER_HOUR) {
             onHour(time, timeMillis);
