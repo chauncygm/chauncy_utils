@@ -9,10 +9,10 @@ import lombok.Data;
 public class BaseEntity {
 
     @TableField(fill = FieldFill.INSERT)
-    private long createTime;
+    private Long createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private long updateTime;
+    private Long updateTime;
 
     @TableLogic(value = "0", delval = "1")
     private boolean deleted;

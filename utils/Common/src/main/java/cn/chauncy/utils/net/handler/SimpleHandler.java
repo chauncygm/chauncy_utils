@@ -58,7 +58,7 @@ public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHand
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        logger.info("channelRead: {}, msg: {}", ctx, msg);
+        logger.debug("channelRead: {}, msg: {}", ctx, msg);
         ctx.fireChannelRead(msg);
     }
 

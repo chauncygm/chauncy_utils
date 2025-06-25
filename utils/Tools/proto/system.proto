@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+enum TipsType {
+  NONE = 0;                     // debug信息
+  TIPS = 1;                     // 普通提示，操作结果
+  WARNING = 2;                  // 错误提示，服务器错误异常等
+  WINDOW = 4;                   // 窗口提示，如封禁/挤下线/停服等
+}
+
+message SystemTips {
+  TipsType type = 1;            //提示类型
+  int32 code = 2;               //错误码
+  repeated int32 params = 3;    //参数
+  optional string message = 4;  //提示信息
+}

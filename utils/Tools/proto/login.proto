@@ -20,6 +20,21 @@ message ReqReconnect {
   string token = 1;
 }
 
+// 请求下线
+message ReqLogout {
+
+}
+
+// 心跳消息
+message ReqHeartbeat {
+
+}
+
+// 心跳相应
+message ResHeartbeat {
+  int64 time = 1;
+}
+
 // 同步登录数据
 message SyncLoginData {
   int64 uid = 1;

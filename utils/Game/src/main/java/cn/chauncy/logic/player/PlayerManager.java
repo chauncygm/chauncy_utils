@@ -60,7 +60,6 @@ public class PlayerManager {
             if (playerData != null) {
                 player = new Player();
                 player.setPlayerData(playerData);
-                player.setPlayerId(playerData.getPlayerId());
             }
         }
         return player;
@@ -97,6 +96,8 @@ public class PlayerManager {
         playerIdMap.put(player.getPlayerId(), player);
         offlinePlayerSet.remove(player.getPlayerId());
         PlayerData playerData = player.getPlayerData();
+        playerData.setLastLoginTime(timeProvider.getTimeMillis());
+        playerDataMapper.updateById(playerData);
         playerUid2IdMap.put(playerData.getUid(), playerData.getPlayerId());
     }
 

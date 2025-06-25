@@ -20,14 +20,19 @@ import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.thread.ConsoleService;
 import cn.chauncy.utils.time.TimeProvider;
+import com.baomidou.mybatisplus.core.MybatisXMLLanguageDriver;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.guice.MyBatisModule;
+
+import javax.sql.DataSource;
 
 public class GameModule extends AbstractModule {
 
@@ -65,6 +70,8 @@ public class GameModule extends AbstractModule {
                 environmentId("development");
                 bindDataSourceProviderType(DataSourceProvider.class);
                 bindTransactionFactoryType(JdbcTransactionFactory.class);
+                bindDefaultScriptingLanguageType(MybatisXMLLanguageDriver.class);
+                bind(MetaObjectHandler.class).to(MyMetaObjectHandler.class).in(Scopes.SINGLETON);
 
                 // 替换应用mybatis-plus的实现
                 useSqlSessionFactoryProvider(MybatisSqlSessionFactoryProvider.class);

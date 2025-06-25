@@ -26,7 +26,7 @@ public class PlayerData extends BaseEntity {
 
     @EqualsAndHashCode.Include
     @TableId(value = "player_id", type = IdType.INPUT)
-    private long playerId;
+    private Long playerId;
 
     /** 玩家uid */
     private long uid;
