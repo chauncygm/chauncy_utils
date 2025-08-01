@@ -1,7 +1,33 @@
 package cn.chauncy;
 
+import cn.chauncy.struct.SheetInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Set;
+
 public class ExcelUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger(ExcelUtil.class);
+    private static final StringBuilder sb = new StringBuilder();
+
+    private static final Set<String> excelFileSuffix = Set.of("xls", "xlsx");
+
+    public static void readExcel(SheetInfo sheetInfo) {
+        try (final ExcelReader2 reader = new ExcelReader2(sheetInfo)) {
+            reader.read();
+        } catch (Exception e) {
+            logger.error("读取Excel文件出错", e);
+        }
+    }
+    public static boolean isExcelFile(String fileName) {
+        int index = fileName.lastIndexOf(".");
+        if (index == -1) {
+            return false;
+        }
+        String suffix = fileName.substring(index + 1);
+        return excelFileSuffix.contains(suffix);
+    }
 
     public static String getExcelName(String fileName) {
         int index = fileName.indexOf(".");

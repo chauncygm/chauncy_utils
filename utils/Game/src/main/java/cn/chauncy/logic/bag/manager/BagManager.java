@@ -109,7 +109,7 @@ public class BagManager {
             Item item = items.get(0);
             BagType bagType = itemManager.getBagType(item);
             CfgTips cfgTips = testRewardItems(player, bagType, List.of(item));
-            if (!cfgTips.compare(CfgTips.SUCCESS_0)) {
+            if (cfgTips != CfgTips.SUCCESS_0) {
                 return cfgTips;
             }
             rewardBagItem(player, bagType, List.of(item));
@@ -119,7 +119,7 @@ public class BagManager {
         Map<BagType, List<Item>> itemTypeListMap = rewardGroupOf(items);
         for (Map.Entry<BagType, List<Item>> entry : itemTypeListMap.entrySet()) {
             CfgTips cfgTips = testRewardItems(player, entry.getKey(), entry.getValue());
-            if (!cfgTips.compare(CfgTips.SUCCESS_0)) {
+            if (cfgTips != CfgTips.SUCCESS_0) {
                 return cfgTips;
             }
         }

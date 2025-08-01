@@ -1,14 +1,18 @@
 package cn.chauncy;
 
+import cn.chauncy.exception.ExcelParseException;
 import cn.chauncy.struct.ExcelCol;
 import cn.chauncy.struct.ExcelFile;
 import cn.chauncy.struct.Field;
+import cn.chauncy.struct.SheetInfo;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -22,6 +26,8 @@ import static cn.chauncy.ExcelUtil.*;
 
 
 public class ExcelReader {
+
+    private  static final Logger logger = LoggerFactory.getLogger(ExcelReader.class);
 
     public static final ExcelReader INSTANCE = new ExcelReader();
     private static final NumberFormat numberFormat;

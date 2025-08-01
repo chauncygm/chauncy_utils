@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+<Properties>
+    <Property name="LOG_HOME">logs</Property>
+    <Property name="LOGSTASH_HOST">172.21.240.55</Property>
+    <Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS z}] [%t] %-5level %logger{36} - %msg%xEx%n</Property>
+</Properties>
+
+<Appenders>
+    <Console name="console" target="SYSTEM_OUT" follow="true">
+        <PatternLayout pattern="${LOG_PATTERN}"/>
+    </Console>
+
+    <File name="log" fileName="${LOG_HOME}/run.log" append="false">
+        <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+        <PatternLayout pattern="${LOG_PATTERN}"/>
+    </File>
+</Appenders>
+
+<Loggers>
+    <Root level="info">
+        <AppenderRef ref="console"/>
+        <AppenderRef ref="log"/>
+    </Root>
+</Loggers>
+</Configuration>

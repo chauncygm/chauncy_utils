@@ -1,4 +1,4 @@
-package cn.chauncy;
+package cn.chauncy.exception;
 
 public class ExcelParseException extends RuntimeException {
 
