@@ -3,6 +3,7 @@
         "@type": "cn.chauncy.template.bean.CfgCondition",
         "id": 1,
         "conditionType": 0,
+        "sourceType": 0,
         "conditionParams": [
         ],
         "target": 0
@@ -11,6 +12,7 @@
         "@type": "cn.chauncy.template.bean.CfgCondition",
         "id": 2,
         "conditionType": 0,
+        "sourceType": 0,
         "conditionParams": [
         ],
         "target": 0
@@ -19,6 +21,7 @@
         "@type": "cn.chauncy.template.bean.CfgCondition",
         "id": 3,
         "conditionType": 0,
+        "sourceType": 0,
         "conditionParams": [
         ],
         "target": 0
@@ -27,6 +30,7 @@
         "@type": "cn.chauncy.template.bean.CfgCondition",
         "id": 4,
         "conditionType": 0,
+        "sourceType": 0,
         "conditionParams": [
         ],
         "target": 0
@@ -35,6 +39,7 @@
         "@type": "cn.chauncy.template.bean.CfgCondition",
         "id": 5,
         "conditionType": 0,
+        "sourceType": 0,
         "conditionParams": [
         ],
         "target": 0
@@ -43,6 +48,7 @@
         "@type": "cn.chauncy.template.bean.CfgCondition",
         "id": 6,
         "conditionType": 0,
+        "sourceType": 0,
         "conditionParams": [
         ],
         "target": 0

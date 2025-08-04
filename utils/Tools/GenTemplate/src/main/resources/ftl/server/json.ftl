@@ -5,11 +5,12 @@
     <#list row.cellValueMap?values as cell>
         <#-- 数组 -->
         <#if cell.fieldInfo.arrayType>
-        "${cell.fieldInfo.name}" : [
+        "${cell.fieldInfo.name}": [
             <#-- 对象数组 -->
             <#if cell.fieldInfo.objectType>
                 <#list cell.fieldValue as value>
             {
+                "@type": "${package}.base.${cell.fieldInfo.javaType?replace("List<", "")?replace(">", "")}",
             <#list cell.fieldInfo.javaFieldMap?keys as fieldName>
                 "${fieldName}": ${value[fieldName_index]}<#if fieldName_has_next == true>,</#if>
             </#list>
@@ -27,6 +28,7 @@
             <#-- 对象类型 -->
             <#if cell.fieldInfo.objectType>
         {
+            "@type": "${package}.base.${cell.fieldInfo.javaType?replace("List<", "")?replace(">", "")},
             <#list cell.fieldInfo.javaFieldMap?keys as fieldName>
             "${fieldName.name}": ${cell.fieldValue[fieldName_index]}<#if fieldName_has_next == true>,</#if>
             </#list>
