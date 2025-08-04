@@ -1,4 +1,4 @@
-package cn.chauncy.utils;
+package cn.chauncy.utils.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
