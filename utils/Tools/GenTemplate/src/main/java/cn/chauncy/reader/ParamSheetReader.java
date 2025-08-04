@@ -1,5 +1,6 @@
-package cn.chauncy.sheet;
+package cn.chauncy.reader;
 
+import cn.chauncy.option.ExportOption;
 import cn.chauncy.struct.CellInfo;
 import cn.chauncy.struct.DataInfo;
 import cn.chauncy.struct.FieldInfo;
@@ -25,7 +26,7 @@ public class ParamSheetReader extends SheetReader {
     }
 
     @Override
-    public SheetContent read(Sheet sheet) {
+    public SheetContent read(Sheet sheet, ExportOption option) {
         Row nameRow = sheet.getRow(nameRowIndex);
         Int2ObjectMap<String> cellValueMapOfRow = getCellIndexValueMapOfRow(nameRow);
         // 获取字段的列索引
@@ -47,6 +48,10 @@ public class ParamSheetReader extends SheetReader {
             String flag = readCellValue(row, flagsColIndex);
             String comment = readCellValue(row, commentColIndex);
             String cellValue = readCellValue(row, valueColIndex);
+            // 无需导出的字段
+            if (flag.contains(option.getMode().value)) {
+                continue;
+            }
 
             FieldInfo fieldInfo = new FieldInfo(name, type, flag, comment, index);
             sheetContent.getFieldInfoMap().put(fieldInfo.getName(), fieldInfo);

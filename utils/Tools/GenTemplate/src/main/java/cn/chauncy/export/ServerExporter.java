@@ -35,9 +35,10 @@ public class ServerExporter {
         cfg.setNumberFormat("0");
     }
 
-    public void export(Map<Integer, SheetInfo> sheetMap, ExportOption option)  throws IOException, TemplateException {
+    public void export(Map<Integer, SheetInfo> sheetMap, ExportOption option) {
         logger.info("开始导出代码和json配置文件... \n输出代码路径: {}\n输出json文件路径：{}",
-                option.getClassOutputPath().toFile().getAbsolutePath(), option.getJsonOutputPath().toFile().getAbsolutePath());
+                option.getClassOutputPath().toFile().getAbsolutePath(),
+                option.getJsonOutputPath().toFile().getAbsolutePath());
         long start = System.currentTimeMillis();
         for (SheetInfo sheetInfo : sheetMap.values()) {
             logger.info("开始导出代码和json文件：{}", sheetInfo.getSheetName());
@@ -51,49 +52,58 @@ public class ServerExporter {
         if (option.getExportIds().isEmpty()) {
             writeDefineClass(sheetMap.values(), option);
         }
-        long end = System.currentTimeMillis();
-        logger.info("配置生成代码和json配置文件导出完毕！ size: [{}], use time: [{}]ms", sheetMap.size(), end - start);
+        logger.info("配置生成代码和json配置文件导出完毕！ size: [{}], use time: [{}]ms", sheetMap.size(), System.currentTimeMillis() - start);
     }
 
-    public void writeClass(SheetInfo sheetInfo, ExportOption option) throws IOException, TemplateException {
-        Path classBeanOutputPath = Path.of(option.getClassOutputPath().toString(),"src\\main\\java",
-                option.getClassOutPackage().replace(".", "\\"), "bean");
-        File file = Path.of(classBeanOutputPath.toString(), "Cfg" + firstCapital(sheetInfo.getSheetName()) + ".java").toFile();
+    public void writeClass(SheetInfo sheetInfo, ExportOption option) {
+        File file = buildOutputPath(option, "bean", "Cfg" + firstCapital(sheetInfo.getSheetName()) + ".java").toFile();
         Map<String, Object> dataModel = Map.of("data", sheetInfo, "package", option.getClassOutPackage());
         writeTemplate(file, "class.ftl", dataModel);
     }
 
-    public void writeTips(SheetInfo sheetInfo, ExportOption option) throws IOException, TemplateException {
-        Path classOutputPath = Path.of(option.getClassOutputPath().toString(),"src\\main\\java",
-                option.getClassOutPackage().replace(".", "\\"));
-        File file = Path.of(classOutputPath.toString(), "Cfg" + firstCapital(sheetInfo.getSheetName()) + ".java").toFile();
+    public void writeTips(SheetInfo sheetInfo, ExportOption option) {
+        File file = buildOutputPath(option, "Cfg" + firstCapital(sheetInfo.getSheetName()) + ".java").toFile();
         Map<String, Object> dataModel = Map.of("data", sheetInfo, "package", option.getClassOutPackage());
         writeTemplate(file, "tips.ftl", dataModel);
     }
 
-    public void writeDefineClass(Collection<SheetInfo> sheetInfos, ExportOption option) throws IOException, TemplateException {
-        Path classOutputPath = Path.of(option.getClassOutputPath().toString(),"src\\main\\java",
-                option.getClassOutPackage().replace(".", "\\"));
-        File file = Path.of(classOutputPath.toString(), "CfgDefine.java").toFile();
+    public void writeDefineClass(Collection<SheetInfo> sheetInfos, ExportOption option) {
+        File file = buildOutputPath(option, "CfgDefine.java").toFile();
         Map<String, Object> dataModel = Map.of("data", sheetInfos, "package", option.getClassOutPackage());
         writeTemplate(file, "define.ftl", dataModel);
     }
 
-    public void writeJson(SheetInfo sheetInfo, ExportOption option) throws IOException, TemplateException {
-        File jsonFile = Path.of(option.getJsonOutputPath().toString(), sheetInfo.getSheetName() + ".json").toFile();
+    public void writeJson(SheetInfo sheetInfo, ExportOption option) {
+        File jsonFile = option.getJsonOutputPath().resolve(sheetInfo.getSheetName() + ".json").toFile();
         Map<String, Object> dataModel = Map.of("data", sheetInfo, "package", option.getClassOutPackage());
         writeTemplate(jsonFile, "json.ftl", dataModel);
     }
 
-    private void writeTemplate(File file, String ftlName, Object dataModel) throws IOException, TemplateException {
-        if (!file.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            file.createNewFile();
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void writeTemplate(File file, String ftlName, Object dataModel) {
+        try {
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            try (FileWriter fileWriter = new FileWriter(file)){
+                Template template = cfg.getTemplate(ftlName);
+                template.process(dataModel, fileWriter);
+            }
+        } catch (IOException | TemplateException e) {
+            logger.error("模版生成失败！ {}", file.getAbsolutePath(), e);
+            throw new RuntimeException(e);
         }
-        try (FileWriter fileWriter = new FileWriter(file)){
-            Template template = cfg.getTemplate(ftlName);
-            template.process(dataModel, fileWriter);
+    }
+
+    private Path buildOutputPath(ExportOption option, String... subPaths) {
+        Path path = option.getClassOutputPath();
+        path = path.resolve("src\\main\\java");
+        path = path.resolve(option.getClassOutPackage().replace(".", "\\"));
+        for (String sub : subPaths) {
+            path = path.resolve(sub);
         }
+        return path;
     }
 
 }

@@ -1,8 +1,7 @@
-package cn.chauncy;
+package cn.chauncy.reader;
 
 import cn.chauncy.exception.ExcelParseException;
-import cn.chauncy.sheet.NormalSheetReader;
-import cn.chauncy.sheet.ParamSheetReader;
+import cn.chauncy.option.ExportOption;
 import cn.chauncy.struct.SheetContent;
 import cn.chauncy.struct.SheetInfo;
 import org.apache.commons.io.IOUtils;
@@ -36,14 +35,14 @@ public class ExcelReader implements AutoCloseable{
         }
     }
 
-    public void read() {
+    public void read(ExportOption option) {
         logger.info("开始解析文件: {}", sheetInfo.getFile().getAbsolutePath());
         Sheet sheet = workbook.getSheetAt(sheetInfo.getSheetIndex());
         SheetContent content;
         if (isParamSheet()) {
-            content = new ParamSheetReader(sheetInfo.getSheetName()).read(sheet);
+            content = new ParamSheetReader(sheetInfo.getSheetName()).read(sheet, option);
         } else {
-            content = new NormalSheetReader(sheetInfo.getSheetName()).read(sheet);
+            content = new NormalSheetReader(sheetInfo.getSheetName()).read(sheet, option);
         }
         if (content != null && !content.getDataInfoList().isEmpty()) {
             sheetInfo.setSheetContent(content);

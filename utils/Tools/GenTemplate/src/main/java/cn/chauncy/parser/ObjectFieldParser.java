@@ -34,6 +34,7 @@ public class ObjectFieldParser implements FieldParser {
             cSharpTypeFieldsMap.put(fieldSplit[1], parser.cSharpType());
         }
 
+        // 特殊针对只有两个基本类型字段的结构统一使用相同的数据类型，如:{奖励道具id,数量}等常用配置，防止类数量过多
         if (fieldParsers.size() == 2 && "int".equals(fieldParsers.get(0).javaType())) {
             switch (fieldParsers.get(1).javaType()) {
                 case "int": specialType = "Entry.Int2IntVal";break;

@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class ArrayParser implements FieldParser {
 
+    /** 数组内元素解析器 */
     private final FieldParser subFieldParser;
 
     public ArrayParser(String fieldName, String type) {

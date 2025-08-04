@@ -1,6 +1,7 @@
-package cn.chauncy.sheet;
+package cn.chauncy.reader;
 
 import cn.chauncy.exception.ExcelScanException;
+import cn.chauncy.option.ExportOption;
 import cn.chauncy.struct.SheetContent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -20,7 +21,7 @@ public abstract class SheetReader {
         this.sheetInfo = sheetInfo;
     }
 
-    public abstract SheetContent read(Sheet sheet);
+    public abstract SheetContent read(Sheet sheet, ExportOption option);
 
     protected int getTotalRowCount(Sheet sheet) {
         return sheet.getLastRowNum() + 1;

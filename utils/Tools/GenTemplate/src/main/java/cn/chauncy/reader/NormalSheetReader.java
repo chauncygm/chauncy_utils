@@ -1,6 +1,7 @@
-package cn.chauncy.sheet;
+package cn.chauncy.reader;
 
 import cn.chauncy.exception.ExcelParseException;
+import cn.chauncy.option.ExportOption;
 import cn.chauncy.struct.CellInfo;
 import cn.chauncy.struct.DataInfo;
 import cn.chauncy.struct.FieldInfo;
@@ -26,7 +27,7 @@ public class NormalSheetReader extends SheetReader {
     }
 
     @Override
-    public SheetContent read(Sheet sheet) {
+    public SheetContent read(Sheet sheet, ExportOption option) {
         Int2ObjectMap<String> commentMap = getCellMapOfSheet(sheet, COMMENT_ROW_INDEX);
         Int2ObjectMap<String> nameMap = getCellMapOfSheet(sheet, NAME_ROW_INDEX);
         Int2ObjectMap<String> typeMap = getCellMapOfSheet(sheet, TYPE_ROW_INDEX);
@@ -37,13 +38,21 @@ public class NormalSheetReader extends SheetReader {
         for (Int2ObjectMap.Entry<String> entry : nameMap.int2ObjectEntrySet()) {
             int index = entry.getIntKey();
             String name = entry.getValue();
-            FieldInfo fieldInfo = new FieldInfo(name, typeMap.get(index), flagMap.get( index), commentMap.get(index), index);
+            String flags = flagMap.get(index);
+            if (!flags.contains(option.getMode().value)) {
+                continue;
+            }
+            FieldInfo fieldInfo = new FieldInfo(name, typeMap.get(index), flags, commentMap.get(index), index);
             if (sheetContent.getFieldInfoMap().containsKey(fieldInfo.getName())) {
                 throw new ExcelParseException("field name is duplicate: " + fieldInfo.getName());
             }
             sheetContent.getFieldInfoMap().put(fieldInfo.getName(), fieldInfo);
         }
 
+        // 没有需要导出的字段
+        if (sheetContent.getFieldInfoMap().isEmpty()) {
+            return null;
+        }
         if (!sheetContent.getFieldInfoMap().containsKey("id")) {
             throw new ExcelParseException("id field is not exist");
         }

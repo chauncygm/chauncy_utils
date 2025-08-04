@@ -1,6 +1,7 @@
 package cn.chauncy.util;
 
-import cn.chauncy.ExcelReader;
+import cn.chauncy.option.ExportOption;
+import cn.chauncy.reader.ExcelReader;
 import cn.chauncy.struct.SheetInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +15,9 @@ public class ExcelUtil {
 
     private static final Set<String> excelFileSuffix = Set.of("xls", "xlsx");
 
-    public static boolean readExcel(SheetInfo sheetInfo) {
+    public static boolean readExcel(SheetInfo sheetInfo, ExportOption option) {
         try (final ExcelReader reader = new ExcelReader(sheetInfo)) {
-            reader.read();
+            reader.read(option);
             return true;
         } catch (Exception e) {
             logger.error("读取Excel文件{}出错.", sheetInfo.getSheetName(), e);
