@@ -8,7 +8,7 @@ public class CellInfo {
     /** 单元格对应的字段信息，缓存在这里 */
     private FieldInfo fieldInfo;
 
-    /** 单元格值 */
+    /** 单元格原始值 */
     private String cellValue;
 
     /** 单元格解析的数据，用于生成json数据 */
