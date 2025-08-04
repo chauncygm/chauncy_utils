@@ -19,6 +19,16 @@ public interface FieldParser {
     /** 获取字段的c#类型，用于生成代码 */
     String cSharpType();
 
+    /** 是否是数组 */
+    default boolean isArray() {
+        return false;
+    }
+
+    /** 元素是否是对象 */
+    default boolean isObject() {
+        return false;
+    }
+
     /** 获取自定义类型的java字段信息，当字段是对象或对象数组类型才存在 */
     Map<String, String> getJavaTypeFieldMap();
 

@@ -1,11 +1,15 @@
 package cn.chauncy.sheet;
 
+import cn.chauncy.exception.ExcelParseException;
 import cn.chauncy.struct.CellInfo;
 import cn.chauncy.struct.DataInfo;
 import cn.chauncy.struct.FieldInfo;
 import cn.chauncy.struct.SheetContent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.apache.poi.ss.usermodel.Sheet;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class NormalSheetReader extends SheetReader {
 
@@ -14,6 +18,8 @@ public class NormalSheetReader extends SheetReader {
     private static final int TYPE_ROW_INDEX = 2;
     private static final int FLAG_ROW_INDEX = 3;
     private static final int DATA_ROW_START_INDEX = 4;
+
+    private final Set<Integer> idSet = new HashSet<>();
 
     public NormalSheetReader(String sheetInfo) {
         super(sheetInfo);
@@ -32,7 +38,14 @@ public class NormalSheetReader extends SheetReader {
             int index = entry.getIntKey();
             String name = entry.getValue();
             FieldInfo fieldInfo = new FieldInfo(name, typeMap.get(index), flagMap.get( index), commentMap.get(index), index);
+            if (sheetContent.getFieldInfoMap().containsKey(fieldInfo.getName())) {
+                throw new ExcelParseException("field name is duplicate: " + fieldInfo.getName());
+            }
             sheetContent.getFieldInfoMap().put(fieldInfo.getName(), fieldInfo);
+        }
+
+        if (!sheetContent.getFieldInfoMap().containsKey("id")) {
+            throw new ExcelParseException("id field is not exist");
         }
 
         // 遍历行读取数据信息
@@ -49,6 +62,13 @@ public class NormalSheetReader extends SheetReader {
                 String value = dataMap.getOrDefault(index, "");
                 Object fieldValue = fieldInfo.getParser().parseValue(value);
                 dataInfo.getCellValueMap().put(fieldInfo.getName(), new CellInfo(fieldInfo, value, fieldValue));
+                if ("id".equals(fieldInfo.getName())) {
+                    dataInfo.setId(Integer.parseInt(value));
+                    if (idSet.contains(dataInfo.getId())) {
+                        throw new ExcelParseException("id is duplicate: " + dataInfo.getId());
+                    }
+                    idSet.add(dataInfo.getId());
+                }
             }
             sheetContent.getDataInfoList().add(dataInfo);
         }

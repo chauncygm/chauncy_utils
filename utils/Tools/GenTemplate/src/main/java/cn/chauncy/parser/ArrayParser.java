@@ -28,6 +28,16 @@ public class ArrayParser implements FieldParser {
     }
 
     @Override
+    public boolean isArray() {
+        return true;
+    }
+
+    @Override
+    public boolean isObject() {
+        return subFieldParser.isObject();
+    }
+
+    @Override
     public Map<String, String> getJavaTypeFieldMap() {
         if (subFieldParser instanceof ObjectFieldParser) {
             return subFieldParser.getJavaTypeFieldMap();

@@ -1,12 +1,13 @@
-package cn.chauncy.template.bean1;
+package ${package}.bean;
 
 import java.util.*;
-import cn.chauncy.utils.JsonUtils;
+import cn.chauncy.base.Entry;
+import cn.chauncy.utils.json.JsonUtils;
+import cn.chauncy.utils.json.ImmutableListDeserializer;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 <#-- 考虑优化，根据需要写入这条import -->
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import cn.chauncy.base.ImmutableListDeserializer;
 import lombok.Getter;
 
 /**
@@ -22,7 +23,7 @@ public class Cfg${data.sheetName?cap_first} {
 <#-- 生成主类字段 -->
 <#list data.sheetContent.fieldInfoMap?values as field>
     /** ${field.comment} */
-    <#if field.javaType?starts_with("List")>
+    <#if field.arrayType>
     @JsonDeserialize(using = ImmutableListDeserializer.class)
     </#if>
     private ${field.javaType} ${field.name};
@@ -30,7 +31,7 @@ public class Cfg${data.sheetName?cap_first} {
 
 <#-- 生成内部类 -->
 <#list data.sheetContent.fieldInfoMap?values as fieldInfo>
-    <#if fieldInfo.javaFieldMap?size gt 0>
+    <#if fieldInfo.javaType?starts_with("D") || fieldInfo.javaType?starts_with("List<D")>
     @Getter
     public static class ${fieldInfo.javaType?replace("List<", "")?replace(">", "")} {
     <#list fieldInfo.javaFieldMap?keys as name>

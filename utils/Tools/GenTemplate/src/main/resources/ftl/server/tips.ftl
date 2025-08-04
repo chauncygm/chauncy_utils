@@ -1,4 +1,4 @@
-package cn.chauncy.template;
+package ${package};
 
 import lombok.Getter;
 

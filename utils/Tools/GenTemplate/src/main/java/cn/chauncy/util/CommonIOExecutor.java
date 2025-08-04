@@ -1,4 +1,4 @@
-package cn.chauncy;
+package cn.chauncy.util;
 
 import lombok.NonNull;
 

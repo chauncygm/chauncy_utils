@@ -1,6 +1,6 @@
-package cn.chauncy.template;
+package ${package};
 
-import cn.chauncy.template.bean.*;
+import ${package}.bean.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public abstract class CfgDefine {
     public int reloadCfg(String tableName, String data) throws JsonProcessingException {
         return switch (tableName) {
 <#list data as info>
-    <#if info.sheetId != 10 && info.sheetId != 99>
+    <#if info.sheetId != 99>
             // ID:${info.sheetId} 字段数:${info.sheetContent.fieldInfoMap?size} 有效数据行数:${info.sheetContent.dataInfoList?size} 说明:${info.sheetComment}
             case Cfg${info.sheetName?cap_first}.TABLE_NAME -> Cfg${info.sheetName?cap_first}.reload(data);
     </#if>

@@ -1,10 +1,9 @@
-package cn.chauncy;
+package cn.chauncy.option;
 
 import cn.chauncy.validator.ExcelValidator;
 import lombok.Data;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,26 +18,29 @@ public class ExportOption {
     /** 表格校验器 */
     private List<ExcelValidator> validators;
 
-    private Path outputPath;
+    private Path classOutputPath;
     private Path jsonOutputPath;
+    private String classOutPackage;
 
     private ExportOption(Builder builder) {
         this.excelPath = builder.excelPath;
         this.exportIds = builder.exportIds;
         this.mode = builder.mode;
         this.validators = builder.validators;
-        this.outputPath = builder.outputPath;
+        this.classOutputPath = builder.classOutputPath;
         this.jsonOutputPath = builder.jsonOutputPath;
+        this.classOutPackage = builder.classOutPackage;
     }
 
-    static class Builder {
+    public static class Builder {
 
         private Path excelPath;
         private Mode mode;
         private List<Integer> exportIds = List.of();
         private List<ExcelValidator> validators = List.of();
-        private Path outputPath;
+        private Path classOutputPath;
         private Path jsonOutputPath;
+        private String classOutPackage;
 
         public Builder excelPath(Path excelPath) {
             this.excelPath = excelPath;
@@ -60,13 +62,18 @@ public class ExportOption {
             return this;
         }
 
-        public Builder outputPath(Path outputPath) {
-            this.outputPath = outputPath;
+        public Builder classOutputPath(Path classOutputPath) {
+            this.classOutputPath = classOutputPath;
             return this;
         }
 
         public Builder jsonOutputPath(Path jsonOutputPath) {
             this.jsonOutputPath = jsonOutputPath;
+            return this;
+        }
+
+        public Builder classOutPackage(String classOutPackage) {
+            this.classOutPackage = classOutPackage;
             return this;
         }
 

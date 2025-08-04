@@ -37,6 +37,8 @@ public class ParamSheetReader extends SheetReader {
 
         SheetContent sheetContent = new SheetContent();
         int totalRowCount = getTotalRowCount(sheet);
+        DataInfo dataInfo = new DataInfo(0);
+        dataInfo.setId(1);
         // 遍历数据行读取字段信息和配置值
         for (int index = dataRowStartIndex; index < totalRowCount; index++) {
             Row row = sheet.getRow(index);
@@ -49,11 +51,10 @@ public class ParamSheetReader extends SheetReader {
             FieldInfo fieldInfo = new FieldInfo(name, type, flag, comment, index);
             sheetContent.getFieldInfoMap().put(fieldInfo.getName(), fieldInfo);
 
-            DataInfo dataInfo = new DataInfo(0);
             Object fieldValue = fieldInfo.getParser().parseValue(cellValue);
             dataInfo.getCellValueMap().put(fieldInfo.getName(), new CellInfo(fieldInfo, cellValue, fieldValue));
-            sheetContent.getDataInfoList().add(dataInfo);
         }
+        sheetContent.getDataInfoList().add(dataInfo);
         return sheetContent;
     }
 

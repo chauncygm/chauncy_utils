@@ -21,6 +21,8 @@ public class FieldInfo {
     /** 类型数据解析信息 */
     private String javaType;
     private String cSharpType;
+    private boolean arrayType;
+    private boolean objectType;
     private String subType;
     private Map<String, String> javaFieldMap;
     private Map<String, String> cSharpFieldMap;
@@ -35,6 +37,8 @@ public class FieldInfo {
         this.parser = FieldParser.getParser(name, type);
         this.javaType = parser.javaType();
         this.cSharpType = parser.cSharpType();
+        this.arrayType = parser.isArray();
+        this.objectType = parser.isObject();
         this.javaFieldMap = parser.getJavaTypeFieldMap();
         this.javaFieldMap = parser.getJavaTypeFieldMap();
     }
