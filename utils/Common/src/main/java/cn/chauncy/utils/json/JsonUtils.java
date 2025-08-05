@@ -27,7 +27,8 @@ public class JsonUtils {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         // 默认采用比较宽容的方式反序列化
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);// 启用 Record 支持
+        objectMapper.findAndRegisterModules();
         return objectMapper;
     });
 

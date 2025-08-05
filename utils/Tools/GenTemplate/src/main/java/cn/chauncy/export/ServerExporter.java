@@ -5,16 +5,17 @@ import cn.chauncy.struct.SheetInfo;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.io.FileUtils;
+import org.bson.RawBsonDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 import static cn.chauncy.util.ExcelUtil.firstCapital;
 import static freemarker.template.Configuration.VERSION_2_3_34;
@@ -52,6 +53,7 @@ public class ServerExporter {
         if (option.getExportIds().isEmpty()) {
             writeDefineClass(sheetMap.values(), option);
         }
+        writeFileVersion(option.getJsonOutputPath().resolve("bson"));
         logger.info("配置生成代码和json配置文件导出完毕！ size: [{}], use time: [{}]ms", sheetMap.size(), System.currentTimeMillis() - start);
     }
 
@@ -77,6 +79,8 @@ public class ServerExporter {
         File jsonFile = option.getJsonOutputPath().resolve(sheetInfo.getSheetName() + ".json").toFile();
         Map<String, Object> dataModel = Map.of("data", sheetInfo, "package", option.getClassOutPackage());
         writeTemplate(jsonFile, "json.ftl", dataModel);
+
+        writeBson(jsonFile, option.getJsonOutputPath());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -92,6 +96,51 @@ public class ServerExporter {
             }
         } catch (IOException | TemplateException e) {
             logger.error("模版生成失败！ {}", file.getAbsolutePath(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void writeBson(File jsonFile, Path outputPath) {
+        if (!jsonFile.exists()) {
+            logger.error("json文件[{}]不存在！", jsonFile.getAbsolutePath());
+        }
+        File outputFile = outputPath
+                .resolve("bson")
+                .resolve(jsonFile.getName().replace(".json", ".bson")).toFile();
+        if (!outputFile.exists()) {
+            outputFile.getParentFile().mkdirs();
+        }
+        try {
+            String json = FileUtils.readFileToString(jsonFile, StandardCharsets.UTF_8);
+            try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                RawBsonDocument doc = RawBsonDocument.parse(json);
+                fos.write(doc.getByteBuffer().array());
+            }
+        } catch (IOException e) {
+            logger.error("bson文件[{}]生成失败！", outputFile.getAbsolutePath(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writeFileVersion(Path bsonPath) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            File bsonDir = bsonPath.toFile();
+            List<File> fileList = Arrays.stream(Objects.requireNonNull(bsonDir.listFiles()))
+                    .filter(f -> f.getName().endsWith(".bson"))
+                    .sorted(Comparator.comparing(File::getName)).toList();
+
+            for (File file : fileList) {
+                digest.update(file.getName().getBytes(StandardCharsets.UTF_8));
+                digest.update(FileUtils.readFileToByteArray(file));
+            }
+
+            byte[] bytes = digest.digest();
+            String version = Base64.getEncoder().encodeToString(bytes);
+            File versionFile = bsonPath.resolve("version.txt").toFile();
+            FileUtils.writeStringToFile(versionFile, version, StandardCharsets.UTF_8);
+        } catch (NoSuchAlgorithmException | IOException e) {
             throw new RuntimeException(e);
         }
     }

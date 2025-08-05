@@ -57,8 +57,8 @@ public class BaseTypeParser implements FieldParser {
     public static BaseTypeParser getParser(String type) {
         type = type.toLowerCase();
         return switch (type) {
-            case "int" -> INT_PARSER;
-            case "long" -> LONG_PARSER;
+            case "int", "int32" -> INT_PARSER;
+            case "long", "int64" -> LONG_PARSER;
             case "float" -> FLOAT_PARSER;
             case "string" -> STRING_PARSER;
             default -> null;
