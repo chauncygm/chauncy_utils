@@ -13,6 +13,7 @@ import cn.chauncy.logic.task.manager.GoalManager;
 import cn.chauncy.logic.task.manager.TaskManager;
 import cn.chauncy.net.GameMessageDispatcher;
 import cn.chauncy.net.GameMessageRegistry;
+import cn.chauncy.services.HttpFileService;
 import cn.chauncy.services.NetService;
 import cn.chauncy.services.ScheduleService;
 import cn.chauncy.utils.guid.GUIDGenerator;
@@ -58,6 +59,7 @@ public class GameModule extends AbstractModule {
 
         Multibinder<Service> multibinder = Multibinder.newSetBinder(binder(), Service.class);
         multibinder.addBinding().to(NetService.class);
+        multibinder.addBinding().to(HttpFileService.class);
         multibinder.addBinding().to(ScheduleService.class);
         multibinder.addBinding().to(ConsoleService.class);
 
