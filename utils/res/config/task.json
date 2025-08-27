@@ -4,7 +4,6 @@
         "id": 1,
         "chapter": 0,
         "type": 0,
-        "desc": "",
         "groupType": 0,
         "sourceType": 0,
         "goalList": [
@@ -21,7 +20,6 @@
         "id": 2,
         "chapter": 0,
         "type": 0,
-        "desc": "",
         "groupType": 0,
         "sourceType": 0,
         "goalList": [
@@ -38,7 +36,6 @@
         "id": 3,
         "chapter": 0,
         "type": 0,
-        "desc": "",
         "groupType": 0,
         "sourceType": 0,
         "goalList": [
@@ -55,7 +52,6 @@
         "id": 4,
         "chapter": 0,
         "type": 0,
-        "desc": "",
         "groupType": 0,
         "sourceType": 0,
         "goalList": [
@@ -72,7 +68,6 @@
         "id": 5,
         "chapter": 0,
         "type": 0,
-        "desc": "",
         "groupType": 0,
         "sourceType": 0,
         "goalList": [
@@ -89,7 +84,6 @@
         "id": 6,
         "chapter": 0,
         "type": 0,
-        "desc": "",
         "groupType": 0,
         "sourceType": 0,
         "goalList": [
@@ -106,7 +100,6 @@
         "id": 1001,
         "chapter": 0,
         "type": 1,
-        "desc": "",
         "groupType": 0,
         "sourceType": 0,
         "goalList": [
@@ -123,7 +116,6 @@
         "id": 1002,
         "chapter": 0,
         "type": 1,
-        "desc": "",
         "groupType": 0,
         "sourceType": 0,
         "goalList": [

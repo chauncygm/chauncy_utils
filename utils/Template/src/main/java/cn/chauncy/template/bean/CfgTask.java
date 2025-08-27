@@ -10,8 +10,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 
 /**
- * 说明: 任务表 ID:20 字段数:12 有效数据行数:8
- * Created on 2025-08-04 17:19
+ * 说明: 任务表 ID:20 字段数:11 有效数据行数:8
+ * Created on 2025-08-05 14:56
  */
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@type")
@@ -25,8 +25,6 @@ public class CfgTask {
     private int chapter;
     /** 任务大类型 */
     private int type;
-    /** 任务描述 */
-    private String desc;
     /** 组任务类型 */
     private int groupType;
     /** 任务数据类型 */

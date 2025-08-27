@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+// 资源变化
+message ResourceChange {
+  int32 resourceId = 1;
+  int32 changeNum = 2;
+  int32 currentNum = 3;
+}
+
+// 同步资源变化
+message SyncResourceChange {
+  repeated ResourceChange changes = 1;
+}
+
+// 同步角色等级经验变化
+message SyncLevelExpChange {
+  int32 level = 1;
+  int32 exp = 2;
+}
+
+
+

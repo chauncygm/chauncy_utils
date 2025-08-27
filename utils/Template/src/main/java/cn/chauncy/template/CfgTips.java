@@ -4,7 +4,7 @@ import lombok.Getter;
 
 /**
  * 说明: 提示表 ID:99 字段数:3 有效数据行数:8
- * Created on 2025-08-04 17:19
+ * Created on 2025-08-05 14:56
  */
 @Getter
 public enum CfgTips {

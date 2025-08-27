@@ -10,8 +10,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 
 /**
- * 说明: 道具表 ID:12 字段数:8 有效数据行数:18
- * Created on 2025-08-04 17:19
+ * 说明: 道具表 ID:12 字段数:7 有效数据行数:18
+ * Created on 2025-08-05 14:56
  */
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@type")
@@ -23,8 +23,6 @@ public class CfgItem {
     private int id;
     /** 道具类型 */
     private int type;
-    /** 道具描述 */
-    private String desc;
     /** 所属背包 */
     private int bagType;
     /** 道具品质 */

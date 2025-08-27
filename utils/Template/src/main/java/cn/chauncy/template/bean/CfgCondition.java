@@ -11,7 +11,7 @@ import lombok.Getter;
 
 /**
  * 说明: 条件表 ID:21 字段数:5 有效数据行数:6
- * Created on 2025-08-04 17:19
+ * Created on 2025-08-05 14:56
  */
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@type")
