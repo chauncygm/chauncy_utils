@@ -33,6 +33,6 @@ public abstract class MessageDispatcher<T extends IMessage> extends SimpleChanne
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        logger.info("channelInactive: {}", ctx);
+        logger.debug("channelInactive: {}", ctx);
     }
 }

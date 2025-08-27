@@ -22,37 +22,37 @@ public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHand
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-        logger.info("handlerRemoved: {}", ctx);
+        logger.debug("handlerRemoved: {}", ctx);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.info("exceptionCaught: {}, cause: {}", ctx, cause);
+        logger.debug("exceptionCaught: {}, cause: {}", ctx, cause);
     }
     //endregion
 
     //region inbound handler
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) {
-        logger.info("channelRegistered: {}", ctx);
+        logger.debug("channelRegistered: {}", ctx);
         ctx.fireChannelRegistered();
     }
 
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) {
-        logger.info("channelUnregistered: {}", ctx);
+        logger.debug("channelUnregistered: {}", ctx);
         ctx.fireChannelUnregistered();
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        logger.info("channelActive: {}", ctx);
+        logger.debug("channelActive: {}", ctx);
         ctx.fireChannelActive();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        logger.info("channelInactive: {}", ctx);
+        logger.debug("channelInactive: {}", ctx);
         ctx.fireChannelInactive();
     }
 
@@ -71,14 +71,14 @@ public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHand
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
         if (!(evt instanceof IdleStateEvent)) {
-            logger.info("userEventTriggered: {}, event: {}", ctx, evt);
+            logger.debug("userEventTriggered: {}, event: {}", ctx, evt);
         }
         ctx.fireUserEventTriggered(evt);
     }
 
     @Override
     public void channelWritabilityChanged(ChannelHandlerContext ctx) {
-        logger.info("channelWritabilityChanged: {}", ctx);
+        logger.debug("channelWritabilityChanged: {}", ctx);
         ctx.fireChannelWritabilityChanged();
     }
     //endregion
@@ -86,31 +86,31 @@ public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHand
     //region outbound handler
     @Override
     public void bind(ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise) {
-        logger.info("bind: {}, localAddress: {}, promise: {}", ctx, localAddress, promise);
+        logger.debug("bind: {}, localAddress: {}, promise: {}", ctx, localAddress, promise);
         ctx.bind(localAddress, promise);
     }
 
     @Override
     public void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress, ChannelPromise promise) {
-        logger.info("connect: {}, remoteAddress: {}, localAddress: {}, promise: {}", ctx, remoteAddress, localAddress, promise);
+        logger.debug("connect: {}, remoteAddress: {}, localAddress: {}, promise: {}", ctx, remoteAddress, localAddress, promise);
         ctx.connect(remoteAddress, localAddress, promise);
     }
 
     @Override
     public void disconnect(ChannelHandlerContext ctx, ChannelPromise promise) {
-        logger.info("disconnect: {}, promise: {}", ctx, promise);
+        logger.debug("disconnect: {}, promise: {}", ctx, promise);
         ctx.disconnect(promise);
     }
 
     @Override
     public void close(ChannelHandlerContext ctx, ChannelPromise promise) {
-        logger.info("close: {}, promise: {}", ctx, promise);
+        logger.debug("close: {}, promise: {}", ctx, promise);
         ctx.close(promise);
     }
 
     @Override
     public void deregister(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
-        logger.info("deregister: {}, promise: {}", ctx, promise);
+        logger.debug("deregister: {}, promise: {}", ctx, promise);
         ctx.deregister(promise);
     }
 
