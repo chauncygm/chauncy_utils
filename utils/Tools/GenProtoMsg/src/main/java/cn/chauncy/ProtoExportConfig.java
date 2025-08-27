@@ -80,7 +80,7 @@ public class ProtoExportConfig {
 
     public static Path getCSharpOutPath() {
         if (C_SHARP_OUT_PATH == null || !C_SHARP_OUT_PATH.toFile().isDirectory()) {
-            throw new RuntimeException("proto.java.out.path is not a directory");
+            throw new RuntimeException("proto.csharp.out.path is not a directory");
         }
         return C_SHARP_OUT_PATH;
     }

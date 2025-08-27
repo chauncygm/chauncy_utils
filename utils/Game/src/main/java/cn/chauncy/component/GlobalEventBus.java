@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class GlobalEventBus implements EventBus {
 
-    private final EventBus delegate = new DefaultEventBus();
+    private final EventBus delegate = new DefaultEventBus(true);
 
     @Override
     public void post(@NonNull Object event) {

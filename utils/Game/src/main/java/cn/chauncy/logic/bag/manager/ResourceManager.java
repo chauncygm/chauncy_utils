@@ -1,6 +1,9 @@
 package cn.chauncy.logic.bag.manager;
 
 import cn.chauncy.logic.player.Player;
+import cn.chauncy.message.ResourceChange;
+import cn.chauncy.message.SyncResourceChange;
+import cn.chauncy.util.MsgUtils;
 
 import java.util.Map;
 import java.util.Set;
@@ -8,7 +11,7 @@ import java.util.Set;
 public class ResourceManager {
 
     /** 所有资源id集合 */
-    private volatile Set<Integer> resourceIds = Set.of(1, 2, 3, 4, 5, 6);
+    private final Set<Integer> resourceIds = Set.of(1, 2, 3, 4, 5, 6);
 
     /**
      * 添加资源
@@ -30,6 +33,8 @@ public class ResourceManager {
 
         Map<Integer, Integer> playerResourceMap = player.getPlayerData().getResourceMap();
         resourceMap.forEach((k, v) -> playerResourceMap.merge(k, v, Integer::sum));
+
+        syncResourceChange(player, resourceMap, true);
     }
 
 
@@ -57,7 +62,7 @@ public class ResourceManager {
 
         Map<Integer, Integer> playerResourceMap = player.getPlayerData().getResourceMap();
         for (Map.Entry<Integer, Integer> entry : resourceMap.entrySet()) {
-            if (isEnough(player, entry.getKey(), entry.getValue())) {
+            if (!isEnough(player, entry.getKey(), entry.getValue())) {
                 return false;
             }
         }
@@ -65,6 +70,7 @@ public class ResourceManager {
         resourceMap.forEach((id, amount) -> {
             costResource(playerResourceMap, id, amount);
         });
+        syncResourceChange(player, resourceMap, false);
         return true;
     }
 
@@ -120,4 +126,15 @@ public class ResourceManager {
         }
     }
 
+    private void syncResourceChange(Player player, Map<Integer, Integer> resourceMap, boolean add) {
+        Map<Integer, Integer> playerResourceMap = player.getPlayerData().getResourceMap();
+        SyncResourceChange.Builder builder = SyncResourceChange.newBuilder();
+        for (Map.Entry<Integer, Integer> entry : resourceMap.entrySet()) {
+            ResourceChange.Builder changeBuilder = ResourceChange.newBuilder();
+            builder.addChanges(changeBuilder.setResourceId(entry.getKey())
+                    .setChangeNum(add ? entry.getValue() : -entry.getValue())
+                    .setCurrentNum(playerResourceMap.getOrDefault(entry.getKey(), 0)));
+        }
+        MsgUtils.sendMsg(player, builder);
+    }
 }

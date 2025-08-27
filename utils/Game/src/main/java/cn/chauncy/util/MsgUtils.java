@@ -34,6 +34,7 @@ public class MsgUtils {
             logger.error("ctx is inactive, player: {}", ctx);
             return;
         }
+        logger.info("send ctx[{}] msg: {}", ctx.channel().id(), message);
         ctx.writeAndFlush(message);
     }
 

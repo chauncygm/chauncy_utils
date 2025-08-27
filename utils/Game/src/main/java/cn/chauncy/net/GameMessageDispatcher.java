@@ -42,7 +42,7 @@ public class GameMessageDispatcher extends MessageDispatcher<ProtobufMessage<?>>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ProtobufMessage<?> msg) {
         if (!(msg.message() instanceof ReqHeartbeat)) {
-            logger.info("Ctx[{}] received message: {}", ctx, msg);
+            logger.info("Ctx[{}] received message: {}", ctx.channel().id(), msg.message());
         }
         Attribute<Map<Integer, RateLimiter>> attr = ctx.channel().attr(Attrs.rateLimiterMapKey);
         Map<Integer, RateLimiter> rateLimiterMap = attr.get();

@@ -2,6 +2,7 @@ package cn.chauncy;
 
 import cn.chauncy.component.GlobalEventBus;
 import cn.chauncy.event.SystemEvent;
+import cn.chauncy.logic.Managers;
 import cn.chauncy.logic.player.PlayerManager;
 import cn.chauncy.util.ConsoleHandler;
 import cn.chauncy.utils.thread.ConsoleService;
@@ -66,6 +67,9 @@ public class GameStarter {
         }
 
         Injector injector = Guice.createInjector(GameModule.INSTANCE);
+        Managers managers = injector.getInstance(Managers.class);
+        managers.inject(injector);
+
         GameStarter starter = injector.getInstance(GameStarter.class);
         starter.start();
         starter.waitSuccess();

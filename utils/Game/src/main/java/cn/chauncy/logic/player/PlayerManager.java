@@ -3,6 +3,7 @@ package cn.chauncy.logic.player;
 import cn.chauncy.dao.dto.PlayerIdUidDTO;
 import cn.chauncy.dao.entity.PlayerData;
 import cn.chauncy.dao.mapper.PlayerDataMapper;
+import cn.chauncy.event.PlayerEvent;
 import cn.chauncy.event.SystemEvent;
 import cn.chauncy.utils.eventbus.Subscribe;
 import cn.chauncy.utils.guid.GUIDGenerator;
@@ -71,6 +72,7 @@ public class PlayerManager {
         playerData.setUid(uid);
         playerData.setPlayerId(guidGenerator.genGuid());
         playerData.setPlayerName("玩家" + uid);
+        playerData.getLevelInfo().setLevel(1);
         player.setPlayerData(playerData);
         player.setNewPlayer(true);
         playerDataMapper.insert(playerData);
@@ -110,5 +112,20 @@ public class PlayerManager {
         }
         offlinePlayerSet.add(player.getPlayerId());
         logger.info("player offline: {}", player.info());
+    }
+
+
+    @Subscribe
+    public void onPlayerCreate(PlayerEvent.PlayerCreateRoleEvent event) {
+        Player player = event.player();
+        Map<Integer, Integer> resourceMap = player.getPlayerData().getResourceMap();
+        resourceMap.put(1, 100);
+        resourceMap.put(2, 100);
+        resourceMap.put(3, 100);
+        playerDataMapper.updateById(player.getPlayerData());
+    }
+
+    public void updatePlayer(Player player) {
+        playerDataMapper.updateById(player.getPlayerData());
     }
 }

@@ -84,7 +84,10 @@ public class LoginManager {
         builder.setUid(playerData.getUid());
         PlayerData.Builder playerDataBuilder = PlayerData.newBuilder();
         playerDataBuilder.setPlayerId(playerData.getPlayerId());
-        playerDataBuilder.setName("chauncy");
+        playerDataBuilder.setName(playerData.getPlayerName());
+        playerDataBuilder.setLevel(playerData.getLevelInfo().getLevel());
+        playerDataBuilder.setExp(playerData.getLevelInfo().getExp());
+        playerDataBuilder.putAllResources(playerData.getResourceMap());
         builder.setPlayerData(playerDataBuilder.build());
         MsgUtils.sendMsg(player, builder);
     }

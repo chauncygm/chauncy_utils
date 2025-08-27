@@ -4,9 +4,12 @@ import cn.chauncy.component.GlobalEventBus;
 import cn.chauncy.component.GlobalIdGenerator;
 import cn.chauncy.component.GlobalTimeProvider;
 import cn.chauncy.dao.config.*;
+import cn.chauncy.logic.Managers;
 import cn.chauncy.logic.bag.manager.BagManager;
 import cn.chauncy.logic.bag.manager.ItemManager;
 import cn.chauncy.logic.bag.manager.ResourceManager;
+import cn.chauncy.logic.function.FunctionManager;
+import cn.chauncy.logic.gm.GMManager;
 import cn.chauncy.logic.login.LoginManager;
 import cn.chauncy.logic.player.PlayerManager;
 import cn.chauncy.logic.task.manager.GoalManager;
@@ -91,5 +94,8 @@ public class GameModule extends AbstractModule {
         binder().bind(BagManager.class).in(Singleton.class);
         binder().bind(ItemManager.class).in(Singleton.class);
         binder().bind(ResourceManager.class).in(Singleton.class);
+        binder().bind(FunctionManager.class).in(Singleton.class);
+        binder().bind(GMManager.class).in(Singleton.class);
+        binder().bind(Managers.class).in(Singleton.class);
     }
 }
