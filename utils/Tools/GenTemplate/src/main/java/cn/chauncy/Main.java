@@ -1,5 +1,6 @@
 package cn.chauncy;
 
+import cn.chauncy.export.ClientExporter;
 import cn.chauncy.export.ServerExporter;
 import cn.chauncy.option.ExcelExportConfig;
 import cn.chauncy.option.ExportOption;
@@ -32,6 +33,9 @@ public class Main {
                 .classOutputPath(ExcelExportConfig.getJavaClassOutPath())
                 .jsonOutputPath(ExcelExportConfig.getJavaJsonOutPath())
                 .classOutPackage(ExcelExportConfig.getJavaOutPackage())
+                .cSharpJsonOutputPath(ExcelExportConfig.getCSharpJsonOutPath())
+                .cSharpOutputPath(ExcelExportConfig.getCSharpOutPath())
+                .cSharpNamespace(ExcelExportConfig.getCSharpNamespace())
                 .mode(mode)
                 .exportIds(exportIds)
                 .build();
@@ -70,6 +74,9 @@ public class Main {
         // 导出json和代码
         if (option.getMode() == Mode.SERVER) {
             ServerExporter.INSTANCE.export(sheetMap, option);
+        }
+        if (option.getMode() == Mode.CLIENT) {
+            ClientExporter.INSTANCE.export(sheetMap, option);
         }
 
     }

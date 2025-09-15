@@ -22,6 +22,10 @@ public class ExportOption {
     private Path jsonOutputPath;
     private String classOutPackage;
 
+    private Path cSharpJsonOutputPath;
+    private Path cSharpOutputPath;
+    private String cSharpNamespace;
+
     private ExportOption(Builder builder) {
         this.excelPath = builder.excelPath;
         this.exportIds = builder.exportIds;
@@ -30,6 +34,9 @@ public class ExportOption {
         this.classOutputPath = builder.classOutputPath;
         this.jsonOutputPath = builder.jsonOutputPath;
         this.classOutPackage = builder.classOutPackage;
+        this.cSharpJsonOutputPath = builder.cSharpJsonOutputPath;
+        this.cSharpOutputPath = builder.cSharpOutputPath;
+        this.cSharpNamespace = builder.cSharpNamespace;
     }
 
     public static class Builder {
@@ -41,6 +48,9 @@ public class ExportOption {
         private Path classOutputPath;
         private Path jsonOutputPath;
         private String classOutPackage;
+        private Path cSharpJsonOutputPath;
+        private Path cSharpOutputPath;
+        private String cSharpNamespace;
 
         public Builder excelPath(Path excelPath) {
             this.excelPath = excelPath;
@@ -74,6 +84,21 @@ public class ExportOption {
 
         public Builder classOutPackage(String classOutPackage) {
             this.classOutPackage = classOutPackage;
+            return this;
+        }
+
+        public Builder cSharpJsonOutputPath(Path cSharpJsonOutputPath) {
+            this.cSharpJsonOutputPath = cSharpJsonOutputPath;
+            return this;
+        }
+
+        public Builder cSharpOutputPath(Path cSharpOutputPath) {
+            this.cSharpOutputPath = cSharpOutputPath;
+            return this;
+        }
+
+        public Builder cSharpNamespace(String cSharpNamespace) {
+            this.cSharpNamespace = cSharpNamespace;
             return this;
         }
 

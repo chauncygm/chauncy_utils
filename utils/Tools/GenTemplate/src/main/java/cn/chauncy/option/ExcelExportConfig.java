@@ -17,6 +17,10 @@ public class ExcelExportConfig {
     private static Path javaClassOutPath;
     private static String javaOutPackage;
 
+    private static Path cSharpJsonOutPath;
+    private static Path cSharpOutPath;
+    private static String cSharpNamespace;
+
     public static void loadConfig() {
         File configFile = CONFIG_PATH.toFile();
         Properties properties = new Properties();
@@ -30,6 +34,10 @@ public class ExcelExportConfig {
         javaJsonOutPath = Path.of(properties.getProperty("java.json.output.path"));
         javaClassOutPath = Paths.get(properties.getProperty("java.class.output.path"));
         javaOutPackage = properties.getProperty("java.class.output.package");
+
+        cSharpJsonOutPath = Path.of(properties.getProperty("cSharp.json.output.path"));
+        cSharpOutPath = Path.of(properties.getProperty("cSharp.class.output.path"));
+        cSharpNamespace = properties.getProperty("cSharp.out.namespace");
 
         if (!javaJsonOutPath.toFile().exists()
                 || !javaJsonOutPath.toFile().isDirectory()
@@ -54,4 +62,13 @@ public class ExcelExportConfig {
         return javaOutPackage;
     }
 
+    public static Path getCSharpJsonOutPath() {
+        return cSharpJsonOutPath;
+    }
+    public static Path getCSharpOutPath() {
+        return cSharpOutPath;
+    }
+    public static String getCSharpNamespace() {
+        return cSharpNamespace;
+    }
 }

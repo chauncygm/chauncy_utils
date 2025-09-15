@@ -25,7 +25,7 @@ public class ArrayParser implements FieldParser {
 
     @Override
     public String cSharpType() {
-        return "List<" + subFieldParser.cSharpType() + ">";
+        return "IList<" + subFieldParser.cSharpType() + ">";
     }
 
     @Override

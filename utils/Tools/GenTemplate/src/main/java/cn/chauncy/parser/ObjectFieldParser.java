@@ -59,6 +59,9 @@ public class ObjectFieldParser implements FieldParser {
 
     @Override
     public String cSharpType() {
+        if (specialType != null) {
+            return specialType;
+        }
         return "D" + firstCapital(fieldName);
     }
 
