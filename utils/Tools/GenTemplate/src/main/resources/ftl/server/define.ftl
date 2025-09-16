@@ -1,6 +1,6 @@
-package ${package};
+package ${packageNamespace};
 
-import ${package}.bean.*;
+import ${packageNamespace}.bean.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;

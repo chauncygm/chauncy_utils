@@ -37,9 +37,9 @@ public class ObjectFieldParser implements FieldParser {
         // 特殊针对只有两个基本类型字段的结构统一使用相同的数据类型，如:{奖励道具id,数量}等常用配置，防止类数量过多
         if (fieldParsers.size() == 2 && "int".equals(fieldParsers.get(0).javaType())) {
             switch (fieldParsers.get(1).javaType()) {
-                case "int": specialType = "Entry.Int2IntVal";break;
-                case "float": specialType = "Entry.Int2FloatVal";break;
-                case "long": specialType = "Entry.Int2LongVal";break;
+                case "int": specialType = "Int2IntVal";break;
+                case "float": specialType = "Int2FloatVal";break;
+                case "long": specialType = "Int2LongVal";break;
             }
             if (specialType != null) {
                 javaTypeFieldsMap.clear();
@@ -52,7 +52,7 @@ public class ObjectFieldParser implements FieldParser {
     @Override
     public String javaType() {
         if (specialType != null) {
-            return specialType;
+            return "Entry." + specialType;
         }
         return "D" + firstCapital(fieldName);
     }

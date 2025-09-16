@@ -1,7 +1,7 @@
 {
 <#list data.sheetContent.dataInfoList as row>
     "${row.id}": {
-<#--        "@type": "${package}.bean.Cfg${data.sheetName?cap_first}",-->
+<#--        "@type": "${packageNamespace}.bean.Cfg${data.sheetName?cap_first}",-->
     <#list row.cellValueMap?values as cell>
         <#-- 数组 -->
         <#if cell.fieldInfo.arrayType>
@@ -28,7 +28,7 @@
             <#-- 对象类型 -->
             <#if cell.fieldInfo.objectType>
         {
-<#--            "@type": "${package}.base.${cell.fieldInfo.javaType?replace("List<", "")?replace(">", "")},-->
+<#--            "@type": "${packageNamespace}.base.${cell.fieldInfo.javaType?replace("List<", "")?replace(">", "")},-->
             <#list cell.fieldInfo.csharpFieldMap?keys as fieldName>
             "${fieldName.name}": ${cell.fieldValue[fieldName_index]}<#if fieldName_has_next == true>,</#if>
             </#list>

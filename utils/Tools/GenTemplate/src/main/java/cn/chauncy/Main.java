@@ -1,7 +1,6 @@
 package cn.chauncy;
 
-import cn.chauncy.export.ClientExporter;
-import cn.chauncy.export.ServerExporter;
+import cn.chauncy.export.Exporter;
 import cn.chauncy.option.ExcelExportConfig;
 import cn.chauncy.option.ExportOption;
 import cn.chauncy.option.Mode;
@@ -72,12 +71,6 @@ public class Main {
         }
 
         // 导出json和代码
-        if (option.getMode() == Mode.SERVER) {
-            ServerExporter.INSTANCE.export(sheetMap, option);
-        }
-        if (option.getMode() == Mode.CLIENT) {
-            ClientExporter.INSTANCE.export(sheetMap, option);
-        }
-
+        new Exporter(option).export(sheetMap);
     }
 }

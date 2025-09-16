@@ -1,4 +1,4 @@
-package ${package}.bean;
+package ${packageNamespace}.bean;
 
 import java.util.*;
 import cn.chauncy.base.Entry;

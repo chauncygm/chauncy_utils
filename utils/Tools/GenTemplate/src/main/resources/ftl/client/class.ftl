@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using GameProto.Base;
 using Newtonsoft.Json;
 
-namespce ${namespace}
+namespace ${packageNamespace}
 {
     ///<summary>
     /// 说明: ${data.sheetComment}表 ID:${data.sheetId} 字段数:${data.sheetContent.fieldInfoMap?size} 有效数据行数:${data.sheetContent.dataInfoList?size}
@@ -14,7 +13,7 @@ namespce ${namespace}
         public const string TableName = "${data.sheetName}";
 
         [JsonConstructor]
-        private Cfg${data.sheetName?cap_first}(<#list data.sheetContent.fieldInfoMap?values as field>[JsonProperty(nameof(field.name?cap_first))] ${field.csharpType} ${field.name}<#if field_has_next>,
+        private Cfg${data.sheetName?cap_first}(<#list data.sheetContent.fieldInfoMap?values as field>[JsonProperty(nameof(${field.name?cap_first}))] ${field.csharpType} ${field.name}<#if field_has_next>,
         </#if></#list>)
         {
             <#list data.sheetContent.fieldInfoMap?values as field>

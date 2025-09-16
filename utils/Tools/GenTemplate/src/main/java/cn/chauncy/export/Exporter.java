@@ -1,16 +1,21 @@
 package cn.chauncy.export;
 
 import cn.chauncy.option.ExportOption;
+import cn.chauncy.option.Mode;
 import cn.chauncy.struct.SheetInfo;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
 import org.bson.RawBsonDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -20,67 +25,91 @@ import java.util.*;
 import static cn.chauncy.util.ExcelUtil.firstCapital;
 import static freemarker.template.Configuration.VERSION_2_3_34;
 
-public class ServerExporter {
+public class Exporter {
+    private static final Logger logger = LoggerFactory.getLogger(Exporter.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(ServerExporter.class);
+    private Configuration cfg;
+    private ExportOption option;
+    private Path classOutPutPath;
+    private Path jsonOutPutPath;
+    private Path bsonOutPutPath;
+    private String classSuffix;
+    private String packageNamespace;
 
-    public static final ServerExporter INSTANCE = new ServerExporter();
 
-    private final Configuration cfg;
+    public Exporter(ExportOption option) {
+        init(option);
+    }
 
-    private ServerExporter() {
+    private void init(ExportOption option) {
+        this.option = option;
+        String ftlPath = option.getMode() == Mode.CLIENT ? "/ftl/client" : "/ftl/server";
         cfg = new Configuration(VERSION_2_3_34);
-        cfg.setClassForTemplateLoading(ServerExporter.class, "/ftl/server");
+        cfg.setClassForTemplateLoading(Exporter.class, ftlPath);
         cfg.setLocale(Locale.CHINA);
         cfg.setDefaultEncoding("UTF-8");
         cfg.setNumberFormat("0");
+        if (option.getMode() == Mode.CLIENT) {
+            classOutPutPath = option.getCSharpOutputPath();
+            jsonOutPutPath = option.getCSharpJsonOutputPath();
+            packageNamespace = option.getCSharpNamespace();
+            classSuffix = ".cs";
+        } else {
+            classOutPutPath = option.getClassOutputPath()
+                    .resolve("src\\main\\java")
+                    .resolve(option.getClassOutPackage().replace(".", "\\"));
+            jsonOutPutPath = option.getJsonOutputPath();
+            packageNamespace = option.getClassOutPackage();
+            classSuffix = ".java";
+        }
+        bsonOutPutPath = jsonOutPutPath.resolve("bson");
     }
 
-    public void export(Map<Integer, SheetInfo> sheetMap, ExportOption option) {
-        logger.info("开始导出代码和json配置文件... \n输出代码路径: {}\n输出json文件路径：{}",
-                option.getClassOutputPath().toFile().getAbsolutePath(),
-                option.getJsonOutputPath().toFile().getAbsolutePath());
+    public void export(Map<Integer, SheetInfo> sheetMap) {
+        logger.info("MODE: {}, 开始导出代码和json配置文件... \n输出代码路径: {}\n输出json文件路径：{}",
+                option.getMode(), classOutPutPath.toFile().getAbsolutePath(),
+                jsonOutPutPath.toFile().getAbsolutePath());
         long start = System.currentTimeMillis();
         for (SheetInfo sheetInfo : sheetMap.values()) {
             logger.info("开始导出代码和json文件：{}", sheetInfo.getSheetName());
-            if (sheetInfo.getSheetName().equals("tips")) {
-                writeTips(sheetInfo, option);
+            if (sheetInfo.getSheetName().equals("tips") && option.getMode() == Mode.SERVER) {
+                writeTips(sheetInfo);
                 continue;
             }
-            writeClass(sheetInfo, option);
-            writeJson(sheetInfo, option);
+            writeClass(sheetInfo);
+            writeJson(sheetInfo);
         }
         if (option.getExportIds().isEmpty()) {
-            writeDefineClass(sheetMap.values(), option);
+            writeDefineClass(sheetMap.values());
         }
-        writeFileVersion(option.getJsonOutputPath().resolve("bson"));
+        writeFileVersion();
         logger.info("配置生成代码和json配置文件导出完毕！ size: [{}], use time: [{}]ms", sheetMap.size(), System.currentTimeMillis() - start);
-    }
 
-    public void writeClass(SheetInfo sheetInfo, ExportOption option) {
-        File file = buildOutputPath(option, "bean", "Cfg" + firstCapital(sheetInfo.getSheetName()) + ".java").toFile();
-        Map<String, Object> dataModel = Map.of("data", sheetInfo, "package", option.getClassOutPackage());
+    }
+    public void writeClass(SheetInfo sheetInfo) {
+        File file = buildOutputPath(classOutPutPath, "Bean", "Cfg" + firstCapital(sheetInfo.getSheetName()) + classSuffix).toFile();
+        Map<String, Object> dataModel = Map.of("data", sheetInfo, "packageNamespace", packageNamespace);
         writeTemplate(file, "class.ftl", dataModel);
     }
 
-    public void writeTips(SheetInfo sheetInfo, ExportOption option) {
-        File file = buildOutputPath(option, "Cfg" + firstCapital(sheetInfo.getSheetName()) + ".java").toFile();
-        Map<String, Object> dataModel = Map.of("data", sheetInfo, "package", option.getClassOutPackage());
+    public void writeTips(SheetInfo sheetInfo) {
+        File file = buildOutputPath(classOutPutPath, "Cfg" + firstCapital(sheetInfo.getSheetName()) + classSuffix).toFile();
+        Map<String, Object> dataModel = Map.of("data", sheetInfo, "packageNamespace", packageNamespace);
         writeTemplate(file, "tips.ftl", dataModel);
     }
 
-    public void writeDefineClass(Collection<SheetInfo> sheetInfos, ExportOption option) {
-        File file = buildOutputPath(option, "CfgDefine.java").toFile();
-        Map<String, Object> dataModel = Map.of("data", sheetInfos, "package", option.getClassOutPackage());
+    public void writeDefineClass(Collection<SheetInfo> sheetInfos) {
+        File file = buildOutputPath(classOutPutPath, "CfgDefine" + classSuffix).toFile();
+        Map<String, Object> dataModel = Map.of("data", sheetInfos, "packageNamespace", packageNamespace);
         writeTemplate(file, "define.ftl", dataModel);
     }
 
-    public void writeJson(SheetInfo sheetInfo, ExportOption option) {
-        File jsonFile = option.getJsonOutputPath().resolve(sheetInfo.getSheetName() + ".json").toFile();
-        Map<String, Object> dataModel = Map.of("data", sheetInfo, "package", option.getClassOutPackage());
+    public void writeJson(SheetInfo sheetInfo) {
+        File jsonFile = buildOutputPath(jsonOutPutPath, sheetInfo.getSheetName() + ".json").toFile();
+        Map<String, Object> dataModel = Map.of("data", sheetInfo, "packageNamespace", packageNamespace);
         writeTemplate(jsonFile, "json.ftl", dataModel);
 
-        writeBson(jsonFile, option.getJsonOutputPath());
+        writeBson(jsonFile);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -101,13 +130,12 @@ public class ServerExporter {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void writeBson(File jsonFile, Path outputPath) {
+    private void writeBson(File jsonFile) {
         if (!jsonFile.exists()) {
             logger.error("json文件[{}]不存在！", jsonFile.getAbsolutePath());
         }
-        File outputFile = outputPath
-                .resolve("bson")
-                .resolve(jsonFile.getName().replace(".json", ".bson")).toFile();
+        String bsonFileName = jsonFile.getName().replace(".json", ".bson");
+        File outputFile = buildOutputPath(bsonOutPutPath, bsonFileName).toFile();
         if (!outputFile.exists()) {
             outputFile.getParentFile().mkdirs();
         }
@@ -123,10 +151,10 @@ public class ServerExporter {
         }
     }
 
-    private void writeFileVersion(Path bsonPath) {
+    private void writeFileVersion() {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            File bsonDir = bsonPath.toFile();
+            File bsonDir = bsonOutPutPath.toFile();
             List<File> fileList = Arrays.stream(Objects.requireNonNull(bsonDir.listFiles()))
                     .filter(f -> f.getName().endsWith(".bson"))
                     .sorted(Comparator.comparing(File::getName)).toList();
@@ -137,18 +165,16 @@ public class ServerExporter {
             }
 
             byte[] bytes = digest.digest();
-            String version = Base64.getEncoder().encodeToString(bytes);
-            File versionFile = bsonPath.resolve("version.txt").toFile();
+            String hex = new String(Hex.encodeHex(bytes));
+            String version = "version:" + hex.substring(hex.length() - 10, hex.length() - 1);
+            File versionFile = bsonOutPutPath.resolve("version.txt").toFile();
             FileUtils.writeStringToFile(versionFile, version, StandardCharsets.UTF_8);
         } catch (NoSuchAlgorithmException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Path buildOutputPath(ExportOption option, String... subPaths) {
-        Path path = option.getClassOutputPath();
-        path = path.resolve("src\\main\\java");
-        path = path.resolve(option.getClassOutPackage().replace(".", "\\"));
+    private Path buildOutputPath(Path path, String... subPaths) {
         for (String sub : subPaths) {
             path = path.resolve(sub);
         }
