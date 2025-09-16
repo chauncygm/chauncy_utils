@@ -83,7 +83,7 @@ public class GenProtoTask implements Runnable {
 
         System.out.println(cmd);
         ProcessUtils.Pair<Integer, String> result = ProcessUtils.exec(cmd);
-        logger.info("gen class file, result: {}", result);
+        logger.info("gen java proto class file, result: {}", result);
     }
 
     private void genCSharpFile() throws Exception {
@@ -95,7 +95,7 @@ public class GenProtoTask implements Runnable {
 
         System.out.println(cmd);
         ProcessUtils.Pair<Integer, String> result = ProcessUtils.exec(cmd);
-        logger.info("gen class file, result: {}", result);
+        logger.info("gen c# proto class file, result: {}", result);
 
     }
 }
