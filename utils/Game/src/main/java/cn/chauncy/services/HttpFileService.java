@@ -39,11 +39,13 @@ public class HttpFileService extends AbstractService {
         FileUtils.forceMkdir(new File(FILE_ROOT_PATH));
         httpServer.start();
         logger.info("HttpFileService start success, port: {}", 11001);
+        notifyStarted();
     }
 
     @Override
     protected void doStop() {
         httpServer.stop(3);
+        notifyStopped();
     }
 
     private static class HttpFileHandler implements HttpHandler {
