@@ -11,7 +11,7 @@ import lombok.Getter;
 
 /**
  * 说明: 全局表 ID:10 字段数:1 有效数据行数:1
- * Created on 2025-08-04 17:19
+ * Created on 2025-09-16 14:24
  */
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@type")

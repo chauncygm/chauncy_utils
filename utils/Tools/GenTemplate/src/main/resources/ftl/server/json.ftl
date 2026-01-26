@@ -1,7 +1,7 @@
 {
 <#list data.sheetContent.dataInfoList as row>
     "${row.id}": {
-<#--        "@type": "${packageNamespace}.bean.Cfg${data.sheetName?cap_first}",-->
+        "@type": "${packageNamespace}.bean.Cfg${data.sheetName?cap_first}",
     <#list row.cellValueMap?values as cell>
         <#-- 数组 -->
         <#if cell.fieldInfo.arrayType>

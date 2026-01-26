@@ -49,7 +49,7 @@ public class ParamSheetReader extends SheetReader {
             String comment = readCellValue(row, commentColIndex);
             String cellValue = readCellValue(row, valueColIndex);
             // 无需导出的字段
-            if (flag.contains(option.getMode().value)) {
+            if (!flag.contains(option.getMode().value)) {
                 continue;
             }
 
