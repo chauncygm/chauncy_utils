@@ -23,12 +23,12 @@ public class SkipList<M, S> {
     /**
      * 跳表头节点，默认为空值节点，主要存放head层级信息，next才是第一个节点
      */
-    private final SkipListNode<M, S> head;
+    final SkipListNode<M, S> head;
 
     /**
      * 跳表尾节点，跳表size为0时，尾节点为null
      */
-    private SkipListNode<M, S> tail;
+    SkipListNode<M, S> tail;
 
     /** 列表长度 */
     private int length;
@@ -107,6 +107,10 @@ public class SkipList<M, S> {
                 levelPreNode.span = (rank[0] + 1) - rank[i];
                 // 新节点层跨度 = 原前驱跨度 - 现前驱跨度 + 1
                 newNode.levels[i].span = levelPreSpan - levelPreNode.span + 1;
+            }
+
+            for (int i = level; i < maxLevel; i++) {
+                update[i].levels[i].span++;
             }
 
 
@@ -284,9 +288,9 @@ public class SkipList<M, S> {
         int curRank = 0;
         SkipListNode<M, S> curNode = head;
         for (int i = maxLevel - 1; i >= 0; i--) {
-            while (curNode.levels[i].forward != null && curRank +curNode.levels[i].span < rank) {
-                curNode = curNode.levels[i].forward;
+            while (curNode.levels[i].forward != null && curRank + curNode.levels[i].span <= rank) {
                 curRank += curNode.levels[i].span;
+                curNode = curNode.levels[i].forward;
             }
             if (curRank == rank) {
                 return curNode;
@@ -489,11 +493,11 @@ public class SkipList<M, S> {
         return skipListNode;
     }
 
-    private ZScoreRangeSpec<S> newScoreRange(S min, S max) {
+    ZScoreRangeSpec<S> newScoreRange(S min, S max) {
         return new ZScoreRangeSpec<>(min, max, true, true);
     }
 
-    private ZScoreRangeSpec<S> newScoreRange(S min, S max, boolean minInclusive, boolean maxInclusive) {
+    ZScoreRangeSpec<S> newScoreRange(S min, S max, boolean minInclusive, boolean maxInclusive) {
         int compare = scoreComparator.compare(min, max);
         if (compare > 0) {
             return new ZScoreRangeSpec<>(max, min, maxInclusive, minInclusive);
@@ -546,21 +550,16 @@ public class SkipList<M, S> {
         while (current != null) {
             // 找到当前节点在基础层中的位置
             int position = nodes.indexOf(current);
-            String posStr = "[" + position + (position < 10 ? " ": "") + "]";
+            String posStr = String.format("[%3d]", position);
             sb.append(posStr);
 
             ZSkipListLevel<?, ?> currentLevel = current.levels[level];
             current = current.levels[level].forward;
             if (currentLevel.forward != null) {
-                String dicNum = " --" + currentLevel.span + "--> ";
+                String dicNum = String.format(" --%3d--> ", currentLevel.span);
                 sb.append(dicNum);
-                for (int i = 0; i < currentLevel.span - 1; i++) {
-                    sb.append(" ".repeat(dicNum.length() + posStr.length()));
-                }
-
-                if (sb.toString().contains("---")) {
-                    System.out.print("");
-                }
+                String placeholder = " ".repeat(dicNum.length() + posStr.length());
+                sb.append(placeholder.repeat(currentLevel.span - 1));
             }
         }
         System.out.println(sb);
@@ -643,8 +642,8 @@ public class SkipList<M, S> {
     public static void main(String[] args) {
         Random random = ThreadLocalRandom.current();
         SkipList<String, Long> skipList = new SkipList<>(String::compareTo, Long::compareTo);
-        for (int i = 0; i < 30; i++) {
-            long value = random.nextLong(500);
+        for (int i = 0; i < 1000; i++) {
+            long value = random.nextLong(10000);
             skipList.zslInsert("key" + i, value);
         }
         skipList.printDetail();
