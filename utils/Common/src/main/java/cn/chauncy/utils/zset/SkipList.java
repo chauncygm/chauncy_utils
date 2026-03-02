@@ -12,6 +12,7 @@ public class SkipList<M, S> {
 
     /** 跳表最高层级，32层 */
     private static final int SKIP_LIST_MAX_LEVEL = 32;
+    private static ThreadLocalRandom random = ThreadLocalRandom.current();
 
     private final int[] rankCache = new int[SKIP_LIST_MAX_LEVEL];
     @SuppressWarnings("unchecked")
@@ -246,17 +247,17 @@ public class SkipList<M, S> {
         }
 
         SkipListNode<M, S> curNode = head;
-        for (int i = 0; i < maxLevel - 1; i++) {
+        for (int i = maxLevel - 1; i >= 0 ; i--) {
             while (curNode.levels[i].forward != null && !zslScoreGteMin(curNode.levels[i].forward.score, range)) {
                 curNode = curNode.levels[i].forward;
             }
         }
 
-        assert curNode != null;
-        if (!zslScoreLteMax(curNode.score, range)) {
-            return null;
+        curNode = curNode.forward0();
+        if (curNode != null && zslScoreLteMax(curNode.score, range)) {
+            return curNode;
         }
-        return curNode;
+        return null;
     }
 
     SkipListNode<M, S> zslLastInRange(ZScoreRangeSpec<S> range) {
@@ -265,7 +266,7 @@ public class SkipList<M, S> {
         }
 
         SkipListNode<M, S> curNode = head;
-        for (int i = 0; i < maxLevel - 1; i++) {
+        for (int i = maxLevel - 1; i >= 0 ; i--) {
             while (curNode.levels[i].forward != null && zslScoreLteMax(curNode.levels[i].forward.score, range)) {
                 curNode = curNode.levels[i].forward;
             }
@@ -281,7 +282,7 @@ public class SkipList<M, S> {
     /**
      * 通过指定排名获取节点
      *
-     * @param rank 排名
+     * @param rank 排名，从1开始
      * @return 节点
      */
     SkipListNode<M, S> zslGetElementByRank(int rank) {
@@ -304,23 +305,23 @@ public class SkipList<M, S> {
      *
      * @param score 分数
      * @param member 成员
-     * @return 排名
+     * @return 排名，从1开始，-1表示不存在
      */
      int zslGetRank(S score, M member) {
         int rank = 0;
         SkipListNode<M, S> curNode = head;
         for (int i = maxLevel - 1; i >= 0; i--) {
-            while (curNode.levels[i].forward != null && compareScoreAndMember(curNode, score, member) < 0) {
-                curNode = curNode.levels[i].forward;
+            while (curNode.levels[i].forward != null && compareScoreAndMember(curNode.levels[i].forward, score, member) < 0) {
                 rank += curNode.levels[i].span;
+                curNode = curNode.levels[i].forward;
             }
         }
 
         final SkipListNode<M, S> node = curNode.forward0();
         if (node != null && compareScoreAndMember(node, score, member) == 0) {
-            return rank;
+            return rank + 1;
         }
-        return 0;
+        return -1;
     }
 
     /**
@@ -341,8 +342,8 @@ public class SkipList<M, S> {
             SkipListNode<M, S> curNode = head;
             for (int i = maxLevel - 1; i >= 0; i--) {
                 while (curNode.levels[i].forward != null && curRank + curNode.levels[i].span < rank) {
-                    curNode = curNode.levels[i].forward;
                     curRank += curNode.levels[i].span;
+                    curNode = curNode.levels[i].forward;
                 }
                 update[i] = curNode;
             }
@@ -362,8 +363,8 @@ public class SkipList<M, S> {
     /**
      * 删除指定范围的节点
      *
-     * @param start 起始排名
-     * @param end 结束排名
+     * @param start 起始排名, 从1开始
+     * @param end 结束排名，最大length
      * @param dict 删除的成员会从该字典中删除
      * @return 删除的节点数量
      */
@@ -379,8 +380,8 @@ public class SkipList<M, S> {
             SkipListNode<M, S> curNode = head;
             for (int i = maxLevel - 1; i >= 0; i--) {
                 while (curNode.levels[i].forward != null && curRank + curNode.levels[i].span < start) {
-                    curNode = curNode.levels[i].forward;
                     curRank += curNode.levels[i].span;
+                    curNode = curNode.levels[i].forward;
                 }
                 update[i] = curNode;
             }
@@ -440,11 +441,11 @@ public class SkipList<M, S> {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean zslScoreGteMin(S score, ZScoreRangeSpec<S> range) {
+    public boolean zslScoreGteMin(S score, ZScoreRangeSpec<S> range) {
         return range.minInclusive ? scoreComparator.compare(score, range.min) >= 0 : scoreComparator.compare(score, range.min) > 0;
     }
 
-    private boolean zslScoreLteMax(S score, ZScoreRangeSpec<S> range) {
+    public boolean zslScoreLteMax(S score, ZScoreRangeSpec<S> range) {
         return range.maxInclusive ? scoreComparator.compare(score, range.max) <= 0 : scoreComparator.compare(score, range.max) < 0;
     }
 
@@ -469,7 +470,7 @@ public class SkipList<M, S> {
      */
     private int randomLevel() {
         int level = 1;
-        while (Math.random() < 0.5 && level < SKIP_LIST_MAX_LEVEL) {
+        while (random.nextDouble(1) < 0.5d && level < SKIP_LIST_MAX_LEVEL) {
             level++;
         }
         return level;
@@ -507,7 +508,7 @@ public class SkipList<M, S> {
 
     record ZScoreRangeSpec<S>(S min, S max, boolean minInclusive, boolean maxInclusive) {}
 
-    void printDetail() {
+    public void printDetail() {
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("=== SkipList Detailed Structure ===");
         System.out.println("Total nodes: " + length + ", Max level: " + maxLevel);
@@ -638,14 +639,4 @@ public class SkipList<M, S> {
         }
     }
 
-
-    public static void main(String[] args) {
-        Random random = ThreadLocalRandom.current();
-        SkipList<String, Long> skipList = new SkipList<>(String::compareTo, Long::compareTo);
-        for (int i = 0; i < 1000; i++) {
-            long value = random.nextLong(10000);
-            skipList.zslInsert("key" + i, value);
-        }
-        skipList.printDetail();
-    }
 }
