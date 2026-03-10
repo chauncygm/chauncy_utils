@@ -63,10 +63,10 @@ public class GameStarter {
         Managers managers = injector.getInstance(Managers.class);
         managers.inject(injector);
 
-        GameStarter starter = injector.getInstance(GameStarter.class);
-        starter.start();
-        starter.waitSuccess();
-        Runtime.getRuntime().addShutdownHook(new Thread(starter::waitStop));
+        GameStarter gameStarter = managers.gameStarter;
+        gameStarter.start();
+        gameStarter.waitSuccess();
+        Runtime.getRuntime().addShutdownHook(new Thread(gameStarter::waitStop));
 
 //        PlayerDataMapper instance = injector.getInstance(PlayerDataMapper.class);
 //        int i = instance.deleteById(1001);

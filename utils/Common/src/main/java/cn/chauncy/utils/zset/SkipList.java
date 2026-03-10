@@ -12,7 +12,7 @@ public class SkipList<M, S> {
 
     /** 跳表最高层级，32层 */
     private static final int SKIP_LIST_MAX_LEVEL = 32;
-    private static ThreadLocalRandom random = ThreadLocalRandom.current();
+    private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     private final int[] rankCache = new int[SKIP_LIST_MAX_LEVEL];
     @SuppressWarnings("unchecked")
@@ -630,13 +630,6 @@ public class SkipList<M, S> {
          * 节点层级跳转的跨度
          */
         private int span;
-
-        public void setSpan(int span) {
-            if (span <= 0) {
-                throw new IllegalArgumentException("span must be greater than 0");
-            }
-            this.span = span;
-        }
     }
 
 }

@@ -17,7 +17,7 @@ public class NetService extends AbstractService {
 
     @Inject
     @SuppressWarnings("rawtypes")
-    public NetService(MessageRegistry registry, MessageDispatcher dispatcher) {
+    public NetService(MessageDispatcher dispatcher) {
         ChannelInitializer<SocketChannel> channelInitializer  = new TcpInitializer(dispatcher);
         this.nettyServer = new NettyServer("nettyServer",  10001, channelInitializer);
     }

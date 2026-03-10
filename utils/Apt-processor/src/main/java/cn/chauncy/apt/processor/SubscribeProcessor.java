@@ -69,7 +69,7 @@ public class SubscribeProcessor extends MyAbstractProcessor {
     }
 
     private void genProxyClass(TypeElement typeElement, List<? extends Element> methodList) throws Exception{
-        String className = typeElement.getSimpleName().toString() + "Register";
+        String className = typeElement.getSimpleName() + "Register";
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addAnnotation(processorAnnotationSpec)

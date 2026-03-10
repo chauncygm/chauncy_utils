@@ -56,7 +56,7 @@ public class SnowflakeIdGenerator implements GUIDGenerator {
 
     /** 当前id段生成距离开始时间的时间戳 */
     private long timestamp;
-    /** 序列号，号段支持每秒产生4096个id，我们扩大时间精度范围，允许10毫秒内可产生40960个id */
+    /** 序列号，号段支持每毫秒产生4096个id，我们扩大时间精度范围，允许10毫秒内可产生40960个id */
     private int sequence;
 
     /** 上次生成的guid */

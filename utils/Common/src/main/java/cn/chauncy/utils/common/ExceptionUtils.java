@@ -14,7 +14,7 @@ public class ExceptionUtils {
     }
 
     public static <T> T rethrow(@NonNull final Throwable throwable) {
-        return ExceptionUtils.eraseType(throwable);
+        return eraseType(throwable);
     }
 
     public static String getStackTrace(final Throwable throwable) {
