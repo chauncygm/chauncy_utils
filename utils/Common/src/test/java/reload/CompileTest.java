@@ -13,11 +13,12 @@ public class CompileTest {
         System.out.println(new File(".").getAbsolutePath());
 
         File sourceDir = Path.of("src/main/java").toFile();
-        File outputDir = Path.of("res/classes").toFile();
+        File outputDir = Path.of("../res/classes").toFile();
         try {
             CompilerUtil.compile(sourceDir, outputDir);
         } catch (Exception e) {
-            e.printStackTrace();
+            // ignore
         }
+        System.out.println("Compile finished.");
     }
 }

@@ -31,6 +31,14 @@ module Common {
     requires org.slf4j;
     requires com.baomidou.mybatis.plus.core;
     requires org.mybatis;
+    requires jdk.attach;
+    requires static lombok;
 
     exports cn.chauncy.utils.log to java.logging;
+    exports cn.chauncy.utils.rpc.service;
+
+    opens cn.chauncy.utils.rpc.service;
+    opens cn.chauncy.utils.reload to jdk.attach;
+
+    uses com.sun.tools.attach.spi.AttachProvider;
 }
