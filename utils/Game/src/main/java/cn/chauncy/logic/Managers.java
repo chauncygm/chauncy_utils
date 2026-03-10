@@ -1,5 +1,6 @@
 package cn.chauncy.logic;
 
+import cn.chauncy.GameStarter;
 import cn.chauncy.logic.bag.manager.BagManager;
 import cn.chauncy.logic.bag.manager.ResourceManager;
 import cn.chauncy.logic.function.FunctionManager;
@@ -12,12 +13,15 @@ public class Managers {
     public FunctionManager functionManager;
     public BagManager bagManager;
     public PlayerManager playerManager;
+    public GameStarter gameStarter;
 
     public void inject(Injector injector) {
         resourceManager = injector.getInstance(ResourceManager.class);
         functionManager = injector.getInstance(FunctionManager.class);
         bagManager = injector.getInstance(BagManager.class);
         playerManager = injector.getInstance(PlayerManager.class);
+        playerManager = injector.getInstance(PlayerManager.class);
+        gameStarter = injector.getInstance(GameStarter.class);
     }
 
 }
