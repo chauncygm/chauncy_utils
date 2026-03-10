@@ -1,8 +1,10 @@
 package disruptor;
 
+import cn.chauncy.utils.Utils;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.SleepingWaitStrategy;
+import com.lmax.disruptor.TimeoutException;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DisruptorTest {
@@ -28,7 +31,8 @@ public class DisruptorTest {
 
     @BeforeEach
     void beforeAll() {
-        disruptor = new Disruptor<>(factory, 2048,
+        Utils.setJULLogger();
+        disruptor = new Disruptor<>(factory, 128,
                 new DefaultThreadFactory("disruptor-test"), ProducerType.MULTI, new SleepingWaitStrategy());
         disruptor.handleEventsWith(new MyEventhandler());
         disruptor.start();
@@ -44,9 +48,24 @@ public class DisruptorTest {
                         event.setValue(num);
                         logger.info("publish event value: {}, sequence: {}", event.getValue(), sequence);
                     });
-
                 }
             }).start();
+        }
+
+
+        try {
+            Thread.sleep(10000);
+            disruptor.shutdown(20, TimeUnit.SECONDS);
+
+            disruptor.publishEvent((event, sequence) -> {
+                event.setValue(111);
+                logger.info("publish event value: {}, sequence: {}", event.getValue(), sequence);
+            });
+
+        } catch (TimeoutException e) {
+            System.out.println("timeout");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -67,7 +86,7 @@ public class DisruptorTest {
         }
     }
 
-    static class MyEventhandler implements EventHandler<Event> {
+    class MyEventhandler implements EventHandler<Event> {
         @Override
         public void onEvent(Event event, long sequence, boolean endOfBatch) throws Exception {
             logger.info("event value: {}, sequence: {}, endOfBatch: {}", event.getValue(), sequence, endOfBatch);
