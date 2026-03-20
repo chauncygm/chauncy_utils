@@ -1,8 +1,8 @@
 package cn.chauncy.utils.eventbus;
 
-import io.netty.util.internal.shaded.org.jctools.queues.unpadded.MpscUnpaddedArrayQueue;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jctools.queues.unpadded.MpscUnpaddedArrayQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -26,10 +26,6 @@ public class InstHelper {
         }
     }
 
-    public static void setInstrumentation(@NonNull Instrumentation instrumentation) {
-        InstHelper.instrumentation = instrumentation;
-    }
-
     /**
      * 获取指定对象在内存中的大小，包含自身及其他引用对象
      *

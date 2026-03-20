@@ -4,10 +4,9 @@
     <parent>
         <groupId>cn.chauncy</groupId>
         <artifactId>Utils</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
     </parent>
 
-    <name>Apt-processor</name>
     <artifactId>Apt-processor</artifactId>
     <packaging>jar</packaging>
 
@@ -15,12 +14,10 @@
         <dependency>
             <groupId>com.squareup</groupId>
             <artifactId>javapoet</artifactId>
-            <version>${javapoet.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.auto.service</groupId>
             <artifactId>auto-service</artifactId>
-            <version>${auto-service.version}</version>
         </dependency>
     </dependencies>
 
@@ -38,15 +35,9 @@
                         <annotationProcessorPath>
                             <groupId>com.google.auto.service</groupId>
                             <artifactId>auto-service</artifactId>
-                            <version>${auto-service.version}</version>
                         </annotationProcessorPath>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

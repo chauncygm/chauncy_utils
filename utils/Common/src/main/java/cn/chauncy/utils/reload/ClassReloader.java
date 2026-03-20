@@ -140,6 +140,9 @@ public class ClassReloader {
         List<ClassDefinition> classes = new ArrayList<>(classFiles.size());
         for (File classFile : classFiles) {
             String className = findClassName(classFile);
+            if ("module-info".equals(className)) {
+                continue;
+            }
 
             Class<?> clazz = Class.forName(className);
             byte[] bytes = FileUtil.readFile(classFile);
@@ -198,7 +201,12 @@ public class ClassReloader {
     private List<File> findAllClassFile() {
         List<File> files = new ArrayList<>();
         File classDir = classDirPath.toFile();
-        FileUtil.recurseSearch(classDir, files, (file) -> file.getName().endsWith(CLASS_SUFFIX));
+        FileUtil.recurseSearch(classDir, files, (file) -> {
+            if ("module-info.class".equals(file.getName())) {
+                return false;
+            }
+            return file.getName().endsWith(CLASS_SUFFIX);
+        });
         return files;
     }
 

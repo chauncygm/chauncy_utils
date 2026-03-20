@@ -1,7 +1,7 @@
 package cn.chauncy;
 
 import cn.chauncy.utils.random.RandomUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;

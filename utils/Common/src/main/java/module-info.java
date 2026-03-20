@@ -1,38 +1,56 @@
 module Common {
+    // 热更支持
     requires Agent;
+    requires jdk.attach;
+
+    // jdk
+    requires java.compiler;
+    requires java.instrument;
+    requires java.logging;
+    requires java.management;
+
+    // guava
     requires com.google.common;
-    requires dubbo;
+    requires com.google.protobuf;
+
+    // jackson
+    requires com.fasterxml.jackson.databind;
+
+    // netty
     requires io.netty.buffer;
     requires io.netty.codec;
     requires io.netty.common;
     requires io.netty.handler;
     requires io.netty.transport;
     requires io.netty.transport.classes.epoll;
+
+    // commons
+    requires org.apache.commons.io;
+    requires org.apache.commons.codec;
+    requires org.apache.commons.lang3;
+
+    // fastutil/jctools
     requires it.unimi.dsi.fastutil;
-    requires java.compiler;
-    requires java.instrument;
-    requires java.logging;
-    requires java.management;
+    requires org.jctools.core;
+
+    // lombok
+    requires static lombok;
+
+    requires dubbo;
     requires jol.core;
     requires jsr305;
-    requires org.apache.commons.codec;
-    requires org.apache.commons.io;
-    requires org.apache.commons.lang3;
-    requires org.checkerframework.checker.qual;
     requires owner;
     requires redisson;
     requires zookeeper;
     requires java.sql;
-    requires com.fasterxml.jackson.databind;
-    requires com.google.protobuf;
     requires org.objectweb.asm.commons;
     requires org.objectweb.asm.util;
     requires com.google.guice;
-    requires org.slf4j;
     requires com.baomidou.mybatis.plus.core;
     requires org.mybatis;
-    requires jdk.attach;
-    requires static lombok;
+    requires org.checkerframework.checker.qual;
+    requires org.slf4j;
+    requires org.apache.logging.log4j;
 
     exports cn.chauncy.utils.log to java.logging;
     exports cn.chauncy.utils.rpc.service;
