@@ -57,6 +57,7 @@ module Common {
 
     opens cn.chauncy.utils.rpc.service;
     opens cn.chauncy.utils.reload to jdk.attach;
+    opens cn.chauncy.utils.reload.tool to jdk.attach;
 
     uses com.sun.tools.attach.spi.AttachProvider;
 }

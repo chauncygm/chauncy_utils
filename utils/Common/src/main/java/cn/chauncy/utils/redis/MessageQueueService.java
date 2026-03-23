@@ -2,10 +2,7 @@ package cn.chauncy.utils.redis;
 
 import com.google.inject.Inject;
 import org.redisson.api.*;
-import org.redisson.api.stream.StreamAddArgs;
-import org.redisson.api.stream.StreamCreateGroupArgs;
-import org.redisson.api.stream.StreamReadGroupArgs;
-import org.redisson.api.stream.StreamTrimArgs;
+import org.redisson.api.stream.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

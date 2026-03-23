@@ -1,6 +1,7 @@
 package cn.chauncy.utils.reload;
 
 import cn.chauncy.utils.common.ExceptionUtils;
+import cn.chauncy.utils.reload.tool.FileUtil;
 import cn.chauncy.utils.time.StopWatch;
 import com.google.common.base.Objects;
 import org.apache.commons.codec.digest.DigestUtils;

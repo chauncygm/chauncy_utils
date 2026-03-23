@@ -1,4 +1,4 @@
-package cn.chauncy.utils.reload;
+package cn.chauncy.utils.reload.tool;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -14,11 +14,11 @@ public class FileUtil {
     /**
      * 读取文件内容
      *
-     * @param fileName 文件名
+     * @param file 文件
      * @return 文件内容
      * @throws IOException 文件读取失败
      */
-    static byte[] readFile(File file) throws IOException {
+    public static byte[] readFile(File file) throws IOException {
         try (FileInputStream stream = new FileInputStream(file)){
             return stream.readAllBytes();
         }
@@ -31,7 +31,7 @@ public class FileUtil {
      * @param out       输出列表
      * @param predicate 文件过滤器
      */
-    static void recurseSearch(@NonNull File dir, @NonNull List<File> out, @Nullable Predicate<? super File> predicate) {
+    public static void recurseSearch(@NonNull File dir, @NonNull List<File> out, @Nullable Predicate<? super File> predicate) {
         if (!dir.exists() || !dir.isDirectory()) {
             throw new IllegalArgumentException("file error, file not exist or not a dictionary, filePath: " + dir.getPath());
         }

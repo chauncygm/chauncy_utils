@@ -1,6 +1,6 @@
 package reload;
 
-import cn.chauncy.utils.reload.CompilerUtil;
+import cn.chauncy.utils.reload.tool.CompilerUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -17,7 +17,8 @@ public class CompileTest {
         try {
             CompilerUtil.compile(sourceDir, outputDir);
         } catch (Exception e) {
-            // ignore
+            e.printStackTrace();
+            return;
         }
         System.out.println("Compile finished.");
     }
