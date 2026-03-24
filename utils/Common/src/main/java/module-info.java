@@ -29,6 +29,9 @@ module Common {
     requires org.apache.commons.codec;
     requires org.apache.commons.lang3;
 
+    // disruptor
+    requires com.lmax.disruptor;
+
     // fastutil/jctools
     requires it.unimi.dsi.fastutil;
     requires org.jctools.core;
@@ -51,6 +54,7 @@ module Common {
     requires org.checkerframework.checker.qual;
     requires org.slf4j;
     requires org.apache.logging.log4j;
+    requires aopalliance;
 
     exports cn.chauncy.utils.log to java.logging;
     exports cn.chauncy.utils.rpc.service;

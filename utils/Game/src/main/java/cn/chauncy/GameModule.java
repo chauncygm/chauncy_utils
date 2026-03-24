@@ -20,6 +20,8 @@ import cn.chauncy.services.HttpFileService;
 import cn.chauncy.services.NetService;
 import cn.chauncy.services.ScheduleService;
 import cn.chauncy.utils.guid.GUIDGenerator;
+import cn.chauncy.utils.interceptor.MethodPerf;
+import cn.chauncy.utils.interceptor.PerfAnalysisInterceptor;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.thread.ConsoleService;
@@ -30,6 +32,7 @@ import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
+import com.google.inject.matcher.Matchers;
 import com.google.inject.multibindings.Multibinder;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
@@ -53,13 +56,14 @@ public class GameModule extends AbstractModule {
         // 禁止循环代理，防止代理死循环
         binder().disableCircularProxies();
 
-        binder().bind(GameStarter.class).in(Singleton.class);
-        binder().bind(GlobalEventBus.class).in(Singleton.class);
-        binder().bind(TimeProvider.class).to(GlobalTimeProvider.class).in(Singleton.class);
-        binder().bind(GUIDGenerator.class).to(GlobalIdGenerator.class).in(Singleton.class);
-        binder().bind(MessageRegistry.class).to(GameMessageRegistry.class).in(Singleton.class);
-        binder().bind(MessageDispatcher.class).to(GameMessageDispatcher.class).in(Singleton.class);
+        bind(GameStarter.class).in(Singleton.class);
+        bind(GlobalEventBus.class).in(Singleton.class);
+        bind(TimeProvider.class).to(GlobalTimeProvider.class).in(Singleton.class);
+        bind(GUIDGenerator.class).to(GlobalIdGenerator.class).in(Singleton.class);
+        bind(MessageRegistry.class).to(GameMessageRegistry.class).in(Singleton.class);
+        bind(MessageDispatcher.class).to(GameMessageDispatcher.class).in(Singleton.class);
 
+        // Service
         Multibinder<Service> multibinder = Multibinder.newSetBinder(binder(), Service.class);
         multibinder.addBinding().to(NetService.class);
         multibinder.addBinding().to(HttpFileService.class);
@@ -67,8 +71,8 @@ public class GameModule extends AbstractModule {
         multibinder.addBinding().to(ConsoleService.class);
 
         // MyBatisModule
-        binder().bind(DefaultObjectWrapperFactory.class).in(Singleton.class);
-        binder().bind(DefaultObjectFactory.class).in(Singleton.class);
+        bind(DefaultObjectWrapperFactory.class).in(Singleton.class);
+        bind(DefaultObjectFactory.class).in(Singleton.class);
         install(new MyBatisModule() {
             @Override
             protected void initialize() {
@@ -87,15 +91,17 @@ public class GameModule extends AbstractModule {
             }
         });
 
-        binder().bind(PlayerManager.class).in(Singleton.class);
-        binder().bind(LoginManager.class).in(Singleton.class);
-        binder().bind(TaskManager.class).in(Singleton.class);
-        binder().bind(GoalManager.class).in(Singleton.class);
-        binder().bind(BagManager.class).in(Singleton.class);
-        binder().bind(ItemManager.class).in(Singleton.class);
-        binder().bind(ResourceManager.class).in(Singleton.class);
-        binder().bind(FunctionManager.class).in(Singleton.class);
-        binder().bind(GMManager.class).in(Singleton.class);
-        binder().bind(Managers.class).in(Singleton.class);
+        bind(PlayerManager.class).in(Singleton.class);
+        bind(LoginManager.class).in(Singleton.class);
+        bind(TaskManager.class).in(Singleton.class);
+        bind(GoalManager.class).in(Singleton.class);
+        bind(BagManager.class).in(Singleton.class);
+        bind(ItemManager.class).in(Singleton.class);
+        bind(ResourceManager.class).in(Singleton.class);
+        bind(FunctionManager.class).in(Singleton.class);
+        bind(GMManager.class).in(Singleton.class);
+        bind(Managers.class).in(Singleton.class);
+
+
     }
 }

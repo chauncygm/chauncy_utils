@@ -63,8 +63,7 @@ public class DefaultEventBus implements EventBus {
             return;
         }
 
-        @SuppressWarnings("unchecked")
-        Set<Class<?>> classes = (Set<Class<?>>) TypeToken.of(eventClass).getTypes().rawTypes();
+        Set<? extends Class<?>> classes = TypeToken.of(eventClass).getTypes().rawTypes();
         for (Class<?> clazz : classes) {
             if (!isJavaLangClass(clazz)) {
                 post(clazz, event);
