@@ -5,6 +5,7 @@ import cn.chauncy.component.GlobalIdGenerator;
 import cn.chauncy.component.GlobalTimeProvider;
 import cn.chauncy.dao.config.*;
 import cn.chauncy.disruptor.GameTickProvider;
+import cn.chauncy.gameplay.scene.SceneManager;
 import cn.chauncy.logic.Managers;
 import cn.chauncy.logic.bag.manager.BagManager;
 import cn.chauncy.logic.bag.manager.ItemManager;
@@ -106,6 +107,7 @@ public class GameModule extends AbstractModule {
         bind(ResourceManager.class).in(Singleton.class);
         bind(FunctionManager.class).in(Singleton.class);
         bind(GMManager.class).in(Singleton.class);
+        bind(SceneManager.class).in(Singleton.class);
         bind(Managers.class).in(Singleton.class);
 
     }

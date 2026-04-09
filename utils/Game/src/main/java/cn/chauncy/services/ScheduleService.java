@@ -22,12 +22,14 @@ public class ScheduleService extends AbstractScheduledService {
     private final TimeProvider timeProvider;
 
     private long lastTickTime;
+    private final long crossDayOffset;
 
     @Inject
     public ScheduleService(GlobalEventBus eventBus, TimeProvider timeProvider) {
         this.eventBus = eventBus;
         this.timeProvider = timeProvider;
         this.lastTickTime = timeProvider.getTimeMillis();
+        this.crossDayOffset = TimeUnit.HOURS.toMillis(0);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class ScheduleService extends AbstractScheduledService {
         }
 
         eventBus.post(new SystemEvent.CrossHourEvent(time.getHour()));
-        if (!TimeHelper.SYSTEM.isSameDay(timeMillis, lastTickTime)) {
+        if (!TimeHelper.SYSTEM.isSameDay(timeMillis - crossDayOffset, lastTickTime - crossDayOffset)) {
             onCrossDay(time, timeMillis);
         }
     }
@@ -59,18 +61,18 @@ public class ScheduleService extends AbstractScheduledService {
         eventBus.post(new SystemEvent.CrossDayEvent(TimeHelper.SYSTEM.toEpochDays(timeMillis)));
 
         // 跨周
-        if (!TimeHelper.SYSTEM.isSameWeek(timeMillis, lastTickTime)) {
+        if (!TimeHelper.SYSTEM.isSameWeek(timeMillis, lastTickTime - crossDayOffset)) {
             eventBus.post(new SystemEvent.CrossWeekEvent(time.getMonthValue()));
         }
 
         // 跨月
-        int lastTickMonth = TimeHelper.SYSTEM.toLocalDateTime(lastTickTime).getMonthValue();
+        int lastTickMonth = TimeHelper.SYSTEM.toLocalDateTime(lastTickTime - crossDayOffset).getMonthValue();
         if (lastTickMonth != time.getMonthValue()) {
             eventBus.post(new SystemEvent.CrossMonthEvent(lastTickMonth));
         }
 
         // 跨年
-        int lastTickYear = TimeHelper.SYSTEM.toLocalDateTime(lastTickTime).getYear();
+        int lastTickYear = TimeHelper.SYSTEM.toLocalDateTime(lastTickTime - crossDayOffset).getYear();
         if (lastTickYear != time.getYear()) {
             eventBus.post(new SystemEvent.CrossYearEvent(lastTickYear));
         }

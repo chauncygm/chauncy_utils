@@ -5,6 +5,8 @@ import cn.chauncy.logic.hero.attr.Attr;
 
 public class HeroUnit {
 
+    private int heroId;
+
     private Attr functionPropSet;
 
     private Attr fightPropSet;
