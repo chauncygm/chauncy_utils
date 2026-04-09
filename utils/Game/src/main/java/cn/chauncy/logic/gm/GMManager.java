@@ -2,7 +2,7 @@ package cn.chauncy.logic.gm;
 
 import cn.chauncy.dao.entity.PlayerData;
 import cn.chauncy.dao.mapper.PlayerDataMapper;
-import cn.chauncy.event.PlayerMsgEvent;
+import cn.chauncy.event.CtxMsgEvent;
 import cn.chauncy.logic.Managers;
 import cn.chauncy.logic.player.LevelInfo;
 import cn.chauncy.logic.player.Player;
@@ -51,7 +51,7 @@ public class GMManager {
     }
 
     @Subscribe
-    public void onReqGM(PlayerMsgEvent<ReqGm> msgEvent) {
+    public void onReqGM(CtxMsgEvent<ReqGm> msgEvent) {
         Player player = msgEvent.player();
         ReqGm reqGm = msgEvent.message();
         String cmd = reqGm.getCmd().toLowerCase();

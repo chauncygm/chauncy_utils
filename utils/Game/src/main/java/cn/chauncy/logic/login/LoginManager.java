@@ -3,7 +3,6 @@ package cn.chauncy.logic.login;
 import cn.chauncy.component.GlobalEventBus;
 import cn.chauncy.event.CtxMsgEvent;
 import cn.chauncy.event.PlayerEvent;
-import cn.chauncy.event.PlayerMsgEvent;
 import cn.chauncy.logic.player.Player;
 import cn.chauncy.logic.player.PlayerManager;
 import cn.chauncy.message.*;
@@ -93,7 +92,7 @@ public class LoginManager {
     }
 
     @Subscribe
-    public void onReqHeartbeat(PlayerMsgEvent<ReqHeartbeat> msgEvent) {
+    public void onReqHeartbeat(CtxMsgEvent<ReqHeartbeat> msgEvent) {
         ChannelHandlerContext context = msgEvent.player().getCtx();
         ResHeartbeat.Builder builder = ResHeartbeat.newBuilder();
         builder.setTime(timeProvider.getTimeMillis());
@@ -101,7 +100,7 @@ public class LoginManager {
     }
 
     @Subscribe
-    public void onReqLogout(PlayerMsgEvent<ReqLogout> msgEvent) {
+    public void onReqLogout(CtxMsgEvent<ReqLogout> msgEvent) {
         Player player = msgEvent.player();
         logger.info("onReqLogout: {}", player.info());
         playerManager.offline(player);

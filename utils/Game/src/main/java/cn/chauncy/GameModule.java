@@ -4,6 +4,7 @@ import cn.chauncy.component.GlobalEventBus;
 import cn.chauncy.component.GlobalIdGenerator;
 import cn.chauncy.component.GlobalTimeProvider;
 import cn.chauncy.dao.config.*;
+import cn.chauncy.disruptor.GameTickProvider;
 import cn.chauncy.logic.Managers;
 import cn.chauncy.logic.bag.manager.BagManager;
 import cn.chauncy.logic.bag.manager.ItemManager;
@@ -14,8 +15,10 @@ import cn.chauncy.logic.login.LoginManager;
 import cn.chauncy.logic.player.PlayerManager;
 import cn.chauncy.logic.task.manager.GoalManager;
 import cn.chauncy.logic.task.manager.TaskManager;
+import cn.chauncy.manager.GameManager;
 import cn.chauncy.net.GameMessageDispatcher;
 import cn.chauncy.net.GameMessageRegistry;
+import cn.chauncy.services.GameTickEventDispatcherService;
 import cn.chauncy.services.HttpFileService;
 import cn.chauncy.services.NetService;
 import cn.chauncy.services.ScheduleService;
@@ -62,6 +65,8 @@ public class GameModule extends AbstractModule {
         bind(GUIDGenerator.class).to(GlobalIdGenerator.class).in(Singleton.class);
         bind(MessageRegistry.class).to(GameMessageRegistry.class).in(Singleton.class);
         bind(MessageDispatcher.class).to(GameMessageDispatcher.class).in(Singleton.class);
+        bind(GameTickProvider.class).to(GameManager.class).in(Singleton.class);
+        bind(GameTickEventDispatcherService.class).in(Singleton.class);
 
         // Service
         Multibinder<Service> multibinder = Multibinder.newSetBinder(binder(), Service.class);
@@ -69,6 +74,7 @@ public class GameModule extends AbstractModule {
         multibinder.addBinding().to(HttpFileService.class);
         multibinder.addBinding().to(ScheduleService.class);
         multibinder.addBinding().to(ConsoleService.class);
+        multibinder.addBinding().to(GameTickEventDispatcherService.class);
 
         // MyBatisModule
         bind(DefaultObjectWrapperFactory.class).in(Singleton.class);
@@ -101,7 +107,6 @@ public class GameModule extends AbstractModule {
         bind(FunctionManager.class).in(Singleton.class);
         bind(GMManager.class).in(Singleton.class);
         bind(Managers.class).in(Singleton.class);
-
 
     }
 }

@@ -97,7 +97,7 @@ public class NettyServer {
         serverBootstrap.option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                .option(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator());
+                .option(ChannelOption.RECVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator());
         if (Epoll.isAvailable()) {
             serverBootstrap.option(ChannelOption.TCP_FASTOPEN, 3);
         }

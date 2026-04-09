@@ -49,16 +49,19 @@ public class GameMessageRegistry extends MessageRegistry {
         Reflections reflections = new Reflections(REGISTRY_PACKAGE);
         Set<Class<?>> registryClasses = reflections.getTypesAnnotatedWith(Registered.class);
 
+        int registeredCount = 0;
         for (Class<?> clazz : registryClasses) {
             try {
                 Method register = clazz.getMethods()[0];
                 Class<?> subscriberClass = register.getParameterTypes()[1];
                 Object subscriber = injector.getInstance(subscriberClass);
                 register.invoke(null, eventBus, subscriber);
+                registeredCount++;
             } catch (InvocationTargetException |
                      IllegalAccessException e) {
                 logger.error("registerAllMessageHandler failed: {}", clazz.getName(), e);
             }
         }
+        logger.info("registerAllMessageHandler success, registeredCount: {}", registeredCount);
     }
 }

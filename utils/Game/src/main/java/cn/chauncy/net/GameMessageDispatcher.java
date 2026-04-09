@@ -1,12 +1,12 @@
 package cn.chauncy.net;
 
 import cn.chauncy.event.CtxMsgEvent;
-import cn.chauncy.event.PlayerMsgEvent;
 import cn.chauncy.logic.player.Player;
 import cn.chauncy.message.ReqHeartbeat;
 import cn.chauncy.message.ReqLogin;
-import cn.chauncy.services.FixedExecutorService;
+import cn.chauncy.services.GameTickEventDispatcherService;
 import cn.chauncy.utils.RateLimiter;
+import cn.chauncy.utils.eventbus.GenericEvent;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.net.proto.ProtobufMessage;
@@ -30,13 +30,13 @@ public class GameMessageDispatcher extends MessageDispatcher<ProtobufMessage<?>>
 
     private static final int MAX_COUNT_PER_SECOND = 4;
     private final Map<Integer, LongAdder> msgCountMap = new ConcurrentHashMap<>();
+    private final GameTickEventDispatcherService dispatcherService;
 
-    private final FixedExecutorService loginExecutors = new FixedExecutorService("Login_Thread");
-    private final FixedExecutorService logicExecutors = new FixedExecutorService("Logic_Thread");
 
     @Inject
-    public GameMessageDispatcher(MessageRegistry registry) {
+    public GameMessageDispatcher(MessageRegistry registry, GameTickEventDispatcherService dispatcherService) {
         super(registry);
+        this.dispatcherService = dispatcherService;
     }
 
     @Override
@@ -63,15 +63,8 @@ public class GameMessageDispatcher extends MessageDispatcher<ProtobufMessage<?>>
 
 
         Message message = msg.message();
-        if (message instanceof ReqLogin loginMsg) {
-            loginExecutors.submit(loginMsg.getUid(), () -> registry.postMessageEvent(new CtxMsgEvent<>(ctx, message)));
-        } else {
-            Player player = ctx.channel().attr(Attrs.playerKey).get();
-            if (player == null) {
-                logger.error("player is null, message: {}", message);
-                return;
-            }
-            logicExecutors.submit(player.getPlayerId(), () -> registry.postMessageEvent(new PlayerMsgEvent<>(player, message)));
-        }
+        Player player = ctx.channel().attr(Attrs.playerKey).get();
+        CtxMsgEvent<Message> data = new CtxMsgEvent<>(ctx, player, message);
+        dispatcherService.postEvent(GameTickEventDispatcherService.GlobalEvent.EventType.PLAYER_MSG_EVENT, msg.protoEnum(), data);
     }
 }

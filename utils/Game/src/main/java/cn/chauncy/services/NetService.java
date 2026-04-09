@@ -3,7 +3,6 @@ package cn.chauncy.services;
 import cn.chauncy.utils.net.NettyServer;
 import cn.chauncy.utils.net.TcpInitializer;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
-import cn.chauncy.utils.net.proto.MessageRegistry;
 import com.google.common.util.concurrent.AbstractService;
 import com.google.inject.Inject;
 import io.netty.channel.ChannelFuture;
