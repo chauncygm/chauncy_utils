@@ -54,6 +54,7 @@ public class HttpFileService extends AbstractService {
             try {
                 String path = httpExchange.getRequestURI().getPath().replace(CONTENT_PATH, "");
                 File file = new File(FILE_ROOT_PATH, path).getCanonicalFile();
+                logger.info("HTTP request file: {}", file.getAbsolutePath());
 
                 if (file.getPath().startsWith(FILE_ROOT_PATH)) {
                     sendError(httpExchange, 403, "Forbidden");

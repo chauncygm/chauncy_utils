@@ -39,7 +39,7 @@ public class NettyClient {
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30000)
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                .option(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator());
+                .option(ChannelOption.RECVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator());
         if (Epoll.isAvailable()) {
             bootstrap.option(ChannelOption.TCP_FASTOPEN_CONNECT, true)
                     .option(EpollChannelOption.TCP_QUICKACK, true)

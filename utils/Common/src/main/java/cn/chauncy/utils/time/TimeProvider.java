@@ -12,4 +12,9 @@ public interface TimeProvider {
      */
     long getTimeMillis();
 
+    /**
+     * 手动更新时间，如需要手动更新，可调用此方法
+     */
+    default void update() {}
+
 }

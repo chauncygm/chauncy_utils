@@ -29,6 +29,7 @@ import cn.chauncy.utils.interceptor.PerfAnalysisInterceptor;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.thread.ConsoleService;
+import cn.chauncy.utils.time.FrameCachedTimeProvider;
 import cn.chauncy.utils.time.TimeProvider;
 import com.baomidou.mybatisplus.core.MybatisXMLLanguageDriver;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
@@ -62,6 +63,7 @@ public class GameModule extends AbstractModule {
 
         bind(GameStarter.class).in(Singleton.class);
         bind(GlobalEventBus.class).in(Singleton.class);
+        bind(FrameCachedTimeProvider.class).in(Singleton.class);
         bind(TimeProvider.class).to(GlobalTimeProvider.class).in(Singleton.class);
         bind(GUIDGenerator.class).to(GlobalIdGenerator.class).in(Singleton.class);
         bind(MessageRegistry.class).to(GameMessageRegistry.class).in(Singleton.class);

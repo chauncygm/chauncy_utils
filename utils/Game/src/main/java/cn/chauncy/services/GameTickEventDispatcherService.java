@@ -69,7 +69,8 @@ public class GameTickEventDispatcherService extends AbstractService {
                 ringBuffer,
                 ringBuffer.newBarrier(),
                 new GlobalEventHandler(globalEventBus),
-                gameTickProvider, MAX_EVENTS_PER_TICK
+                gameTickProvider,
+                MAX_EVENTS_PER_TICK
         );
 
         disruptor.handleEventsWith(eventProcessor);

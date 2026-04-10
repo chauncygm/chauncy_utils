@@ -3,6 +3,7 @@ package cn.chauncy.services;
 import cn.chauncy.utils.net.NettyServer;
 import cn.chauncy.utils.net.TcpInitializer;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
+import cn.chauncy.utils.net.proto.ProtobufMessage;
 import com.google.common.util.concurrent.AbstractService;
 import com.google.inject.Inject;
 import io.netty.channel.ChannelFuture;
@@ -15,8 +16,7 @@ public class NetService extends AbstractService {
     private final NettyServer nettyServer;
 
     @Inject
-    @SuppressWarnings("rawtypes")
-    public NetService(MessageDispatcher dispatcher) {
+    public NetService(MessageDispatcher<ProtobufMessage<?>> dispatcher) {
         ChannelInitializer<SocketChannel> channelInitializer  = new TcpInitializer(dispatcher);
         this.nettyServer = new NettyServer("nettyServer",  10001, channelInitializer);
     }
