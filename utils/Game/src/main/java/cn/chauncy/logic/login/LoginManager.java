@@ -92,14 +92,6 @@ public class LoginManager {
     }
 
     @Subscribe
-    public void onReqHeartbeat(CtxMsgEvent<ReqHeartbeat> msgEvent) {
-        ChannelHandlerContext context = msgEvent.player().getCtx();
-        ResHeartbeat.Builder builder = ResHeartbeat.newBuilder();
-        builder.setTime(timeProvider.getTimeMillis());
-        MsgUtils.sendMsg(context, builder);
-    }
-
-    @Subscribe
     public void onReqLogout(CtxMsgEvent<ReqLogout> msgEvent) {
         Player player = msgEvent.player();
         logger.info("onReqLogout: {}", player.info());

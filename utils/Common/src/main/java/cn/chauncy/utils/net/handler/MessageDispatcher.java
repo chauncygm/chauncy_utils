@@ -21,18 +21,23 @@ public abstract class MessageDispatcher<T extends IMessage> extends SimpleChanne
         return registry;
     }
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        logger.info("channelActive: {}", ctx);
-    }
+    /**
+     * 是否是心跳消息
+     * @param msg 消息
+     * @return true: 是心跳包
+     */
+    protected abstract boolean isHeartbeat(T msg);
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.error("MessageDispatcher exceptionCaught, ctx: {}, cause: {}", ctx, cause);
-    }
+    /**
+     * 处理心跳消息
+     * @param ctx 上下文
+     */
+    protected abstract void heartbeat(ChannelHandlerContext ctx);
 
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) {
-        logger.debug("channelInactive: {}", ctx);
-    }
+    /**
+     * 处理消息
+     * @param ctx 上下文
+     * @param msg 消息
+     */
+    protected abstract void channelRead0(ChannelHandlerContext ctx, T msg);
 }

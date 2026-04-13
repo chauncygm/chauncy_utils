@@ -1,6 +1,7 @@
 package cn.chauncy;
 
 import cn.chauncy.component.GlobalEventBus;
+import cn.chauncy.component.GlobalTimeProvider;
 import cn.chauncy.net.GameMessageDispatcher;
 import cn.chauncy.message.ReqLogin;
 import cn.chauncy.net.GameMessageRegistry;
@@ -17,7 +18,7 @@ public class NettyClientTest {
 
     public static void main(String[] args) {
         MessageRegistry registry = new GameMessageRegistry(new GlobalEventBus(), null);
-        GameMessageDispatcher dispatcher = new GameMessageDispatcher(registry);
+        GameMessageDispatcher dispatcher = new GameMessageDispatcher(registry, null, new GlobalTimeProvider());
         TcpInitializer channelInitializer = new TcpInitializer(dispatcher);
         NettyClient nettyClient = new NettyClient("client0", channelInitializer);
         nettyClient.connect(HOST, PORT);

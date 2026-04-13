@@ -24,7 +24,7 @@ public class TcpInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel ch) {
-        ch.pipeline().addLast(new IdleStateHandler(30, 30, 60));
+//        ch.pipeline().addLast(new IdleStateHandler(30, 30, 60));
 
         // 数据格式 |2bit 包长度 (| (4bit 协议号 | x bit proto数据) 计算 | 8bit crc校验码 |)
         ch.pipeline().addLast(new LengthFieldPrepender(2));

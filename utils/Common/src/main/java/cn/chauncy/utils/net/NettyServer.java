@@ -6,12 +6,13 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollIoHandler;
 import io.netty.channel.epoll.EpollServerSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.NettyRuntime;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class NettyServer {
         this.port = port;
         this.channelInitializer = channelInitializer;
 
-        int processors = Runtime.getRuntime().availableProcessors();
+        int processors = NettyRuntime.availableProcessors();
         int bossThreadCount = Math.max(processors / 2, 1);
         this.bossGroup = createEventLoopGroup(name + "-boss", bossThreadCount);
         this.workerGroup = createEventLoopGroup(name + "-worker", processors * 2);
@@ -60,7 +61,7 @@ public class NettyServer {
             }
         });
         channelFuture.channel().closeFuture().addListener(future -> {
-            logger.info("NettyServer[{}] stoped.", this.port);
+            logger.info("NettyServer[{}] stopped.", this.port);
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
             running = false;
@@ -87,7 +88,8 @@ public class NettyServer {
 
     private EventLoopGroup createEventLoopGroup(String groupName, int threadCount) {
         DefaultThreadFactory threadFactory = new DefaultThreadFactory(groupName);
-        return  Epoll.isAvailable() ? new EpollEventLoopGroup(threadCount, threadFactory) : new NioEventLoopGroup(threadCount, threadFactory);
+        IoHandlerFactory handlerFactory = Epoll.isAvailable() ? EpollIoHandler.newFactory() : NioIoHandler.newFactory();
+        return new MultiThreadIoEventLoopGroup(threadCount, threadFactory, handlerFactory);
     }
 
     private void initConfigure(ServerBootstrap serverBootstrap) {

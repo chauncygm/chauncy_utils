@@ -9,7 +9,7 @@ public class RateLimiter {
     private final Deque<Long> window;
 
     public RateLimiter(int maxOperations) {
-        this(maxOperations, 1);
+        this(maxOperations, 1000L);
     }
 
     public RateLimiter(int maxOperations, long durationMillis) {
