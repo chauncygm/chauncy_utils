@@ -58,10 +58,15 @@ module Common {
 
     exports cn.chauncy.utils.log to java.logging;
     exports cn.chauncy.utils.rpc.service;
+    exports cn.chauncy.behavior_tree to com.fasterxml.jackson.databind;
 
     opens cn.chauncy.utils.rpc.service;
     opens cn.chauncy.utils.reload to jdk.attach;
     opens cn.chauncy.utils.reload.tool to jdk.attach;
+    opens cn.chauncy.behavior_tree to com.fasterxml.jackson.databind;
+    opens cn.chauncy.behavior_tree.branch to com.fasterxml.jackson.databind;
+    opens cn.chauncy.behavior_tree.leaf to com.fasterxml.jackson.databind;
+    opens cn.chauncy.behavior_tree.decorate to com.fasterxml.jackson.databind;
 
     uses com.sun.tools.attach.spi.AttachProvider;
 }
