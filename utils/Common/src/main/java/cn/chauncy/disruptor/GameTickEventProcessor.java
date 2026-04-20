@@ -34,9 +34,9 @@ public class GameTickEventProcessor<T> implements EventProcessor {
     /** 异常处理器 */
     private final ExceptionHandlerWrapper<T> exceptionHandler = new ExceptionHandlerWrapper<>();
 
-
     /** 每帧处理事件最大数量 */
     private final int maxEventsPerTick;
+    /** 运行状态 */
     private volatile boolean running = false;
 
     public GameTickEventProcessor(DataProvider<T> dataProvider,

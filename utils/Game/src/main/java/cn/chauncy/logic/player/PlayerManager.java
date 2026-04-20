@@ -22,7 +22,7 @@ public class PlayerManager {
 
     private static final Logger logger = LoggerFactory.getLogger(PlayerManager.class);
 
-    private static final long PLAYER_CACHE_TIME = 1 * 60 * 1000L;
+    private static final long PLAYER_CACHE_TIME = 5 * 60 * 1000L;
     private final ConcurrentHashMap<Long, Player> playerIdMap = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, Long> playerUid2IdMap = new ConcurrentHashMap<>();
     private final Set<Long> offlinePlayerSet = ConcurrentHashMap.newKeySet();

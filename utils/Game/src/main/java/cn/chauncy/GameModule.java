@@ -26,8 +26,11 @@ import cn.chauncy.services.ScheduleService;
 import cn.chauncy.utils.guid.GUIDGenerator;
 import cn.chauncy.utils.interceptor.MethodPerf;
 import cn.chauncy.utils.interceptor.PerfAnalysisInterceptor;
+import cn.chauncy.utils.net.TcpInitializer;
+import cn.chauncy.utils.net.config.NettyConfig;
 import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.proto.MessageRegistry;
+import cn.chauncy.utils.net.proto.ProtobufMessage;
 import cn.chauncy.utils.thread.ConsoleService;
 import cn.chauncy.utils.time.FrameCachedTimeProvider;
 import cn.chauncy.utils.time.TimeProvider;
@@ -37,8 +40,10 @@ import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.multibindings.Multibinder;
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
@@ -67,9 +72,11 @@ public class GameModule extends AbstractModule {
         bind(TimeProvider.class).to(GlobalTimeProvider.class).in(Singleton.class);
         bind(GUIDGenerator.class).to(GlobalIdGenerator.class).in(Singleton.class);
         bind(MessageRegistry.class).to(GameMessageRegistry.class).in(Singleton.class);
-        bind(MessageDispatcher.class).to(GameMessageDispatcher.class).in(Singleton.class);
+        bind(new TypeLiteral<MessageDispatcher<ProtobufMessage<?>>>() {}).to(GameMessageDispatcher.class).in(Singleton.class);
         bind(GameTickProvider.class).to(GameManager.class).in(Singleton.class);
         bind(GameTickEventDispatcherService.class).in(Singleton.class);
+        bind(TcpInitializer.class).in(Singleton.class);
+        bind(NettyConfig.class).toInstance(ConfigFactory.create(NettyConfig.class));
 
         // Service
         Multibinder<Service> multibinder = Multibinder.newSetBinder(binder(), Service.class);

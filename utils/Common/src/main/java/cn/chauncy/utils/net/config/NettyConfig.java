@@ -7,15 +7,7 @@ import org.aeonbits.owner.Config;
 public interface NettyConfig extends Config {
 
     @Key("port")
-    @DefaultValue("8080")
+    @DefaultValue("10001")
     int port();
-
-    @Key("bossGroupThreads")
-    @DefaultValue("1")
-    int bossGroupThreads();
-
-    @Key("workGroupThreads")
-    @DefaultValue("8")
-    int workGroupThreads();
 
 }

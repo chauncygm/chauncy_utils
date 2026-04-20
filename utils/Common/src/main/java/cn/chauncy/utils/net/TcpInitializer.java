@@ -6,17 +6,18 @@ import cn.chauncy.utils.net.handler.MessageDispatcher;
 import cn.chauncy.utils.net.handler.SimpleHandler;
 import cn.chauncy.utils.net.proto.MessageRegistry;
 import cn.chauncy.utils.net.proto.ProtobufMessage;
+import com.google.inject.Inject;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
-import io.netty.handler.timeout.IdleStateHandler;
 
 public class TcpInitializer extends ChannelInitializer<SocketChannel> {
 
     private final MessageRegistry registry;
     private final MessageDispatcher<ProtobufMessage<?>> dispatcher;
 
+    @Inject
     public TcpInitializer(MessageDispatcher<ProtobufMessage<?>> dispatcher) {
         this.registry = dispatcher.getRegistry();
         this.dispatcher = dispatcher;
