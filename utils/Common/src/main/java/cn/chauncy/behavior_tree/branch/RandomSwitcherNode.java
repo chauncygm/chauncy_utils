@@ -1,6 +1,8 @@
 package cn.chauncy.behavior_tree.branch;
 
 import cn.chauncy.behavior_tree.Node;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Random;
@@ -10,15 +12,20 @@ import java.util.Random;
  */
 public class RandomSwitcherNode extends SwitcherNode {
 
-    private final Random random;
+    private final long seed;
+    private final transient Random random;
 
-    public RandomSwitcherNode(long seed, Node... children) {
+    @JsonCreator
+    public RandomSwitcherNode(@JsonProperty("seed") long seed,
+                              @JsonProperty("children") List<Node> children) {
         super(children);
+        this.seed = seed;
         random = new Random(seed);
     }
 
-    public RandomSwitcherNode(long seed, List<Node> children) {
+    public RandomSwitcherNode(long seed, Node... children) {
         super(children);
+        this.seed = seed;
         random = new Random(seed);
     }
 

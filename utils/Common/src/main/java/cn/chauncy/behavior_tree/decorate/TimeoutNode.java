@@ -1,13 +1,17 @@
 package cn.chauncy.behavior_tree.decorate;
 
 import cn.chauncy.behavior_tree.Node;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TimeoutNode extends DecorateNode {
 
     private final long timeoutMs;
     private transient long startTime;
 
-    public TimeoutNode(Node child, long timeoutMs) {
+    @JsonCreator
+    public TimeoutNode(@JsonProperty("child") Node child,
+                       @JsonProperty("timeoutMs") long timeoutMs) {
         super(child);
         this.timeoutMs = timeoutMs;
     }

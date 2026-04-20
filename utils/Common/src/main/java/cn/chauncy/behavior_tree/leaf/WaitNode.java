@@ -1,5 +1,8 @@
 package cn.chauncy.behavior_tree.leaf;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * 等待固定时间节点
  */
@@ -8,7 +11,8 @@ public class WaitNode extends LeafNode {
     private final long waitTime;
     private transient long enterTime;
 
-    public WaitNode(long waitTime) {
+    @JsonCreator
+    public WaitNode(@JsonProperty("waitTime") long waitTime) {
         this.waitTime = waitTime;
     }
 

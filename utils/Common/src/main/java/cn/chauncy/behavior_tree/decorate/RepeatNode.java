@@ -2,6 +2,8 @@ package cn.chauncy.behavior_tree.decorate;
 
 
 import cn.chauncy.behavior_tree.Node;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 重复执行N次节点
@@ -10,7 +12,9 @@ public class RepeatNode extends LoopNode {
 
     private final int requireCount;
 
-    public RepeatNode(Node child, int requireCount) {
+    @JsonCreator
+    public RepeatNode(@JsonProperty("child") Node child,
+                      @JsonProperty("requireCount") int requireCount) {
         super(child);
         this.requireCount = requireCount;
     }

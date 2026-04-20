@@ -2,6 +2,9 @@ package cn.chauncy.behavior_tree.branch;
 
 import cn.chauncy.behavior_tree.Node;
 import cn.chauncy.behavior_tree.leaf.FSMStateNode;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,20 +18,22 @@ import java.util.Map;
 public class FSMNode extends SwitcherNode {
 
     /** 缓存所有状态，需确保是同一组状态，不包含重复的状态，保证状态是单例的 */
+    @JsonIgnore
     private final Map<Class<?>, FSMStateNode> stateMap = new HashMap<>();
 
     private transient FSMStateNode nextState;
 
-    public FSMNode(FSMStateNode... children) {
-        super(children);
+    @JsonCreator
+    public FSMNode(@JsonProperty("children") List<FSMStateNode> children) {
+        super(Collections.unmodifiableList(children));
         for (FSMStateNode state : children) {
             stateMap.put(state.getClass(), state);
         }
     }
 
-    public FSMNode(List<FSMStateNode> stateList) {
-        super(Collections.unmodifiableList(stateList));
-        for (FSMStateNode state : stateList) {
+    public FSMNode(FSMStateNode... children) {
+        super(children);
+        for (FSMStateNode state : children) {
             stateMap.put(state.getClass(), state);
         }
     }
@@ -46,10 +51,6 @@ public class FSMNode extends SwitcherNode {
         }
         if (nextState != null) {
             throw new IllegalStateException("change State is not complete: " + newState);
-        }
-
-        if (newState != null) {
-            newState.reset();
         }
         if (runningNode == null) {
             runningNode = newState;
@@ -84,7 +85,9 @@ public class FSMNode extends SwitcherNode {
 
     @Override
     protected Node switchStrategy() {
-        return nextState;
+        FSMStateNode state = nextState;
+        nextState = null;
+        return state;
     }
 
     @Override

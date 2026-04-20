@@ -1,5 +1,8 @@
 package cn.chauncy.behavior_tree.leaf;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Random;
 
 /**
@@ -7,11 +10,15 @@ import java.util.Random;
  */
 public class RandomNode extends LeafNode {
 
-    private final Random random;
+    private final long seed;
+    private final transient Random random;
 
-    public RandomNode(Random random) {
-        this.random = random;
+    @JsonCreator
+    public RandomNode(@JsonProperty("seed") long send) {
+        this.seed = send;
+        this.random = new Random(send);
     }
+
     @Override
     protected void execute() {
         if (random.nextFloat() < 0.5) {

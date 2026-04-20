@@ -2,6 +2,9 @@ package cn.chauncy.behavior_tree.branch;
 
 import cn.chauncy.behavior_tree.Node;
 import cn.chauncy.behavior_tree.Status;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.List;
 
@@ -16,10 +19,11 @@ public class SequenceNode extends SingleRunningNode {
     protected transient int runningIndex;
     private transient StopHandler stopHandler;
 
-
-    public SequenceNode(List<Node> children) {
+    @JsonCreator
+    public SequenceNode(@JsonProperty("children") List<Node> children,
+                        @JsonProperty("mode") int mode) {
         super(children);
-        this.mode = 0;
+        this.mode = mode;
         initStopHandler();
     }
 
@@ -64,6 +68,7 @@ public class SequenceNode extends SingleRunningNode {
         }
 
         runningNode = children.get(runningIndex);
+        runningNode.reset();
         executeNode(runningNode);
     }
 

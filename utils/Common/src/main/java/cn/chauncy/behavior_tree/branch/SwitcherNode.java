@@ -2,6 +2,8 @@ package cn.chauncy.behavior_tree.branch;
 
 import cn.chauncy.behavior_tree.Node;
 import cn.chauncy.behavior_tree.Status;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -12,11 +14,12 @@ public class SwitcherNode extends SingleRunningNode {
 
     protected transient SwitchHandler handler = SwitchHandler.DEFAULT;
 
-    public SwitcherNode(Node... children) {
+    @JsonCreator
+    public SwitcherNode(@JsonProperty("children") List<Node> children) {
         super(children);
     }
 
-    public SwitcherNode(List<Node> children) {
+    public SwitcherNode(Node... children) {
         super(children);
     }
 

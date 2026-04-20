@@ -1,5 +1,8 @@
 package cn.chauncy.utils.json;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -28,6 +31,9 @@ public class JsonUtils {
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         // 默认采用比较宽容的方式反序列化
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);// 启用 Record 支持
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        objectMapper.setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
+        objectMapper.setVisibility(PropertyAccessor.IS_GETTER, JsonAutoDetect.Visibility.NONE);
         objectMapper.findAndRegisterModules();
         return objectMapper;
     });

@@ -1,6 +1,8 @@
 package cn.chauncy.behavior_tree.decorate;
 
 import cn.chauncy.behavior_tree.Node;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 装饰节点
@@ -10,8 +12,11 @@ public abstract class DecorateNode extends Node {
 
     protected Node child;
 
-    public DecorateNode(Node child) {
-        addChild(child);
+    @JsonCreator
+    public DecorateNode(@JsonProperty("child") Node child) {
+        if (child != null) {
+            addChild(child);
+        }
     }
 
     @Override

@@ -23,14 +23,6 @@ public abstract class LoopNode extends DecorateNode {
     }
 
     @Override
-    protected void execute() {
-        if (child.isComplete()) {
-            child.reset();
-        }
-        executeNode(child);
-    }
-
-    @Override
     protected void onExit() {
         loopCount = 0;
         loopMaxCount = 0;

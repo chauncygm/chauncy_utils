@@ -1,6 +1,8 @@
 package cn.chauncy.behavior_tree.branch;
 
 import cn.chauncy.behavior_tree.Node;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +19,8 @@ public abstract class BranchNode extends Node {
         this.children = new ArrayList<>();
     }
 
-    public BranchNode(List<Node> children) {
+    @JsonCreator
+    public BranchNode(@JsonProperty("children") List<Node> children) {
         this.children = children != null ? new ArrayList<>(children) : new ArrayList<>();
         for (Node child : this.children) {
             if (child != null) {

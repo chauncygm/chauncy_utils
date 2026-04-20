@@ -1,14 +1,25 @@
 package cn.chauncy.behavior_tree;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BehaviourTree {
 
+    @JsonProperty
     private final String name;
+    @JsonProperty
     private final Node root;
 
-    public BehaviourTree(String name, Node root) {
+    @JsonCreator
+    public BehaviourTree(@JsonProperty("name") String name, @JsonProperty("root") Node root) {
         this.name = name;
         this.root = root;
     }
+
+    public String getName() {
+        return name;
+    }
+
     public void update() {
         if (root == null) {
             throw new IllegalStateException("BehaviourTree root is null.");

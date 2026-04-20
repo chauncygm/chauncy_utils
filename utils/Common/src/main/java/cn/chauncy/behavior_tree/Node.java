@@ -2,6 +2,7 @@ package cn.chauncy.behavior_tree;
 
 import cn.chauncy.behavior_tree.leaf.GuardNode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author Chauncy
  */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.CLASS,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "@class"
+)
 public abstract class Node {
 
     protected static final Logger logger = LoggerFactory.getLogger(Node.class);
@@ -104,11 +110,6 @@ public abstract class Node {
         if (guard != null) {
             guard.reset();
         }
-        blackBoard = null;
-        parent = null;
-    }
-
-    private void releaseContext() {
         blackBoard = null;
     }
     //endregion
@@ -244,7 +245,6 @@ public abstract class Node {
                 parent.onChildComplete(this);
             }
             onExit();
-            releaseContext();
         } else if (preStatus == Status.NEW) {
             throw new IllegalStateException("node is not running.");
         } else {

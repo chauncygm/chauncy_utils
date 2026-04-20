@@ -1,6 +1,8 @@
 package cn.chauncy.behavior_tree.branch;
 
 import cn.chauncy.behavior_tree.Node;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -13,11 +15,12 @@ public abstract class SingleRunningNode extends BranchNode {
     /** 当前运行的节点 */
     protected transient Node runningNode;
 
-    public SingleRunningNode(Node... children) {
+    @JsonCreator
+    public SingleRunningNode(@JsonProperty("children") List<Node> children) {
         super(children);
     }
 
-    public SingleRunningNode(List<Node> children) {
+    public SingleRunningNode(Node... children) {
         super(children);
     }
 
