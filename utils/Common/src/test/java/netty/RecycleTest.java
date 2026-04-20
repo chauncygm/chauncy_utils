@@ -22,10 +22,14 @@ public class RecycleTest {
     @Test
     public void test() {
         PlayerObject playerObject = RECYCLE.get();
+        playerObject.id = 101L;
         playerObject.data = "AAA";
         playerObject.recycle();
 
         PlayerObject secondPlayer = RECYCLE.get();
+        playerObject.id = 202L;
+        secondPlayer.data = "BBB";
+        Assertions.assertSame(playerObject, secondPlayer);
         Assertions.assertEquals(playerObject, secondPlayer);
     }
 }

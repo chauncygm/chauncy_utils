@@ -3,7 +3,6 @@ package cn.chauncy.behavior_tree.branch;
 import cn.chauncy.behavior_tree.Node;
 import cn.chauncy.behavior_tree.leaf.FSMStateNode;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collections;
@@ -18,8 +17,7 @@ import java.util.Map;
 public class FSMNode extends SwitcherNode {
 
     /** 缓存所有状态，需确保是同一组状态，不包含重复的状态，保证状态是单例的 */
-    @JsonIgnore
-    private final Map<Class<?>, FSMStateNode> stateMap = new HashMap<>();
+    private transient final Map<Class<?>, FSMStateNode> stateMap = new HashMap<>();
 
     private transient FSMStateNode nextState;
 

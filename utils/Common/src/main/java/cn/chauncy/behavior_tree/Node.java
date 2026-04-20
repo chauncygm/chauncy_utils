@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static cn.chauncy.behavior_tree.DefaultBlackboard.ENTITY_KEY;
+
 /**
  * 行为树节点抽象类
  * 生命周期 Status: NEW -> RUNNING -> SUCCESS/FAILURE
@@ -26,14 +28,20 @@ public abstract class Node {
     protected GuardNode guard;
 
     /** 父节点 */
-    @JsonIgnore
     protected transient Node parent;
     /** 黑板数据 */
-    @JsonIgnore
     protected transient Blackboard blackBoard;
     /** 运行状态 */
-    @JsonIgnore
     protected transient Status status = Status.NEW;
+
+    protected transient Object entity;
+
+    public Object getEntity() {
+        if (entity == null) {
+            entity = blackBoard.get(ENTITY_KEY);
+        }
+        return entity;
+    }
 
     public GuardNode getGuard() {
         return guard;

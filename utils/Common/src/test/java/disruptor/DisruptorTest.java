@@ -31,7 +31,6 @@ public class DisruptorTest {
 
     @BeforeEach
     void beforeAll() {
-        Utils.setJULLogger();
         disruptor = new Disruptor<>(factory, 128,
                 new DefaultThreadFactory("disruptor-test"), ProducerType.MULTI, new SleepingWaitStrategy());
         disruptor.handleEventsWith(new MyEventhandler());

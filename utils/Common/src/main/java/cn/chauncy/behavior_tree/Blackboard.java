@@ -1,16 +1,34 @@
 package cn.chauncy.behavior_tree;
 
+import io.netty.util.AttributeKey;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public interface Blackboard {
 
-    void set(String key, Object value);
+    <T> T get(@NonNull AttributeKey<T> key);
 
-    <T> T get(String key);
+    <T> void set(@NonNull AttributeKey<T> key, @NonNull T value);
 
-    <T> T getOrDefault(String key, T defaultValue);
+    default <T> T getOrDefault(@NonNull AttributeKey<T> key, @NonNull T defaultValue) {
+        final T value = get(key);
+        if (value != null || containsKey(key)) {
+            return value;
+        }
+        return defaultValue;
+    }
 
-    boolean contains(String key);
+    default <T> T getOrElse(@NonNull AttributeKey<T> key, @NonNull T other) {
+        T value = get(key);
+        return value != null ? value : other;
+    }
 
-    void remove(String key);
+    <T> boolean containsKey(@NonNull AttributeKey<T> key);
+
+    <T> void remove(@NonNull AttributeKey<T> key);
+
+    int size();
+
+    boolean isEmpty();
 
     void reset();
 }
