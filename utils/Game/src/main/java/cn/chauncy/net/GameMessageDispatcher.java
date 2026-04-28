@@ -28,7 +28,7 @@ public class GameMessageDispatcher extends MessageDispatcher<ProtobufMessage<?>>
     private static final Logger logger = LoggerFactory.getLogger(GameMessageDispatcher.class);
 
     private static final int MAX_COUNT_MSG_PER_SECOND = 4;
-    private static final int MAX_COUNT_HEARTBEAT_PER_MINUTE = 8;
+    private static final int MAX_COUNT_HEARTBEAT_PER_MINUTE = 12;
     private final Map<Integer, LongAdder> msgCountMap = new ConcurrentHashMap<>();
     private final GameTickEventDispatcherService dispatcherService;
     private final TimeProvider timeProvider;

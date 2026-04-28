@@ -11,7 +11,7 @@ public class GameManager implements GameTickProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(GameManager.class);
 
-    private static final long MAX_FRAME_USE_TIME = 1000 / 30;
+    private static final long MAX_FRAME_USE_TIME = 100;
     private static final long MAX_WARN_FRAME_COUNT = 100;
 
     private int warnFrameCount = 0;

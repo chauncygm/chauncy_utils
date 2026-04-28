@@ -82,6 +82,7 @@ public class GameTickEventDispatcherService extends AbstractService {
         logger.info("Starting GameTickEventDispatcherService...");
         disruptor.start();
         logger.info("GameTickEventDispatcherService started successfully.");
+        notifyStarted();
     }
 
     @Override
@@ -89,6 +90,7 @@ public class GameTickEventDispatcherService extends AbstractService {
         logger.info("Stopping GameTickEventDispatcherService...");
         disruptor.shutdown();
         logger.info("GameTickEventDispatcherService stopped.");
+        notifyStopped();
     }
 
     /**

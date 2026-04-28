@@ -45,6 +45,7 @@ public class HttpFileService extends AbstractService {
     @Override
     protected void doStop() {
         httpServer.stop(3);
+        logger.info("HttpFileService stopped");
         notifyStopped();
     }
 
