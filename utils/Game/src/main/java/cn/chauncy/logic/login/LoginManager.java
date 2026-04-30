@@ -46,14 +46,12 @@ public class LoginManager {
         if (player.isOnline()) {
             ChannelHandlerContext onlineCtx = player.getCtx();
             if (onlineCtx != null && onlineCtx.channel().isActive()) {
-                MsgUtils.sendTips(player, TipsType.WINDOW, LOGIN_REPEATED, "login repeated kick out offline");
+                unbindCtx(onlineCtx, player);
+                MsgUtils.sendTips(onlineCtx, TipsType.WINDOW, LOGIN_REPEATED, "login repeated kick out offline");
                 onlineCtx.close();
-                player.setCtx(null);
             }
         }
-        player.setCtx(ctx);
-        ctx.channel().attr(Attrs.playerKey).set(player);
-        ctx.channel().attr(Attrs.playerIdKey).set(player.getPlayerId());
+        bindCtx(ctx, player);
         globalEventBus.post(new PlayerEvent.PlayerLoginEvent(player));
         playerManager.online(player);
         if (player.isNewPlayer()) {
@@ -63,6 +61,18 @@ public class LoginManager {
         globalEventBus.post(new PlayerEvent.PlayerOnlineEvent(player));
 
         syncLoginData(player);
+    }
+
+    private void bindCtx(ChannelHandlerContext ctx, Player player) {
+        player.setCtx(ctx);
+        ctx.channel().attr(Attrs.playerKey).set(player);
+        ctx.channel().attr(Attrs.playerIdKey).set(player.getPlayerId());
+    }
+
+    private void unbindCtx(ChannelHandlerContext ctx, Player player) {
+        player.setCtx(null);
+        ctx.channel().attr(Attrs.playerKey).set(null);
+        ctx.channel().attr(Attrs.playerIdKey).set(null);
     }
 
     private Player getOrCreatePlayer(long uid) {
@@ -95,6 +105,12 @@ public class LoginManager {
     public void onReqLogout(CtxMsgEvent<ReqLogout> msgEvent) {
         Player player = msgEvent.player();
         logger.info("onReqLogout: {}", player.info());
+        playerManager.offline(player);
+    }
+
+    @Subscribe
+    public void onPlayerOffline(PlayerEvent.PlayerOfflineEvent event) {
+        Player player = event.player();
         playerManager.offline(player);
     }
 }

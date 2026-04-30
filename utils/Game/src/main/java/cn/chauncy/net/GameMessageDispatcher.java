@@ -1,6 +1,8 @@
 package cn.chauncy.net;
 
+import cn.chauncy.component.GlobalEventBus;
 import cn.chauncy.event.CtxMsgEvent;
+import cn.chauncy.event.PlayerEvent;
 import cn.chauncy.logic.player.Player;
 import cn.chauncy.message.ReqHeartbeat;
 import cn.chauncy.message.ResHeartbeat;
@@ -14,6 +16,7 @@ import com.google.inject.Inject;
 import com.google.protobuf.Message;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,13 +38,16 @@ public class GameMessageDispatcher extends MessageDispatcher<ProtobufMessage<?>>
 
     private final int heartBeatProtoEnum;
 
+    private final GlobalEventBus globalEventBus;
+
 
     @Inject
-    public GameMessageDispatcher(MessageRegistry registry, GameTickEventDispatcherService dispatcherService, TimeProvider timeProvider) {
+    public GameMessageDispatcher(MessageRegistry registry, GameTickEventDispatcherService dispatcherService, TimeProvider timeProvider, GlobalEventBus globalEventBus) {
         super(registry);
         this.dispatcherService = dispatcherService;
         this.timeProvider = timeProvider;
         this.heartBeatProtoEnum = registry.getProtoEnum(ReqHeartbeat.class);
+        this.globalEventBus = globalEventBus;
     }
 
     @Override
@@ -85,12 +91,35 @@ public class GameMessageDispatcher extends MessageDispatcher<ProtobufMessage<?>>
     @Override
     protected void heartbeat(ChannelHandlerContext ctx) {
         Player player = ctx.channel().attr(Attrs.playerKey).get();
-        if (player == null || ctx.channel().isOpen()) {
+        if (player == null) {
+            logger.error("receive heartbeat but player is null");
             return;
         }
 
         ResHeartbeat.Builder builder = ResHeartbeat.newBuilder();
         builder.setTime(timeProvider.getTimeMillis());
         ctx.writeAndFlush(builder.build());
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        Player player = ctx.channel().attr(Attrs.playerKey).get();
+        if (player != null && player.isOnline()) {
+            logger.info("Player offline due to channel inactive: {}", player.info());
+            globalEventBus.post(new PlayerEvent.PlayerOfflineEvent(player));
+        }
+        ctx.fireChannelInactive();
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
+        if (evt instanceof IdleStateEvent idleStateEvent) {
+            logger.warn("IdleStateEvent triggered: {}, channel will be closed", idleStateEvent);
+            Player player = ctx.channel().attr(Attrs.playerKey).get();
+            if (player != null && player.isOnline()) {
+                globalEventBus.post(new PlayerEvent.PlayerOfflineEvent(player));
+            }
+        }
+        ctx.fireUserEventTriggered(evt);
     }
 }

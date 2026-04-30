@@ -18,7 +18,7 @@ public class NettyClientTest {
 
     public static void main(String[] args) {
         MessageRegistry registry = new GameMessageRegistry(new GlobalEventBus(), null);
-        GameMessageDispatcher dispatcher = new GameMessageDispatcher(registry, null, new GlobalTimeProvider());
+        GameMessageDispatcher dispatcher = new GameMessageDispatcher(registry, null, new GlobalTimeProvider(), null);
         TcpInitializer channelInitializer = new TcpInitializer(dispatcher);
         NettyClient nettyClient = new NettyClient("client0", channelInitializer);
         nettyClient.connect(HOST, PORT);
@@ -28,7 +28,7 @@ public class NettyClientTest {
             String msg = scanner.nextLine();
             if (msg.equals("exit")) {
                 nettyClient.close();
-                break;
+                return;
             } else if (msg.equals("test")){
                 nettyClient.send(ReqLogin.newBuilder().setUid(1).build());
             } else {

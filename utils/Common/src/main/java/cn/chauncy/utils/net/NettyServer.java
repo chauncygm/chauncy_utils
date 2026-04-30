@@ -110,8 +110,9 @@ public class NettyServer {
                 .childOption(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30000)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(8 * 1024, 32 * 1024))
-                .childOption(ChannelOption.SO_LINGER, 3)
-                .childOption(ChannelOption.ALLOW_HALF_CLOSURE, true);
+                .childOption(ChannelOption.SO_LINGER, 3);
+                // 正常用不上，适用于客户端不写入，等待服务器输出流的场景(如上传文件完毕等待服务器处理，实时拉取日志等)
+                //.childOption(ChannelOption.ALLOW_HALF_CLOSURE, true);
     }
 
     private Class<? extends ServerSocketChannel> getSocketChannelClass() {

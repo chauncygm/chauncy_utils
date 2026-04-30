@@ -104,6 +104,11 @@ public class PlayerManager {
     }
 
     public void offline(Player player) {
+        if (!player.isOnline()) {
+            logger.warn("Player already offline: {}", player.info());
+            return;
+        }
+        
         player.setOnline(false);
         player.getPlayerData().setLastOfflineTime(timeProvider.getTimeMillis());
         ChannelHandlerContext ctx = player.getCtx();

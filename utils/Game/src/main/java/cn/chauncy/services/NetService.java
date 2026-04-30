@@ -11,8 +11,12 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NetService extends AbstractService {
+
+    private static final Logger logger = LoggerFactory.getLogger(NetService.class);
 
     private final NettyServer nettyServer;
 
@@ -33,12 +37,21 @@ public class NetService extends AbstractService {
 
     @Override
     protected void doStop() {
-        ChannelFuture future = nettyServer.shutdown();
-        future.addListener((f) -> {
-            if (f.isSuccess()) {
-                notifyStopped();
+        logger.info("NetService stopping...");
+        try {
+            ChannelFuture future = nettyServer.shutdown();
+            // 等待关闭完成，设置超时时间
+            future.await(15, java.util.concurrent.TimeUnit.SECONDS);
+            if (future.isSuccess()) {
+                logger.info("NetService stopped successfully");
+            } else {
+                logger.warn("NetService shutdown failed: {}", future.cause() != null ? future.cause().getMessage() : "unknown error");
             }
-        });
-
+        } catch (InterruptedException e) {
+            logger.error("NetService shutdown interrupted", e);
+            Thread.currentThread().interrupt();
+        } finally {
+            notifyStopped();
+        }
     }
 }

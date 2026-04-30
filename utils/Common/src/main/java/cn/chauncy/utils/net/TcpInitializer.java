@@ -11,6 +11,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.timeout.IdleStateHandler;
 
 public class TcpInitializer extends ChannelInitializer<SocketChannel> {
 
@@ -25,7 +26,9 @@ public class TcpInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel ch) {
-//        ch.pipeline().addLast(new IdleStateHandler(30, 30, 60));
+        // 心跳超时检测: 读超时60秒,写超时0(不限制),空闲超时0(不限制)
+        // 如果客户端60秒内没有发送任何数据(包括心跳),则触发读超时事件
+        ch.pipeline().addLast(new IdleStateHandler(60, 0, 0));
 
         // 数据格式 |2bit 包长度 (| (4bit 协议号 | x bit proto数据) 计算 | 8bit crc校验码 |)
         ch.pipeline().addLast(new LengthFieldPrepender(2));

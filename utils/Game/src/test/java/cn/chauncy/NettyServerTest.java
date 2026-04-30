@@ -15,7 +15,7 @@ public class NettyServerTest {
 
     public static void main(String[] args) {
         MessageRegistry registry = new GameMessageRegistry(new GlobalEventBus(), null);
-        GameMessageDispatcher dispatcher = new GameMessageDispatcher(registry, null, new GlobalTimeProvider());
+        GameMessageDispatcher dispatcher = new GameMessageDispatcher(registry, null, new GlobalTimeProvider(), null);
 
         TcpInitializer channelInitializer = new TcpInitializer(dispatcher);
         NettyServer nettyServer = new NettyServer("NettyServer", PORT, channelInitializer);

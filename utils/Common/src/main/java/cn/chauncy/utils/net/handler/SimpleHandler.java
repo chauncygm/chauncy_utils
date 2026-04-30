@@ -27,14 +27,15 @@ public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHand
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.debug("exceptionCaught: {}, cause: {}", ctx, cause);
+        logger.warn("exceptionCaught: {}, cause: {}", ctx, cause);
+        ctx.fireExceptionCaught(cause);
     }
     //endregion
 
     //region inbound handler
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) {
-        logger.debug("channelRegistered: {}", ctx);
+        logger.info("channelRegistered: {}", ctx);
         ctx.fireChannelRegistered();
     }
 
@@ -46,13 +47,13 @@ public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHand
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        logger.debug("channelActive: {}", ctx);
+        logger.info("channelActive: {}", ctx);
         ctx.fireChannelActive();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        logger.debug("channelInactive: {}", ctx);
+        logger.info("channelInactive: {}", ctx);
         ctx.fireChannelInactive();
     }
 
@@ -70,9 +71,6 @@ public class SimpleHandler implements ChannelInboundHandler, ChannelOutboundHand
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
-        if (!(evt instanceof IdleStateEvent)) {
-            logger.debug("userEventTriggered: {}, event: {}", ctx, evt);
-        }
         ctx.fireUserEventTriggered(evt);
     }
 

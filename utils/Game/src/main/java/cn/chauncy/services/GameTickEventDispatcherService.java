@@ -10,12 +10,15 @@ import com.google.common.util.concurrent.AbstractService;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.TimeoutException;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 支持游戏主循环 Tick 的事件分发服务
@@ -88,8 +91,12 @@ public class GameTickEventDispatcherService extends AbstractService {
     @Override
     protected void doStop() {
         logger.info("Stopping GameTickEventDispatcherService...");
-        disruptor.shutdown();
-        logger.info("GameTickEventDispatcherService stopped.");
+        try {
+            disruptor.shutdown(10, TimeUnit.SECONDS);
+            logger.info("GameTickEventDispatcherService stopped.");
+        } catch (TimeoutException e) {
+            logger.error("stop GameTickEventDispatcherService timeout: ", e);
+        }
         notifyStopped();
     }
 

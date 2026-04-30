@@ -88,10 +88,26 @@ public class NettyClient {
 
     public void close() {
         if (channelFuture != null) {
-            channelFuture.channel().close().addListener(future -> {
-                workEventGroup.shutdownGracefully().syncUninterruptibly();
+            logger.info("NettyClient[{}] closing...", name);
+            try {
+                // 同步等待 channel 关闭完成
+                channelFuture.channel().close().sync();
+                logger.info("NettyClient[{}] channel closed", name);
+            } catch (InterruptedException e) {
+                logger.error("NettyClient[{}] channel close interrupted", name, e);
+                Thread.currentThread().interrupt();
+            }
+            
+            try {
+                // 同步等待 EventLoopGroup 关闭完成
+                workEventGroup.shutdownGracefully().sync();
                 logger.info("NettyClient[{}] close success", name);
-            });
+            } catch (InterruptedException e) {
+                logger.error("NettyClient[{}] eventLoopGroup shutdown interrupted", name, e);
+                Thread.currentThread().interrupt();
+            }
+        } else {
+            logger.warn("NettyClient[{}] channelFuture is null, skip close", name);
         }
     }
 

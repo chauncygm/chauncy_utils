@@ -7,7 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -26,38 +29,49 @@ public class ConsoleService extends AbstractService {
 
     /** 运行状态 */
     private volatile boolean runningState = false;
+    /** 控制台线程 */
+    private Thread consoleThread;
     /** 命令处理器 */
     private static final Map<String, Function<List<String>, Object>> handlers = new ConcurrentHashMap<>();
 
     @Override
     protected void doStart() {
-        Thread thread = new Thread(this::execute, "Console-Thread");
-        thread.setUncaughtExceptionHandler((t, e) -> {
+        consoleThread = new Thread(this::execute, "Console-Thread");
+        consoleThread.setUncaughtExceptionHandler((t, e) -> {
             logger.error("ConsoleThread has uncaught exception.\n", e);
         });
-        thread.start();
+        consoleThread.start();
     }
 
     @Override
     protected void doStop() {
         runningState = false;
+        // 中断控制台线程以解除Scanner阻塞
+        if (consoleThread != null && consoleThread.isAlive()) {
+            consoleThread.interrupt();
+        }
+        logger.info("ConsoleService stopped");
+        notifyStopped();
     }
 
     private void execute() {
         notifyStarted();
         runningState = true;
-        Scanner sc = new Scanner(System.in);
-        while (sc.hasNext()) {
-            if (!runningState) {
-                break;
+        try (Scanner sc = new Scanner(System.in)) {
+            while (runningState && sc.hasNext()) {
+                String commandStr = sc.nextLine();
+                if (!commandStr.startsWith(COMMAND_PREFIX)) {
+                    continue;
+                }
+                doCommand(commandStr);
             }
-            String commandStr = sc.nextLine();
-            if (!commandStr.startsWith(COMMAND_PREFIX)) {
-                continue;
-            }
-            doCommand(commandStr);
+        } catch (Exception e) {
+            // 线程中断或Scanner关闭时的正常退出
+            logger.debug("Console thread interrupted or scanner closed: {}", e.getMessage());
+        } finally {
+            logger.info("ConsoleService execute loop exited");
+            notifyStopped();
         }
-        notifyStopped();
     }
 
     /**

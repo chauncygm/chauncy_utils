@@ -26,9 +26,13 @@ public class ThreadUtil {
 
     private ThreadUtil() {}
 
-    public static ThreadFactory createFactory(String name) {
+    public static ThreadFactory createFactory(String name, boolean daemon) {
         int index = threadIndex.incrementAndGet();
-        return runnable -> new Thread(runnable, name + "-" + index);
+        return runnable ->  {
+            Thread thread = new Thread(runnable, name + "-" + index);
+            thread.setDaemon(daemon);
+            return thread;
+        };
     }
 
     /** 获取当前线程的名字 */

@@ -11,6 +11,7 @@ import com.google.common.util.concurrent.ServiceManager;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,17 @@ public class GameStarter {
         eventBus.post(new SystemEvent.ServerStopEvent());
         manager.stopAsync().awaitStopped();
         logger.info("服务器停服完成");
+
+        // 强制刷新日志缓冲区
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        // 手动关闭log4j2，确保所有日志都已写入
+        logger.info("关闭日志系统...");
+        LogManager.shutdown();
     }
 
     public static void main(String[] args) {

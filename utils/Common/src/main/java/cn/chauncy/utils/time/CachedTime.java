@@ -16,7 +16,7 @@ public class CachedTime implements TimeProvider {
     private volatile long currentTime = System.currentTimeMillis();
 
     public CachedTime() {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.createFactory("CachedTime"));
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.createFactory("CachedTime", true));
         executor.scheduleAtFixedRate(() -> currentTime = System.currentTimeMillis(),
                 1, 1, TimeUnit.MILLISECONDS); // 1ms精度
     }
