@@ -34,7 +34,7 @@ public class GameManager implements GameTickProvider {
             warnFrameCount++;
         }
         warnStatisticTime += lastFrameUseTime;
-        if (warnStatisticTime > 60 * 1000) {
+        if (warnStatisticTime > 5 * 60 * 1000) {
             if (warnFrameCount > MAX_WARN_FRAME_COUNT) {
                 logger.warn("too many warn frame: {}", warnFrameCount);
             }
